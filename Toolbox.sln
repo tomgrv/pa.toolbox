@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2012 for Windows Desktop
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Plugin", "PA.Plugin\PA.Plugin.csproj", "{557ACE88-A58E-48AB-B7CF-07925CA98530}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Converters", "PA.Converters\PA.Converters.csproj", "{B09F91A1-DF25-4DAE-8E45-40DF0FA9334F}"
