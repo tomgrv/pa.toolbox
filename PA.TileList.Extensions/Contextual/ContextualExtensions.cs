@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using PA.TileList;
 using PA.TileList.Contextual;
-using PA.TileList.Extensions.Quantified;
+using PA.TileList.Quantified;
 
-namespace PA.TileList.Extensions
+namespace PA.TileList.Contextual
 {
     public static class ContextualExtensions
     {
@@ -65,7 +65,7 @@ namespace PA.TileList.Extensions
         {
             IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);
 
-            Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.Where<U>(predicate).SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
+            Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.GetArea(), t.Where<U>(predicate).SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
 
             list.SetReference(list.Find(reference.X, reference.Y));
 
@@ -78,7 +78,7 @@ namespace PA.TileList.Extensions
         {
             IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);
 
-            Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
+            Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.GetArea(), t.SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
 
             list.SetReference(list.Find(reference.X, reference.Y));
 

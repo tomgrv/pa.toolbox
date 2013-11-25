@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Collections;
 
-namespace PA.TileList
+namespace PA.TileList.Quadrant
 {
     public enum Quadrant
     {

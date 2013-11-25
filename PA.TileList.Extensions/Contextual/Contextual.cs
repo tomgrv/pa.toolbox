@@ -6,7 +6,7 @@ using System.Text;
 namespace PA.TileList.Contextual
 {
     public class Contextual<T> : IContextual<T>
-        where T : ICoordinate, IDisposable
+        where T : ICoordinate
     {
         public int X { get;  set; }
         public int Y { get;  set; }
@@ -20,9 +20,5 @@ namespace PA.TileList.Contextual
             this.Context = context;
         }
 
-        public void Dispose()
-        {
-            this.Context.Dispose();
-        }
     }
 }

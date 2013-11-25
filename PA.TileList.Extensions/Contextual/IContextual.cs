@@ -5,8 +5,8 @@ using System.Text;
 
 namespace PA.TileList.Contextual
 {
-    public interface IContextual<T> : ICoordinate, IDisposable
-        where T : ICoordinate, IDisposable
+    public interface IContextual<T> : ICoordinate
+        where T : ICoordinate
     {
         T Context { get; }
     }

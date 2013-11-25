@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace PA.TileList
+namespace PA.TileList.Extensions
 {
     public static class CoordinateExtention
     {
@@ -19,6 +19,8 @@ namespace PA.TileList
         {
             return new Coordinate(c.X, c.Y);
         }
+
+       
     }
 
    

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PA.TileList.Extensions.Quantified
+namespace PA.TileList.Quantified
 {
     public interface IQuantifiedTile : ITile
     {

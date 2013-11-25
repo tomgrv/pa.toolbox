@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
-namespace PA.TileList
+namespace PA.TileList.Quadrant
 {
     public interface IQuadrant<T> : IList<T> where T : ICoordinate
     {

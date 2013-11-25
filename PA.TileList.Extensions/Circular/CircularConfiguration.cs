@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PA.TileList.Extensions.Circular
+namespace PA.TileList.Circular
 {
     public class CircularConfiguration
     {
