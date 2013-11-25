@@ -6,3 +6,4 @@ publish/
 *.pidb
 *.exe
 *.nupkg
+*.user

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>0df835cf-e269-470b-9e68-02c5201a41a1</ProjectGuid>
+    <ProjectGuid>{AC973648-96E4-4C7F-9047-E84D71EBB750}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTests</RootNamespace>
@@ -50,8 +50,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="TileList.Extensions\LinearTests.cs" />
+    <Compile Include="TileList\CoordinateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PA.TileList.Extensions\PA.TileList.Extensions.csproj">
+      <Project>{a16e749b-7556-41bd-a9b9-253b3253578c}</Project>
+      <Name>PA.TileList.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PA.TileList\PA.TileList.csproj">
+      <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
+      <Name>PA.TileList</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
