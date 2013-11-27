@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pluginHost1 = new PA.PluginHost();
+            this.pluginHost1 = new PA.Components.PluginLoader();
             ((System.ComponentModel.ISupportInitialize)(this.pluginHost1)).BeginInit();
             // 
             // pluginHost1
@@ -42,6 +42,6 @@
 
         #endregion
 
-        private PA.PluginHost pluginHost1;
+        private PA.Components.PluginLoader pluginHost1;
     }
 }
