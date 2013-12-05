@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
 [assembly: AssemblyTitle("PA.Configuration")]
-[assembly: AssemblyDescription("Flexible composable configuration provider")]
+[assembly: AssemblyDescription("MEF catalog and provider for configuration items")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Thomas GERVAIS")]
 [assembly: AssemblyProduct("PA.Toolbox")]
