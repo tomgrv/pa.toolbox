@@ -46,7 +46,7 @@ namespace PA.Configuration
                             }
                             catch
                             {
-                                Trace.TraceWarning("Error while configuring " + definition.ContractName + " for " + targetType + " in " + targetType.DeclaringType);
+                                Trace.TraceWarning("Error while configuring <" + definition.ContractName + "> as <" + targetType + "> in <" + targetType.DeclaringType+">");
                             }
                         }
                         else if (targetType.IsArray
@@ -59,7 +59,7 @@ namespace PA.Configuration
                             }
                             catch
                             {
-                                Trace.TraceWarning("Error while configuring " + definition.ContractName + " for " + targetType + " in " + targetType.DeclaringType);
+                                Trace.TraceWarning("Error while configuring <" + definition.ContractName + "> as <" + targetType + "> in <" + targetType.DeclaringType + ">");
                             }
                         }
                         else if (typeof(IEnumerable).IsAssignableFrom(targetType) 
@@ -73,9 +73,16 @@ namespace PA.Configuration
                             }
                             catch
                             {
-                                Trace.TraceWarning("Error while configuring " + definition.ContractName + " for " + targetType + " in " + targetType.DeclaringType);
+                                Trace.TraceWarning("Error while configuring <" + definition.ContractName + "> as <" + targetType + "> in <" + targetType.DeclaringType + ">");
                             }
                         }
+                        if (typeof(IEnumerable).IsAssignableFrom(targetType)
+                           && targetType.IsGenericType
+                           && targetType.GetGenericArguments().Length == 1
+                           && stringValue.StartsWith(">"))
+                        {
+                        }
+                       
 
                         if (value is object)
                         {

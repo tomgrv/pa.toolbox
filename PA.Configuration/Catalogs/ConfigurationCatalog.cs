@@ -29,66 +29,97 @@ namespace PA.Configuration
 
             for (int i = 0; i < keys.Length; i++)
             {
-                if (keys[i].EndsWith("/size"))
+                string value = this.Source.GetSetting(keys[i]);
+
+                if (value.StartsWith(">"))
                 {
-                    string root = keys[i].Substring(0, keys[i].LastIndexOf('/'));
-                    string size = this.Source.GetSetting(keys[i]);
+                    int index;
 
-                    for (int index = 0; index < int.Parse(size); index++)
+                    if (int.TryParse(keys[i].Substring(keys[i].LastIndexOf("/") + 1), out index))
                     {
-                        string t = this.Source.GetSetting(root + "/" + index);
 
-                        if (t.StartsWith(">"))
-                        {
-                            ComposablePartDefinition part = this.catalog.Parts.FirstOrDefault(t.Substring(1));
-
-                            if (part is ComposablePartDefinition)
-                            {
-                                var import = part.ImportDefinitions
-                                    .Select(id => id.ContractName.StartsWith("#/") ? CreateIndexedImportDefinition(id, root, index) : id)
-                                    .ToArray();
-
-                                var export = part.ExportDefinitions
-                                    .Select(ed => CreateIndexedExportDefinition(ed, index))
-                                    .ToArray();
-
-                                var newpart = ReflectionModelServices.CreatePartDefinition(
-                                    ReflectionModelServices.GetPartType(part),
-                                    ReflectionModelServices.IsDisposalRequired(part),
-                                    new Lazy<IEnumerable<ImportDefinition>>(() => import),
-                                    new Lazy<IEnumerable<ExportDefinition>>(() => export),
-                                    new Lazy<IDictionary<string, object>>(() => part.Metadata),
-                                    null);
-
-                                this._parts.Add(newpart);
-                            }
-                        }
+                        string root = keys[i].Substring(0, keys[i].LastIndexOf('/'));
+                        CreateImportDefinition(root, index, value.Substring(1));
                     }
+                    else
+                    {
+                        CreateImportDefinition(keys[i], -1, value.Substring(1));
+                    }
+                }
+
+            }
+        }
+
+        private void CreateImportDefinition(string root, int index, string value)
+        {
+            if (value is string)
+            {
+                ComposablePartDefinition part = this.catalog.Parts.FirstOrDefault(value);
+
+                if (part is ComposablePartDefinition)
+                {
+                    string name = index < 0 ? root : root + "/" + index;
+
+                    var import = part.ImportDefinitions
+                        .Select(id => id.ContractName.StartsWith("#/") ? CreateRelativeImportDefinition(id, name) : id)
+                        .ToArray();
+
+                    var export = part.ExportDefinitions
+                        .Select(ed => CreateRelativeExportDefinition(ed, root, index))
+                        .ToArray();
+
+                    var newpart = ReflectionModelServices.CreatePartDefinition(
+                        ReflectionModelServices.GetPartType(part),
+                        ReflectionModelServices.IsDisposalRequired(part),
+                        new Lazy<IEnumerable<ImportDefinition>>(() => import),
+                        new Lazy<IEnumerable<ExportDefinition>>(() => export),
+                        new Lazy<IDictionary<string, object>>(() => part.Metadata),
+                        null);
+
+                    this._parts.Add(newpart);
                 }
             }
         }
 
-        public ExportDefinition CreateIndexedExportDefinition(ExportDefinition id, int index)
+        public ExportDefinition CreateRelativeExportDefinition(ExportDefinition id, string name, int index)
         {
             LazyMemberInfo pi = ReflectionModelServices.GetExportingMember(id);
 
-            Dictionary<string, object> metadata = new Dictionary<string, object>(id.Metadata);
-            metadata.Add("Index", index);
+            if (index < 0)
+            {
+                return ReflectionModelServices.CreateExportDefinition(pi,
+                   name,
+                    new Lazy<IDictionary<string, object>>(() => id.Metadata),
+                   null);
 
-            return ReflectionModelServices.CreateExportDefinition(pi,
-                    id.ContractName,
-                    new Lazy<IDictionary<string, object>>(() => metadata),
-                    null);
+            }
+            else
+            {
+                Dictionary<string, object> metadata = new Dictionary<string, object>(id.Metadata);
+                metadata.Add("Index", index);
+
+                return ReflectionModelServices.CreateExportDefinition(pi,
+                 name,
+                 new Lazy<IDictionary<string, object>>(() => metadata),
+                 null);
+            }
+
         }
 
         public ImportDefinition CreateIndexedImportDefinition(ImportDefinition id, string root, int index)
+        {
+            return CreateRelativeImportDefinition(id, root + "/" + index);
+        }
+
+
+        public ImportDefinition CreateRelativeImportDefinition(ImportDefinition id, string root)
         {
             if (ReflectionModelServices.IsImportingParameter(id))
             {
                 Lazy<ParameterInfo> pi = ReflectionModelServices.GetImportingParameter(id);
 
                 return ReflectionModelServices.CreateImportDefinition(pi,
-                    root + "/" + index + id.ContractName.Substring(1),
+                    root + id.ContractName.Substring(1),
                     AttributedModelServices.GetTypeIdentity(pi.Value.ParameterType),
                     new Dictionary<string, Type>(),
                     id.Cardinality,
@@ -100,7 +131,7 @@ namespace PA.Configuration
                 LazyMemberInfo pi = ReflectionModelServices.GetImportingMember(id);
 
                 return ReflectionModelServices.CreateImportDefinition(pi,
-                  root + "/" + index + id.ContractName.Substring(1),
+                  root + id.ContractName.Substring(1),
                    AttributedModelServices.GetTypeIdentity(pi.GetMemberUnderlyingType()),
                    new Dictionary<string, Type>(),
                    id.Cardinality,

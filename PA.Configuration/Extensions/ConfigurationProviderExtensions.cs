@@ -151,7 +151,6 @@ namespace PA.Configuration
                 var importingParameter = ReflectionModelServices.GetImportingParameter(definition);
                 contractName = importingParameter.Value.Member.DeclaringType.FullName + "/" + importingParameter.Value.Name;
                 contractType = importingParameter.Value.ParameterType;
-
             }
             else
             {
@@ -201,7 +200,16 @@ namespace PA.Configuration
                         }
                         else
                         {
-                            yield return new Item(cp.Source.GetSetting(contract.Name + "/" + i), contract);
+                            string value =  cp.Source.GetSetting(contract.Name + "/" + i);
+
+                            if (value.StartsWith(">"))
+                            {
+                                yield return new Item(value, new Contract(contract.Name + "/" + i,typeof(object)));
+                            }
+                            else
+                            {
+                                yield return new Item(value, contract);
+                            }
                         }
                     }
                 }

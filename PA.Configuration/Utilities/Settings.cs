@@ -265,7 +265,9 @@ namespace PA.Configuration
                         // Strip comments
                         if (!strCurrent.StartsWith("#") && !strCurrent.StartsWith(";"))
                         {
-                            string key = strCurrent.Substring(0, strCurrent.IndexOf('='));
+                            int pos = strCurrent.IndexOf('=');
+
+                            string key = pos > 0 ? strCurrent.Substring(0, pos) : strCurrent;
 
                             if (key.Trim().Length > 0)
                             {
