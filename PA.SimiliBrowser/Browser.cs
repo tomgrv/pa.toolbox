@@ -9,6 +9,7 @@ using System.Web;
 using HtmlAgilityPack;
 using System.ComponentModel.Composition;
 using System.Globalization;
+using PA.Plugin.Components;
 
 namespace PA.SimiliBrowser
 {

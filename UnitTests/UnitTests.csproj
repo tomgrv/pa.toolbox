@@ -73,6 +73,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PA.Components\PA.Plugin.Components.csproj">
+      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
+      <Name>PA.Plugin.Components</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PA.Configuration\PA.Configuration.csproj">
       <Project>{40fa1f2a-3b4e-470b-87ca-d8b3792f3e8a}</Project>
       <Name>PA.Configuration</Name>
@@ -81,17 +85,9 @@
       <Project>{b09f91a1-df25-4dae-8e45-40df0fa9334f}</Project>
       <Name>PA.Converters</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PA.Data\PA.Data.csproj">
-      <Project>{dde40a86-a8a4-4a0e-a964-a4e0c233611f}</Project>
-      <Name>PA.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
       <Name>PA.Plugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PA.SimiliBrowser\PA.SimiliBrowser.csproj">
-      <Project>{a717a9f8-aea4-4b9a-a0ba-8e6d0c856aee}</Project>
-      <Name>PA.SimiliBrowser</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.TileList.Extensions\PA.TileList.Extensions.csproj">
       <Project>{a16e749b-7556-41bd-a9b9-253b3253578c}</Project>

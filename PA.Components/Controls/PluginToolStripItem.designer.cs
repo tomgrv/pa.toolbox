@@ -1,9 +1,13 @@
-﻿
-namespace PA.SimiliBrowser
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace PA.Plugin.Components.Controls
 {
-    partial class Browser
+    partial class PluginToolStripItem
     {
-        /// <summary>
+        /// <summary> 
         /// Variable nécessaire au concepteur.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -23,26 +27,15 @@ namespace PA.SimiliBrowser
 
         #region Code généré par le Concepteur de composants
 
-        /// <summary>
-        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
+        /// <summary> 
+        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas 
         /// le contenu de cette méthode avec l'éditeur de code.
         /// </summary>
         private void InitializeComponent()
         {
-            this.pluginHost1 = new PA.Plugin.Components.Core.PluginLoader();
-            ((System.ComponentModel.ISupportInitialize)(this.pluginHost1)).BeginInit();
-            // 
-            // pluginHost1
-            // 
-           
-            this.pluginHost1.Location = null;
- 
-            ((System.ComponentModel.ISupportInitialize)(this.pluginHost1)).EndInit();
-
         }
 
         #endregion
 
-        private PA.Plugin.Components.Core.PluginLoader pluginHost1;
     }
 }

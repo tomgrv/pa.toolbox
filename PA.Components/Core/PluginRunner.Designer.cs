@@ -1,9 +1,8 @@
-﻿
-namespace PA.SimiliBrowser
+﻿namespace PA.Plugin.Components.Core
 {
-    partial class Browser
+    partial class PluginRunner
     {
-        /// <summary>
+        /// <summary> 
         /// Variable nécessaire au concepteur.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -23,26 +22,24 @@ namespace PA.SimiliBrowser
 
         #region Code généré par le Concepteur de composants
 
-        /// <summary>
-        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
+        /// <summary> 
+        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas 
         /// le contenu de cette méthode avec l'éditeur de code.
         /// </summary>
         private void InitializeComponent()
         {
-            this.pluginHost1 = new PA.Plugin.Components.Core.PluginLoader();
-            ((System.ComponentModel.ISupportInitialize)(this.pluginHost1)).BeginInit();
+            this.AsyncOperation = new System.ComponentModel.BackgroundWorker();
             // 
-            // pluginHost1
+            // AsyncOperation
             // 
-           
-            this.pluginHost1.Location = null;
- 
-            ((System.ComponentModel.ISupportInitialize)(this.pluginHost1)).EndInit();
+            this.AsyncOperation.WorkerSupportsCancellation = true;
+            this.AsyncOperation.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AsyncOperation_DoWork);
+            this.AsyncOperation.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.AsyncOperation_RunWorkerCompleted);
 
         }
 
         #endregion
 
-        private PA.Plugin.Components.Core.PluginLoader pluginHost1;
+        private System.ComponentModel.BackgroundWorker AsyncOperation;
     }
 }

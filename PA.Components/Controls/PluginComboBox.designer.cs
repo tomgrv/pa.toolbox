@@ -1,6 +1,6 @@
-﻿namespace PA.Components
+﻿namespace PA.Plugin.Components.Controls
 {
-    partial class PluginRunner
+    partial class PluginComboBox
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -28,18 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.AsyncOperation = new System.ComponentModel.BackgroundWorker();
-            // 
-            // AsyncOperation
-            // 
-            this.AsyncOperation.WorkerSupportsCancellation = true;
-            this.AsyncOperation.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AsyncOperation_DoWork);
-            this.AsyncOperation.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.AsyncOperation_RunWorkerCompleted);
-
+            components = new System.ComponentModel.Container();
         }
 
         #endregion
-
-        private System.ComponentModel.BackgroundWorker AsyncOperation;
     }
 }

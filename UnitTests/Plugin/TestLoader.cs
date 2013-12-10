@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.Composition;
 using PA.Plugin;
-using PA.Components;
+using PA.Plugin.Components;
 using PA.Configuration;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ namespace UnitTests.Plugin
         [TestMethod]
         public void ConfigurationLoading()
         {
-            PluginLoader loader = new PluginLoader();
+            PA.Plugin.Components.Core.PluginLoader loader = new PA.Plugin.Components.Core.PluginLoader();
             loader.BeginInit();
             loader.Configuration = new IniConfigurationSource();
             loader.Parent = this;

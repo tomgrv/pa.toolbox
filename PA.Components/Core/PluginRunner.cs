@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using PA.Plugin;
 
-namespace PA.Components
+namespace PA.Plugin.Components.Core
 {
     public partial class PluginRunner : Component
     {

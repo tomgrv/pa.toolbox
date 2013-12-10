@@ -15,7 +15,7 @@ using PA.Configuration;
 using PA.Plugin.Configuration;
 using PA.Plugin.Extensions;
 
-namespace PA.Components
+namespace PA.Plugin.Components.Core
 {
     public partial class PluginLoader : Component, ISupportInitialize, ISupportInitializeNotification
     {
