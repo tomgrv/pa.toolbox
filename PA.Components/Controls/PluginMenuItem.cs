@@ -36,7 +36,8 @@ namespace PA.Plugin.Components.Controls
         [DefaultValue(GroupType.None)]
         public PluginMenuItem.GroupType GroupBy { get; set; }
 
-        protected void BuildMenus<T>() where T : IPluginOperation
+        protected void BuildMenus<T>() 
+            where T : IPluginOperation
         {
             this.DropDownItems.Clear();
 

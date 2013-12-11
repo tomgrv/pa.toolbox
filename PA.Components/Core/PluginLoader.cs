@@ -17,11 +17,8 @@ using PA.Plugin.Extensions;
 
 namespace PA.Plugin.Components.Core
 {
-    public partial class PluginLoader : Component, ISupportInitialize, ISupportInitializeNotification
+    public partial class PluginLoader : Component, ISupportInitialize, ISupportInitializeNotification, IEditableObject
     {
-        [Browsable(false)]
-        public CompositionContainer CompositionContainer { get; private set; }
-
         [Description("Plugin Location")]
         [AmbientValue("")]
         public string Location { get; set; }
@@ -29,17 +26,20 @@ namespace PA.Plugin.Components.Core
         [Description("Configuration access")]
         public IConfigurationSource Configuration { get; set; }
 
+        private CompositionContainer _container;
+        private CompositionConfigurator _configurator;
+
         #region Delayed composition
 
         private Queue<IComponent> toCompose = new Queue<IComponent>();
 
         public void DelayedComposition(IComponent component)
         {
-            if (this.CompositionContainer is CompositionContainer && this.IsInitialized)
+            if (this._container is CompositionContainer && this.IsInitialized)
             {
                 try
                 {
-                    this.CompositionContainer.ComposeParts(component);
+                    this._container.ComposeParts(component);
                 }
                 catch (System.Reflection.ReflectionTypeLoadException e)
                 {
@@ -65,34 +65,19 @@ namespace PA.Plugin.Components.Core
 
         public void BeginInit()
         {
-            
         }
 
         public void EndInit()
         {
             if (!this.DesignMode)
             {
-                if (this.Configuration is IConfigurationSource && this.Configuration.ContainsSetting(Process.GetCurrentProcess().ProcessName + "/Plugins"))
-                {
-                    this.Location = this.Configuration.GetSetting(Process.GetCurrentProcess().ProcessName + "/Plugins");
-                }
-
-                this.CompositionContainer = PluginManager.GetContainer(x =>
-                {
-                    
-                    //x.With(new AssemblyCatalog(Assembly.GetAssembly(this.Parent.GetType())));
-                    x.WithDirectory(this.Location);
-                    x.With(new UriHandlerExportProvider(x.Catalog, true, this.Configuration));
-                    x.With(new ConfigurationCatalog(this.Configuration, x.Catalog));
-                    x.With(new ConfigurationItemExportProvider(this.Configuration));
-
-                });
-
-                this.CompositionContainer.ComposeParts(this.Parent);
-                this.CompositionContainer.ComposeParts(this.toCompose);
+                this.EndEdit();
             }
 
-            this.OnInitialized();
+            if (!this.IsInitialized)
+            {
+                this.OnInitialized();
+            }
         }
 
         #endregion
@@ -138,5 +123,42 @@ namespace PA.Plugin.Components.Core
         }
 
         #endregion
+
+        public void BeginEdit()
+        {
+            this._configurator.Unload();
+            this.toCompose.Clear();
+        }
+
+        public void CancelEdit()
+        {
+            this._configurator.Reload();
+            this.toCompose.Clear();
+        }
+
+        public void EndEdit()
+        {
+            if (this.Configuration is IConfigurationSource && this.Configuration.ContainsSetting(Process.GetCurrentProcess().ProcessName + "/Plugins"))
+            {
+                this.Location = this.Configuration.GetSetting(Process.GetCurrentProcess().ProcessName + "/Plugins");
+            }
+
+            this._configurator = new CompositionConfigurator();
+            this._configurator.WithDirectory(this.Location);
+            this._configurator.With(new UriHandlerExportProvider(this._configurator.Catalog, true, this.Configuration));
+            this._configurator.With(new ConfigurationCatalog(this.Configuration, this._configurator.Catalog));
+            this._configurator.With(new ConfigurationItemExportProvider(this.Configuration));
+
+            this._container = this._configurator.GetContainer();
+         
+            this._container.ComposeParts(this.Parent);
+            this._container.ComposeParts(this.toCompose);
+        }
+
+        public new void Dispose()
+        {
+            this._container.Dispose();
+            base.Dispose();
+        }
     }
 }
