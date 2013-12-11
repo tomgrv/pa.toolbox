@@ -41,7 +41,7 @@ namespace PA.Plugin.Components.Controls
         {
             this.DropDownItems.Clear();
 
-            foreach (IPlugin o in this.Imports.OfType<T>().OrderBy(o => o.GetDescription()))
+            foreach (IPlugin o in this.Imports.OfType<T>().OrderBy(o => PluginManager.GetAttribute<PluginDescriptionAttribute>(o.GetType()).Description))
             {
                 PluginToolStripItem PluginMenu = new PluginToolStripItem(o, new EventHandler<PluginEventArgs>(this.OnPluginItemClicked));
 
