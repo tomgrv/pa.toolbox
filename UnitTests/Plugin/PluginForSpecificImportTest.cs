@@ -9,6 +9,7 @@ namespace UnitTests.Plugin
 {
     [Export]
     [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+    [PluginDescription("DESC")]
     public class PluginForSpecificImportTest : IPlugin
     {
         [Import("SpecificImport/Param")]
