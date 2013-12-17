@@ -1,29 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.ComponentModel.Composition;
-using System.ComponentModel;
-using System.IO;
-using System.Drawing;
-using System.Collections;
-using System.Reflection;
+﻿using PA.Plugin.Components;
 using PA.Plugin.Components.Interfaces;
-using PA.Plugin.Components.Core;
 using PA.Plugin.Extensions;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace PA.Plugin.Components.Controls
 {
-    [ToolboxItem(typeof(IPluginSource))]
-    public partial class PluginMenuItem : ToolStripMenuItem, IPluginSource, ISupportInitialize
+    [ToolboxItem(typeof(IPluginHandler))]
+    public partial class PluginMenuItem : ToolStripMenuItem, IPluginHandler, ISupportInitialize
     {
-        [ImportMany("Toolbox.Plugin.Controls/PluginMenuItem/ForceDefaultParameters")]
-        [Browsable(false), ReadOnly(true)]
-        public IEnumerable<string> ForceDefaultParameters { get; private set; }
-
-        #region Plugin Management
-
         public enum GroupType
         {
             None,
@@ -31,13 +20,20 @@ namespace PA.Plugin.Components.Controls
             CategoryDropDown
         }
 
+        [Browsable(false)]
+        [ReadOnly(true)]
+        [ImportMany("Toolbox.Plugin.Controls/PluginMenuItem/ForceDefaultParameters")]
+        public IEnumerable<string> ForceDefaultParameters { get; private set; }
+
+        #region Plugin Management
+
         [Category("Plugin Management")]
         [Description("Specify how to group plugins")]
         [DefaultValue(GroupType.None)]
         public PluginMenuItem.GroupType GroupBy { get; set; }
 
-        protected void BuildMenus<T>() 
-            where T : IPluginOperation
+
+        public void BuildWithType<T>() where T : IPluginOperation
         {
             this.DropDownItems.Clear();
 
@@ -45,55 +41,48 @@ namespace PA.Plugin.Components.Controls
             {
                 PluginToolStripItem PluginMenu = new PluginToolStripItem(o, new EventHandler<PluginEventArgs>(this.OnPluginItemClicked));
 
+                string category = PluginMenu.Plugin.GetCategory();
+
                 switch (this.GroupBy)
                 {
                     case PluginMenuItem.GroupType.CategoryDropDown:
 
-                        if (PluginMenu.Plugin.GetCategory() != "")
+                        if (category.Length > 0)
                         {
-                            if (!this.DropDownItems.ContainsKey(PluginMenu.Plugin.GetCategory()))
-                            {
-                                ToolStripMenuItem PluginSubMenu = new ToolStripMenuItem(PluginMenu.Plugin.GetCategory());
-                                {
-                                    PluginSubMenu.Name = PluginMenu.Plugin.GetCategory();
-                                }
-                                this.DropDownItems.Add(PluginSubMenu);
-                            }
+                            ToolStripMenuItem item = this.DropDownItems.Cast<ToolStripMenuItem>().LastOrDefault(t => t.Name == category);
 
-                            (this.DropDownItems[PluginMenu.Plugin.GetCategory()] as ToolStripMenuItem).DropDownItems.Add(PluginMenu);
+                            if (item is ToolStripItem)
+                            {
+                                item.DropDownItems.Add(PluginMenu);
+                            }
+                            else
+                            {
+                                item = new ToolStripMenuItem(category) { Name = category };
+                                this.DropDownItems.Add(item);
+                                item.DropDownItems.Add(PluginMenu);
+                            }
                         }
                         else
                         {
                             this.DropDownItems.Add(PluginMenu);
                         }
+
                         break;
 
                     case PluginMenuItem.GroupType.Category:
 
-                        if (PluginMenu.Plugin.GetCategory() != "")
+                        if (category.Length > 0)
                         {
-                            int index = -1;
+                            ToolStripItem item = this.DropDownItems.Cast<ToolStripItem>().LastOrDefault(t => t.Name == category);
 
-                            foreach (ToolStripItem t in this.DropDownItems)
+                            if (item is ToolStripItem)
                             {
-                                if (t.Name == PluginMenu.Plugin.GetCategory())
-                                {
-                                    index = this.DropDownItems.IndexOf(t);
-                                }
-                            }
-
-                            if (index < 0)
-                            {
-                                ToolStripSeparator PluginSubMenu = new ToolStripSeparator();
-                                {
-                                    PluginSubMenu.Name = PluginMenu.Plugin.GetCategory();
-                                }
-                                this.DropDownItems.Add(PluginSubMenu);
-                                this.DropDownItems.Add(PluginMenu);
+                                this.DropDownItems.Insert(this.DropDownItems.IndexOf(item) + 1, PluginMenu);
                             }
                             else
                             {
-                                this.DropDownItems.Insert(index + 1, PluginMenu);
+                                this.DropDownItems.Add(new ToolStripSeparator() { Name = category });
+                                this.DropDownItems.Add(PluginMenu);
                             }
                         }
                         else
@@ -105,7 +94,6 @@ namespace PA.Plugin.Components.Controls
                     default:
                         this.DropDownItems.Add(PluginMenu);
                         break;
-
                 }
             }
 
@@ -135,12 +123,12 @@ namespace PA.Plugin.Components.Controls
 
         #region IPartImportsSatisfiedNotification Members
 
-        [ImportMany]
+        [ImportMany(AllowRecomposition = true)]
         protected virtual IEnumerable<IPluginOperation> Imports { get; set; }
 
         public virtual void OnImportsSatisfied()
         {
-            this.BuildMenus<IPluginOperation>();
+            this.BuildWithType<IPluginOperation>();
         }
 
         #endregion

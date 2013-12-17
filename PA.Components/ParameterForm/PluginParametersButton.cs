@@ -11,7 +11,7 @@ using PA.Plugin.Components.Interfaces;
 
 namespace PA.Plugin.Components.ParameterForm
 {
-    public partial class PluginParametersButton : System.Windows.Forms.Button, IPluginHelper
+    public partial class PluginParametersButton : Button
     {
         private PluginParametersForm form;
 
@@ -21,18 +21,12 @@ namespace PA.Plugin.Components.ParameterForm
             this.form = new PluginParametersForm();
         }
 
-        #region IPluginHelper Membres
-
-        public IPluginHelper NextHelper { get; set; }
-
-        public bool Help<T>(T p) where T : IPlugin
+        public bool Refresh<T>(T p) where T : IPlugin
         {
             this.form.Refresh<T>(p);
             this.Enabled = this.form.HasParameters;
             return true;
         }
-
-        #endregion
 
         protected override void OnClick(EventArgs e)
         {

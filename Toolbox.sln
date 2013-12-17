@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Plugin.Components", "PA.Components\PA.Plugin.Components.csproj", "{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Plugin.Operations", "PA.Plugin.Operations\PA.Plugin.Operations.csproj", "{AC454838-BC18-4852-9EAA-1D2E4E72F711}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,14 @@ Global
 		{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE}.Release|x64.ActiveCfg = Release|Any CPU
 		{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE}.Release|x86.ActiveCfg = Release|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|x64.ActiveCfg = Release|Any CPU
+		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

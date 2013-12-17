@@ -15,7 +15,7 @@ using PA.Configuration;
 using PA.Plugin.Configuration;
 using PA.Plugin.Extensions;
 
-namespace PA.Plugin.Components.Core
+namespace PA.Plugin.Components.Controls
 {
     public partial class PluginLoader : Component, ISupportInitialize, ISupportInitializeNotification, IEditableObject
     {
@@ -28,6 +28,7 @@ namespace PA.Plugin.Components.Core
 
         private CompositionContainer _container;
         private CompositionConfigurator _configurator;
+
 
         #region Delayed composition
 
@@ -155,10 +156,6 @@ namespace PA.Plugin.Components.Core
             this._container.ComposeParts(this.toCompose);
         }
 
-        public new void Dispose()
-        {
-            this._container.Dispose();
-            base.Dispose();
-        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace PA.Plugin.Components.Core
+﻿namespace PA.Plugin
 {
     partial class PluginRunner
     {

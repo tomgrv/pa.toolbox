@@ -5,7 +5,7 @@ using System.Reflection;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 
-namespace PA.Plugin.Components.Core
+namespace PA.Plugin.Components.Controls
 {
 
     public partial class PluginLoader

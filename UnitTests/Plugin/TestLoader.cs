@@ -55,9 +55,14 @@ namespace UnitTests.Plugin
         {
             Assert.AreEqual("DESC", PluginManager.GetAttribute<PluginDescriptionAttribute>(typeof(PluginForSpecificImportTest)).Description);
 
-            using (PA.Plugin.Components.Core.PluginLoader loader = new PA.Plugin.Components.Core.PluginLoader())
+            using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
-                Assert.AreEqual("DESC", this.SpecificPluginToTest.GetAttribute<IPlugin,PluginDescriptionAttribute>().Description);
+                loader.BeginInit();
+                loader.Configuration = new IniConfigurationSource();
+                loader.Parent = this;
+                loader.EndInit();
+
+                Assert.AreEqual("DESC", PluginManager.GetAttribute<PluginDescriptionAttribute>(this.SpecificPluginToTest).Description);
                 Assert.AreEqual("DESC", this.SpecificPluginToTest.GetDescription());
             }
         }
@@ -65,7 +70,7 @@ namespace UnitTests.Plugin
         [TestMethod]
         public void LoadingUnloading()
         {
-            using (PA.Plugin.Components.Core.PluginLoader loader = new PA.Plugin.Components.Core.PluginLoader())
+            using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
                 loader.BeginInit();
                 loader.Configuration = new IniConfigurationSource();
@@ -101,7 +106,7 @@ namespace UnitTests.Plugin
         [TestMethod]
         public void ConfigurationLoading()
         {
-            using (PA.Plugin.Components.Core.PluginLoader loader = new PA.Plugin.Components.Core.PluginLoader())
+            using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
                 loader.BeginInit();
                 loader.Configuration = new IniConfigurationSource();

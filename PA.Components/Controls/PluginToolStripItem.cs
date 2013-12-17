@@ -5,10 +5,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using PA.Plugin.Extensions;
+using PA.Plugin.Components.Interfaces;
 
 namespace PA.Plugin.Components.Controls
 {
-    public partial class PluginToolStripItem : ToolStripMenuItem
+    public partial class PluginToolStripItem : ToolStripMenuItem, IPluginProvider
     {
         public IPlugin Plugin { get; private set; }
 

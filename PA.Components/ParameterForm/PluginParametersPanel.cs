@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
+using PA.Plugin.Components.Interfaces;
 
 namespace PA.Plugin.Components.ParameterForm
 {
-    public partial class PluginParametersPanel : FlowLayoutPanel
+    public partial class PluginParametersPanel : FlowLayoutPanel, IPluginProvider
     {
         public PluginParametersPanel()
         {

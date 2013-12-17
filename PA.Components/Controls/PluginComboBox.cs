@@ -7,16 +7,16 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel.Composition;
 using PA.Plugin.Components.Interfaces;
-using PA.Plugin.Components.Core;
+using PA.Plugin.Components;
 
 
 namespace PA.Plugin.Components.Controls
 {
-    public partial class PluginComboBox : ComboBox, IPluginSource, ISupportInitialize
+    public partial class PluginComboBox : ComboBox, IPluginHandler, ISupportInitialize
     {
         #region Plugin Management
 
-        protected void BuildMenus<T>() where T : IPluginOperation
+        public void BuildWithType<T>() where T : IPluginOperation
         {
             this.BeginUpdate();
 
@@ -62,7 +62,7 @@ namespace PA.Plugin.Components.Controls
 
         public virtual void OnImportsSatisfied()
         {
-            this.BuildMenus<IPluginOperation>();
+            this.BuildWithType<IPluginOperation>();
         }
 
         #endregion

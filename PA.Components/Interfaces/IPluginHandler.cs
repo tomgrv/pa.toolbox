@@ -1,4 +1,5 @@
-﻿using PA.Plugin.Components.Core;
+﻿using PA.Plugin.Components;
+using PA.Plugin.Components.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -7,10 +8,10 @@ using System.Text;
 
 namespace PA.Plugin.Components.Interfaces
 {
-    public interface IPluginSource: IPartImportsSatisfiedNotification
+    public interface IPluginHandler : IPartImportsSatisfiedNotification, IPluginProvider
     {
         PluginLoader Loader { get; set; }
-        IPlugin Plugin { get; }
+        void BuildWithType<T>() where T : IPluginOperation;
         event EventHandler<PluginEventArgs> PluginChanged;
     }
 }

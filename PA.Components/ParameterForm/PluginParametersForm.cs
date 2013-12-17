@@ -40,16 +40,11 @@ namespace PA.Plugin.Components.ParameterForm
             this.flowLayoutPanel1.Save();
         }
 
-        public void Refresh<T>(T p) where T:IPlugin
+        public void Refresh<T>(T pi)
+            where T : IPlugin
         {
-            this.flowLayoutPanel1.Refresh<T>(p);
-            this.Text = "Parameters for " + p.GetType().Name.ToString();
-        }
-
-        public void Refresh(IPlugin pi)
-        {
-            this.flowLayoutPanel1.Refresh<IPlugin>(pi);
-            this.Text = "Parameters for "+pi.GetDescription();
+            this.flowLayoutPanel1.Refresh<T>(pi);
+            this.Text = "Parameters for " + pi.GetDescription();
         }
     }
 }
