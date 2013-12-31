@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Plugin.Components", "PA.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Plugin.Operations", "PA.Plugin.Operations\PA.Plugin.Operations.csproj", "{AC454838-BC18-4852-9EAA-1D2E4E72F711}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.Plugin.File", "PA.Plugin.File\PA.Plugin.File.csproj", "{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,6 +140,14 @@ Global
 		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|x64.ActiveCfg = Release|Any CPU
 		{AC454838-BC18-4852-9EAA-1D2E4E72F711}.Release|x86.ActiveCfg = Release|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Release|x64.ActiveCfg = Release|Any CPU
+		{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,7 @@ namespace PA.Plugin.Components.Interfaces
     public interface IPluginHandler : IPartImportsSatisfiedNotification, IPluginProvider
     {
         PluginLoader Loader { get; set; }
-        void BuildWithType<T>() where T : IPluginOperation;
+        void BuildWithType<T>() where T : IPlugin;
         event EventHandler<PluginEventArgs> PluginChanged;
     }
 }

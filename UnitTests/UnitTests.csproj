@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTests</RootNamespace>
     <AssemblyName>UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -41,10 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition">
-      <Private>True</Private>
-      <HintPath>..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
-    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -61,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Configuration\IniConfigurationTest.cs" />
     <Compile Include="Converters\Extensions.cs" />
+    <Compile Include="Operations\ClassForJob.cs" />
+    <Compile Include="Operations\TestRunner.cs" />
     <Compile Include="Plugin\PluginForSpecificImportTest.cs" />
     <Compile Include="Plugin\PluginForGenericArrayTest.cs" />
     <Compile Include="Plugin\PluginForGenericImportTest.cs" />
@@ -85,6 +84,10 @@
       <Project>{b09f91a1-df25-4dae-8e45-40df0fa9334f}</Project>
       <Name>PA.Converters</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+      <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
+      <Name>PA.Plugin.Operations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
       <Name>PA.Plugin</Name>
@@ -99,7 +102,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="app.config" />
     <None Include="vstest.executionengine.x86.clr20.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

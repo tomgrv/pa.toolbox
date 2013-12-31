@@ -33,7 +33,7 @@ namespace PA.Plugin.Components.Controls
         public PluginMenuItem.GroupType GroupBy { get; set; }
 
 
-        public void BuildWithType<T>() where T : IPluginOperation
+        public void BuildWithType<T>() where T : IPlugin
         {
             this.DropDownItems.Clear();
 
@@ -124,11 +124,11 @@ namespace PA.Plugin.Components.Controls
         #region IPartImportsSatisfiedNotification Members
 
         [ImportMany(AllowRecomposition = true)]
-        protected virtual IEnumerable<IPluginOperation> Imports { get; set; }
+        protected virtual IEnumerable<IActionPlugin> Imports { get; set; }
 
         public virtual void OnImportsSatisfied()
         {
-            this.BuildWithType<IPluginOperation>();
+            this.BuildWithType<IActionPlugin>();
         }
 
         #endregion

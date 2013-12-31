@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A16E749B-7556-41BD-A9B9-253B3253578C}</ProjectGuid>
+    <ProjectGuid>{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PA.TileList</RootNamespace>
-    <AssemblyName>PA.TileList.Extensions</AssemblyName>
+    <RootNamespace>PA.Plugin.File</RootNamespace>
+    <AssemblyName>PA.Plugin.File</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <TargetFrameworkProfile />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\WMT_Wafermap\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,30 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Circular\CircularExtensions.cs" />
-    <Compile Include="Circular\CircularProfile.cs" />
-    <Compile Include="Circular\CircularConfiguration.cs" />
-    <Compile Include="Contextual\Contextual.cs" />
-    <Compile Include="Contextual\IContextual.cs" />
-    <Compile Include="Contextual\ContextualExtensions.cs" />
-    <Compile Include="Extensions\CoordinateExtention.cs" />
-    <Compile Include="Linear\LinearExtensions.cs" />
+    <Compile Include="Interfaces\IFilePlugin.cs" />
+    <Compile Include="Interfaces\IFileExporterPlugin.cs" />
+    <Compile Include="Interfaces\IFileImporterPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quadrant\IQuadrant.cs" />
-    <Compile Include="Quadrant\Quadrant.cs" />
-    <Compile Include="Quadrant\QuadrantExtension.cs" />
-    <Compile Include="Quantified\IQuantifiedTile.cs" />
-    <Compile Include="Quantified\QuantifiedTile.cs" />
-    <Compile Include="Rotation\RotationExtensions.cs" />
-    <Compile Include="Rotation\RotationTable.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="PA.Plugin.File.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PA.TileList.Extension.nuspec" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PA.TileList\PA.TileList.csproj">
-      <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
-      <Name>PA.TileList</Name>
+    <ProjectReference Include="..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+      <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
+      <Name>PA.Plugin.Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
+      <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
+      <Name>PA.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

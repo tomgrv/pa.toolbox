@@ -16,13 +16,13 @@ namespace PA.Plugin.Components.Controls
     {
         #region Plugin Management
 
-        public void BuildWithType<T>() where T : IPluginOperation
+        public void BuildWithType<T>() where T : IPlugin
         {
             this.BeginUpdate();
 
             this.Items.Clear();
 
-            foreach (IPluginOperation o in this.Imports.OfType<T>())
+            foreach (IPlugin o in this.Imports.OfType<T>())
             {
                 this.Items.Add(o);
             }
@@ -58,11 +58,11 @@ namespace PA.Plugin.Components.Controls
         #region IPartImportsSatisfiedNotification Members
 
         [ImportMany]
-        protected virtual IEnumerable<IPluginOperation> Imports { get; set; }
+        protected virtual IEnumerable<IPlugin> Imports { get; set; }
 
         public virtual void OnImportsSatisfied()
         {
-            this.BuildWithType<IPluginOperation>();
+            this.BuildWithType<IPlugin>();
         }
 
         #endregion

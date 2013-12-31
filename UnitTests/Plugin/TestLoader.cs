@@ -114,7 +114,7 @@ namespace UnitTests.Plugin
                 loader.EndInit();
 
                 Assert.AreEqual("Correct", this.ValueToTest, "String", "String Parsing");
-                Assert.AreEqual(new Uri("http://www.google.fr", true), this.UrlToTest, "Url Parsing");
+                Assert.AreEqual(new Uri(@"http://www.google.fr"), this.UrlToTest, "Url Parsing");
 
                 Assert.AreEqual(1, this.ManyPluginToLoad1.Count(), "TestSection/Many Plugin Loading");
                 Assert.IsInstanceOfType(this.ManyPluginToLoad1.ElementAt(0).Value, typeof(PluginForSpecificArrayTest));
