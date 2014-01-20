@@ -8,3 +8,4 @@ publish/
 *.nupkg
 *.user
 /TestResults/
+/*.suo

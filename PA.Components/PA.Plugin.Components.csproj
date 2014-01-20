@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\common\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Controls\PluginComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -101,6 +104,7 @@
     <Compile Include="ParameterForm\PluginParametersPanel.designer.cs">
       <DependentUpon>PluginParametersPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="PluginItemEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
