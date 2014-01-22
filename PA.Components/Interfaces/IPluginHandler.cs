@@ -1,5 +1,6 @@
 ﻿using PA.Plugin.Components;
 using PA.Plugin.Components.Controls;
+using PA.Plugin.Operations.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;

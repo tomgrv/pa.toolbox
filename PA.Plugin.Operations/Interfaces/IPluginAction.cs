@@ -2,7 +2,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel;
 using System;
 
-namespace PA.Plugin
+namespace PA.Plugin.Operations.Interfaces
 {
     [InheritedExport]
     public interface IPluginAction : IPlugin, ICloneable //IPluginAction must be cloneable to save parameters during async operation

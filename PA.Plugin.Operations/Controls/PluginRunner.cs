@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using PA.Plugin.Operations.Interfaces;
 
 namespace PA.Plugin
 {
@@ -19,16 +20,15 @@ namespace PA.Plugin
         }
 
         class AsyncWrapper<T, U> : AsyncWrapper
-            where T : class, IPluginOperation
-            where U : class
+            where T : IPluginOperation, ICloneable
         {
             private T p;
             private U o;
 
             public AsyncWrapper(T p, U o)
             {
-                this.p = p.Clone() as T;
-                this.o = o is U ? o : Activator.CreateInstance<U>();
+                this.p = (T) p.Clone();
+                this.o = o;
             }
 
             public override object Execute()
@@ -67,8 +67,7 @@ namespace PA.Plugin
         public bool ContinueOnError { get; set; }
 
         public void RunAsync<T, U>(T p, U args)
-            where T : class, IPluginOperation
-            where U : class
+            where T : IPluginOperation, ICloneable
         {
             this.DelayedCalls.Enqueue(new AsyncWrapper<T, U>(p, args));
             this.RunNext();

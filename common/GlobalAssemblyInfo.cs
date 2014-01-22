@@ -7,7 +7,7 @@
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("Thomas GERVAIS")]
+[assembly: AssemblyCompany("PerspicApps")]
 [assembly: AssemblyProduct("PA.Toolbox")]
 [assembly: AssemblyCopyright("©PA 2013")]
 [assembly: AssemblyTrademark("")]

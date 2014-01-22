@@ -1,12 +1,12 @@
 
 using System.ComponentModel;
 using System;
-using PA.Plugin.Operations.Interfaces;
+using System.ComponentModel.Composition;
 
-namespace PA.Plugin
+namespace PA.Plugin.Operations.Interfaces
 {
     [InheritedExport]
-    public interface IPluginOperation : IPlugin, ICloneable
+    public interface IPluginOperation : IPlugin
     {
         [Obsolete]
         bool CanExecute<T>(object obj)
@@ -16,10 +16,6 @@ namespace PA.Plugin
             where T : IPluginOperation;
 
         bool CanExecute(params object[] arguments);
-        bool CanExecute<T>(params object[] arguments)
-           where T : IPluginOperation;
-        R Execute<R>(params object[] arguments);
-        R Execute<R, T>(params object[] arguments)
-            where T : IPluginOperation;
+        object Execute(params object[] arguments);
     }
 }
