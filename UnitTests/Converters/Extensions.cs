@@ -24,5 +24,7 @@ namespace UnitTests.Converters
 
             Assert.IsTrue(url.Authority == "www.test.fr");
         }
+
+     
     }
 }

@@ -32,11 +32,9 @@ namespace PA.TileList.Circular
             return new QuantifiedTile<T>(list, sizeX, sizeY, stepX, stepY, offsetX, offsetY);
         }
 
-        public static IEnumerable<T> Take<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
+        public static IEnumerable<KeyValuePair<T, int>> Points<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
            where T : ICoordinate
         {
-            int steps = (int)Math.Round(1 / config.Resolution + 1, 0);
-            int minPoints = (int)(config.Tolerance * steps * steps);
             double minRadius2 = Math.Pow(p.GetMinRadius(), 2);
             double maxRadius2 = Math.Pow(p.GetMaxRadius(), 2);
 
@@ -44,12 +42,12 @@ namespace PA.TileList.Circular
             {
                 int points = 0;
 
-                for (int i = 0; i < steps; i++)
+                for (int i = 0; i < config.Steps; i++)
                 {
                     double testX = ((c.X - list.Reference.X) - 0.5f + i * config.Resolution) * list.ElementStepX + list.RefOffsetX;
                     double textX2 = Math.Pow(testX, 2);
 
-                    for (int j = 0; j < steps; j++)
+                    for (int j = 0; j < config.Steps; j++)
                     {
                         double testY = ((c.Y - list.Reference.Y) - 0.5f + j * config.Resolution) * list.ElementStepY + list.RefOffsetY;
 
@@ -86,19 +84,37 @@ namespace PA.TileList.Circular
                     }
                 }
 
-                if (minPoints <= points && (config.SelectionType & CircularConfiguration.SelectionFlag.Inside) > 0)
+                yield return new KeyValuePair<T, int>(c, points);
+            }
+        }
+
+        public static IEnumerable<KeyValuePair<T, float>> Percent<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
+           where T : ICoordinate
+        {
+            foreach (KeyValuePair<T, int> c in list.Points(p, config))
+            {
+                yield return new KeyValuePair<T, float>(c.Key, (float)c.Value / config.MaxSurface);
+            }
+        }
+
+        public static IEnumerable<T> Take<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
+           where T : ICoordinate
+        {
+            foreach (KeyValuePair<T, int> c in list.Points(p, config))
+            {
+                if (config.MinSurface <= c.Value && (config.SelectionType & CircularConfiguration.SelectionFlag.Inside) > 0)
                 {
-                    yield return c;
+                    yield return c.Key;
                 }
 
-                if (0 < points && points < minPoints && (config.SelectionType & CircularConfiguration.SelectionFlag.Under) > 0)
+                if (0 < c.Value && c.Value < config.MinSurface && (config.SelectionType & CircularConfiguration.SelectionFlag.Under) > 0)
                 {
-                    yield return c;
+                    yield return c.Key;
                 }
 
-                if (points == 0 && (config.SelectionType & CircularConfiguration.SelectionFlag.Outside) > 0)
+                if (c.Value == 0 && (config.SelectionType & CircularConfiguration.SelectionFlag.Outside) > 0)
                 {
-                    yield return c;
+                    yield return c.Key;
                 }
             }
         }

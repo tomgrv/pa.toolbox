@@ -17,8 +17,13 @@ namespace PA.TileList.Circular
 
         public float Resolution { get; private set; }
         public float Tolerance { get; private set; }
+
+        public int Steps { get; private set; }
+        public float MinSurface { get; private set; }
+        public float MaxSurface { get; private set; }
         public SelectionFlag SelectionType { get; private set; }
-       
+
+
         public CircularConfiguration(float tolerance, float resolution, SelectionFlag type)
         {
             if (tolerance < 0 || tolerance > 1) 
@@ -30,7 +35,16 @@ namespace PA.TileList.Circular
             this.Tolerance = tolerance;
             this.Resolution = resolution;
             this.SelectionType = type;
+
+            this.Steps = (int)Math.Round(1 / this.Resolution + 1, 0);
+            this.MaxSurface = this.Steps * this.Steps;
+            this.MinSurface = this.Tolerance * this.MaxSurface;
         }
 
+        public float GetSurfacePercent(int points)
+        {
+            return  points / this.MaxSurface ;
+        }
+    
     }
 }

@@ -7,6 +7,8 @@ namespace PA.TileList.Circular
 {
     public class CircularProfile
     {
+        public double Radius { get; private set; }
+
         public struct ProfileStep
         {
             public double Angle;
@@ -17,9 +19,10 @@ namespace PA.TileList.Circular
 
         public IEnumerable<ProfileStep> Profile { get { return this.profile; } }
 
-        public CircularProfile()
+        public CircularProfile(Double radius)
         {
-            this.profile = new List<ProfileStep>();
+            this.Radius = radius;
+            this.ResetProfile();
         }
 
         public double GetMinRadius()
@@ -32,10 +35,22 @@ namespace PA.TileList.Circular
             return this.profile.Max<ProfileStep>(p => p.Radius);
         }
 
+        public double GetRadius()
+        {
+            return this.profile.Sum<ProfileStep>(p => p.Radius) / this.profile.Count();
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="radius">Radius of selection</param>
+        public void ResetProfile()
+        {
+            this.profile = new List<ProfileStep>();
+            this.profile.Add(new ProfileStep() { Angle = 0, Radius = this.Radius });
+        }
+
+        [Obsolete]
         public void ResetProfile(double radius)
         {
             this.profile = new List<ProfileStep>();
