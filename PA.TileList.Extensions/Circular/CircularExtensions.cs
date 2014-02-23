@@ -32,6 +32,18 @@ namespace PA.TileList.Circular
             return new QuantifiedTile<T>(list, sizeX, sizeY, stepX, stepY, offsetX, offsetY);
         }
 
+        public static IEnumerable<KeyValuePair<T, double>> Distance<T>(this IQuantifiedTile<T> list)
+            where T : ICoordinate
+        {
+            foreach (T c in list)
+            {
+                double testX = (c.X - list.Reference.X) * list.ElementStepX + list.RefOffsetX;
+                double testY = (c.Y - list.Reference.Y) * list.ElementStepY + list.RefOffsetY;
+                double radius2 = Math.Pow(testX ,2) + Math.Pow(testY, 2);
+                yield return new KeyValuePair<T, double>(c, Math.Sqrt(radius2));
+            }
+        }
+
         public static IEnumerable<KeyValuePair<T, int>> Points<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
            where T : ICoordinate
         {
@@ -96,6 +108,8 @@ namespace PA.TileList.Circular
                 yield return new KeyValuePair<T, float>(c.Key, (float)c.Value / config.MaxSurface);
             }
         }
+
+
 
         public static IEnumerable<T> Take<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
            where T : ICoordinate
