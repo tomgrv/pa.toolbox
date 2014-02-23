@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace PA.Configuration
 {
@@ -14,7 +15,7 @@ namespace PA.Configuration
         public IniConfigurationSource()
         {
             this.settings = new Settings(Process.GetCurrentProcess().ProcessName + ".ini", Settings.Format.IniFormat);
-            Trace.TraceInformation("Loading configuration from "+this.settings.FileName);
+            Trace.TraceInformation("Loading configuration from " + this.settings.FileName);
         }
 
         public bool ContainsSetting(string key)
@@ -68,10 +69,43 @@ namespace PA.Configuration
 
         public string[] GetSettings(string section)
         {
-            this.settings.BeginGroup(section);
-            string[] keys = this.settings.AllKeys();
-            this.settings.EndGroup();
-            return keys;
+            List<string> stg = new List<string>();
+
+            lock (this.settings)
+            {
+                this.settings.BeginGroup(section);
+                stg.AddRange(this.settings.ChildKeys());
+
+                foreach (string group in this.settings.ChildGroups())
+                {
+                    if (this.settings.Contains(group + "/size"))
+                    {
+                        int size = this.settings.BeginReadArray(group);
+
+                        for (int i = 0; i < size; i++)
+                        {
+                            this.settings.SetArrayIndex(i);
+
+                            stg.AddRange(this.settings.ChildKeys().Select(k =>  group + "/" + i + (k.Length > 0 ? "/" + k : "")));
+
+                            foreach (string subgroup in this.settings.ChildGroups())
+                            {
+                                stg.AddRange(this.GetSettings(subgroup + "/" + i).Select(k =>  group + "/" + i + (k.Length > 0 ? "/" + k : "")));
+                            }
+                        }
+
+                        this.settings.EndArray();
+                    }
+                    else
+                    {
+                        stg.AddRange(this.GetSettings(group).Select(k =>  group + (k.Length > 0 ? "/" + k : "")));
+                    }
+                }
+
+                this.settings.EndGroup();
+            }
+
+            return stg.Distinct().ToArray();
         }
 
         public void SetSetting(string key, string value)

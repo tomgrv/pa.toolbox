@@ -75,82 +75,90 @@ namespace PA.Configuration
 
         public Settings(string organization, string application)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = DefaultFormat;
             this.CurrentScope = Scope.UserScope;
             this.OrganizationName = organization;
             this.ApplicationName = application;
             this.SetFileName();
+            this.Sync();
         }
 
         public Settings(string organization)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = DefaultFormat;
             this.CurrentScope = Scope.UserScope;
             this.OrganizationName = organization;
             this.ApplicationName = GetAttribute<AssemblyProductAttribute>();
             this.SetFileName();
+            this.Sync();
         }
 
         public Settings(Settings.Scope scope, string organization, string application)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = DefaultFormat;
             this.CurrentScope = scope;
             this.OrganizationName = organization;
             this.ApplicationName = application;
             this.SetFileName();
+            this.Sync();
         }
 
         public Settings(Settings.Scope scope, string organization)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = DefaultFormat;
             this.CurrentScope = scope;
             this.OrganizationName = organization;
             this.ApplicationName = GetAttribute<AssemblyProductAttribute>();
             this.SetFileName();
+            this.Sync();
         }
 
         public Settings(Settings.Format format, Settings.Scope scope, string organization, string application)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = format;
             this.CurrentScope = scope;
             this.OrganizationName = organization;
             this.ApplicationName = application;
             this.SetFileName();
+            this.Sync();
         }
 
         public Settings(Settings.Format format, Settings.Scope scope, string organization)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = format;
             this.CurrentScope = scope;
             this.OrganizationName = organization;
             this.ApplicationName = GetAttribute<AssemblyProductAttribute>();
             this.SetFileName();
+            this.Sync();
         }
 
         public Settings(string fileName, Settings.Format format)
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.FileName = Path.GetFullPath(fileName);
             this.CurrentFormat = format;
             this.CurrentScope = Scope.UserScope;
             this.OrganizationName = GetAttribute<AssemblyCompanyAttribute>();
             this.ApplicationName = GetAttribute<AssemblyProductAttribute>();
+            this.Sync();
         }
 
         public Settings()
         {
-            this.Group = "";
+            this.path = new Stack<string>();
             this.CurrentFormat = DefaultFormat;
             this.CurrentScope = Scope.UserScope;
             this.OrganizationName = GetAttribute<AssemblyCompanyAttribute>(); ;
             this.ApplicationName = GetAttribute<AssemblyProductAttribute>();
             this.SetFileName();
+            this.Sync();
         }
 
 
@@ -158,23 +166,27 @@ namespace PA.Configuration
 
         #region Group
 
-        public string Group { get; protected set; }
+        public string Group { get { return formatGroup(false, false); } }
 
         public void BeginGroup(string g)
         {
-            this.Group += (this.Group is string && this.Group.Length > 0 ? "/" : "") + g;
+            this.path.Push(g);
         }
 
         public void EndGroup()
         {
-            if (this.Group.Contains('/'))
-            {
-                this.Group = this.Group.Substring(0, this.Group.LastIndexOf('/'));
-            }
-            else
-            {
-                this.Group = "";
-            }
+            this.path.Pop();
+        }
+
+        private Stack<string> path;
+
+        private string formatGroup(bool exludefirst, bool excludelast)
+        {
+            int lastindex = this.path.Count - 1;
+
+            IEnumerable<string> grp = this.path.Where((s, i) => (i == 0 && !excludelast) || (i > 0 && i == lastindex && !exludefirst) || (i > 0 && i < lastindex));
+
+            return grp.Count() > 0 ? grp.Aggregate((a, b) => b + "/" + a) : "";
         }
 
         #endregion
@@ -227,63 +239,34 @@ namespace PA.Configuration
 
         public string[] AllKeys()
         {
-            return this.subkeys()
-                .ToArray();
+            string root = this.Group + (this.array is string && this.array.Length > 0 ? "/"+this.array + "/" + this.index : string.Empty);
+
+            switch (this.CurrentFormat)
+            {
+                case Format.IniFormat:
+
+                    return this.values.Keys
+                        .Where(k => k.StartsWith(root) && k.Length >= root.Length)
+                        .Select(k => k.Substring(root.Length > 0 ? root.Length : 0))
+                        .Select(k => k.StartsWith("/") ? k.Substring(1) : k)
+                        //.Select(k => k.EndsWith("/") ? k.Substring(0, k.Length - 1) : k)
+                        .ToArray();
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public string[] ChildKeys()
-        {
-            return this.subkeys()
-                .Where(key => !key.Contains('/'))
-                .Distinct()
-                .ToArray();
-        }
-
-        private IEnumerable<string> subkeys()
         {
             switch (this.CurrentFormat)
             {
                 case Format.IniFormat:
 
-
-                    List<string> temp = new List<string>();
-                    IntPtr pBuffer = Marshal.AllocHGlobal(32767);
-
-                    int size = GetPrivateProfileSection(this.Group.Contains('/') ? this.Group.Substring(0, this.Group.IndexOf('/')) : this.Group, pBuffer, 32767, this.FileName);
-
-                    // iStartAddress will point to the first character of the buffer,
-                    int iStartAddress = pBuffer.ToInt32();
-                    // iEndAddress will point to the last null char in the buffer.
-                    int iEndAddress = iStartAddress + size * sizeof(char);
-
-                    // Navigate through pBuffer.
-                    while (iStartAddress < iEndAddress)
-                    {
-                        // Get the current string which starts at "iStartAddress".
-                        string strCurrent = Marshal.PtrToStringAuto(new IntPtr(iStartAddress));
-
-                        // Strip comments
-                        if (!strCurrent.StartsWith("#") && !strCurrent.StartsWith(";"))
-                        {
-                            int pos = strCurrent.IndexOf('=');
-
-                            string key = pos > 0 ? strCurrent.Substring(0, pos) : strCurrent;
-
-                            if (key.Trim().Length > 0)
-                            {
-                                yield return key.Substring(this.Group.Contains('/') ? this.Group.IndexOf('/') : 0);
-                            }
-                        }
-
-                        // Make "iStartAddress" point to the next string.
-                        iStartAddress += (strCurrent.Length + 1) * sizeof(char);
-                    }
-
-                    Marshal.FreeHGlobal(pBuffer);
-                    pBuffer = IntPtr.Zero;
-
-
-                    break;
+                    return this.AllKeys()
+                        .Where(key => !key.Contains('/'))
+                        .Distinct()
+                        .ToArray();
 
                 default:
                     throw new NotImplementedException();
@@ -296,34 +279,15 @@ namespace PA.Configuration
             {
                 case Format.IniFormat:
 
-                    if (File.Exists(this.FileName))
-                    {
-                        if (this.Group.Length == 0)
-                        {
-                            byte[] temp = new byte[1024];
-                            GetPrivateProfileSectionNames(temp, temp.Length, this.FileName);
-                            return System.Text.Encoding.Unicode
-                                .GetString(temp)
-                                .Split('\0');
-                        }
-                        else
-                        {
-                            return this.subkeys()
-                                .Where(key => key.Contains('/'))
-                                .Select(key => key.Substring(0, key.IndexOf('/') - 1))
-                                .Distinct()
-                                .ToArray();
-                        }
-                    }
-                    else
-                    {
-                        throw new FileNotFoundException("Ini file '" + this.FileName + "' not found");
-                    }
+                    return this.AllKeys()
+                        .Where(key => key.Contains('/'))
+                        .Select(key => key.Substring(0, key.IndexOf('/')))
+                        .Distinct()
+                        .ToArray();
 
                 case Format.NativeFormat:
 
                     string[] rpath = this.FileName.Split(new char[] { '\\' }, 2);
-
 
                     switch (rpath[0])
                     {
@@ -336,7 +300,6 @@ namespace PA.Configuration
                         default:
                             throw new NotSupportedException("Path " + this.FileName + " not supported ");
                     }
-
 
                 default:
                     throw new NotSupportedException("Format " + this.CurrentFormat + " not supported ");
@@ -358,26 +321,76 @@ namespace PA.Configuration
 
         public void Sync()
         {
-            foreach (KeyValuePair<string, string> item in this.values)
+            if (this.values.Count > 0)
             {
-                if (item.Value is string)
+                foreach (KeyValuePair<string, string> item in this.values)
                 {
-                    string[] hash = this.GetHashArray(item.Key);
-
-                    switch (this.CurrentFormat)
+                    if (item.Value is string)
                     {
-                        case Format.IniFormat:
-                            WritePrivateProfileString(hash[0], hash[1], item.Value.ToString(), this.FileName);
-                            break;
+                        string[] hash = this.GetHashArray(item.Key);
 
-                        case Format.NativeFormat:
-                            Microsoft.Win32.Registry.SetValue(this.FileName + (hash[0] is string && hash[0].Length > 0 ? "\\" + hash[0] : ""), hash[1], item.Value);
-                            break;
+                        switch (this.CurrentFormat)
+                        {
+                            case Format.IniFormat:
+                                WritePrivateProfileString(hash[0], hash[1], item.Value.ToString(), this.FileName);
+                                break;
+
+                            case Format.NativeFormat:
+                                Microsoft.Win32.Registry.SetValue(this.FileName + (hash[0] is string && hash[0].Length > 0 ? "\\" + hash[0] : ""), hash[1], item.Value);
+                                break;
+                        }
                     }
                 }
             }
+            else
+            {
+                switch (this.CurrentFormat)
+                {
+                    case Format.IniFormat:
 
+                        byte[] data = new byte[1024];
+                        GetPrivateProfileSectionNames(data, data.Length, this.FileName);
 
+                        foreach (string section in System.Text.Encoding.Unicode.GetString(data).Split('\0').Where(s => s.Length > 0))
+                        {
+                            List<string> temp = new List<string>();
+                            IntPtr pBuffer = Marshal.AllocHGlobal(32767);
+
+                            int size = GetPrivateProfileSection(section, pBuffer, 32767, this.FileName);
+
+                            // iStartAddress will point to the first character of the buffer,
+                            int iStartAddress = pBuffer.ToInt32();
+                            // iEndAddress will point to the last null char in the buffer.
+                            int iEndAddress = iStartAddress + size * sizeof(char);
+
+                            // Navigate through pBuffer.
+                            while (iStartAddress < iEndAddress)
+                            {
+                                // Get the current string which starts at "iStartAddress".
+                                string strCurrent = Marshal.PtrToStringAuto(new IntPtr(iStartAddress));
+
+                                // Strip comments
+                                if (!strCurrent.StartsWith("#") && !strCurrent.StartsWith(";"))
+                                {
+                                    int pos = strCurrent.IndexOf('=');
+
+                                    this.SetValue(section + "/" + (pos > 0 ? strCurrent.Substring(0, pos) : strCurrent), pos > 0 ? strCurrent.Substring(pos + 1) : "");
+                                }
+
+                                // Make "iStartAddress" point to the next string.
+                                iStartAddress += (strCurrent.Length + 1) * sizeof(char);
+                            }
+
+                            Marshal.FreeHGlobal(pBuffer);
+                            pBuffer = IntPtr.Zero;
+                        }
+
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
         }
 
         public string Value(string key)
@@ -407,7 +420,10 @@ namespace PA.Configuration
                             throw new InvalidOperationException("Cannot open Ini file '" + this.FileName + "'");
                         }
 
-                        this.SetValue(key, temp.Length > 0 ? temp.ToString() : null);
+                        if (temp.Length > 0)
+                        {
+                            this.SetValue(key, temp.ToString());
+                        }
                     }
                     else
                     {
@@ -426,7 +442,7 @@ namespace PA.Configuration
                     break;
             }
 
-            return this.values[hashk];
+            return this.values.ContainsKey(hashk) ? this.values[hashk] : null;
         }
 
         public void SetValue(string key, string value)
@@ -500,24 +516,14 @@ namespace PA.Configuration
 
         private string GetHashKey(string k, out string field)
         {
-            string g = this.Group is string && this.Group.Length > 0 ? this.Group : "";
-            string a = this.array is string && this.array.Length > 0 ? this.array : "";
+            string g = this.Group is string && this.Group.Length > 0 ? this.Group + "/" : "";
+            string a = this.array is string && this.array.Length > 0 ? this.array + "/" : "";
             string i = this.index < 0 ? "" : this.index.ToString();
+            string s = i.Length > 0 && k.Length > 0 ? "/" + k : k;
 
-            if (a.Length > 0 && i.Length > 0)
-            {
-                field = a + "/" + i + "/" + k;
-            }
-            else if (a.Length > 0)
-            {
-                field = a + "/" + k;
-            }
-            else
-            {
-                field = k;
-            }
+            field = a + i + s;
 
-            return g + "/" + field;
+            return g + field;
         }
 
         private string[] GetHashArray(string h)
