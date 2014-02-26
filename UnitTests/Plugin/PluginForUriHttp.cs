@@ -8,17 +8,19 @@ using System.Text;
 
 namespace UnitTests.Plugin
 {
-    [Export]
+    [ExportWithLabel(typeof(IPlugin<Uri>), "http")]
     [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-    public class PluginForSpecificArrayTest : IPlugin
+    public class PluginForUriHttp : IPlugin<Uri>
     {
-        [Import("#/Param")]
-        public string Parameter { get; set; }
+        public Uri Value { get; set; }
 
-        public PluginForSpecificArrayTest()
+        [ImportingConstructor]
+        public PluginForUriHttp(Uri value)
         {
-            
+            this.Value = value;
         }
+
+       
 
 
         public void Dispose()

@@ -63,7 +63,11 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Configuration\IniConfigurationTest.cs" />
+    <Compile Include="Configuration\SettingsTest.cs" />
     <Compile Include="Converters\Extensions.cs" />
+    <Compile Include="Plugin\Plugin2ForUriHttp.cs" />
+    <Compile Include="Plugin\PluginForUriHttp.cs" />
+    <Compile Include="Plugin\PluginForUriFile.cs" />
     <Compile Include="Plugin\PluginForSpecificImportTest.cs" />
     <Compile Include="Plugin\PluginForGenericArrayTest.cs" />
     <Compile Include="Plugin\PluginForGenericImportTest.cs" />

@@ -6,12 +6,85 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices;
 
 namespace PA.Converters.Extensions
 {
     public static class ObjectExtensions
     {
-   
+        public static T ParseTo<T, U>(this U value, [Optional] Type type)
+        {
+            Type t = type ?? typeof(T);
+
+            if (!typeof(T).IsAssignableFrom(t))
+            {
+                throw new InvalidCastException("Cannot cast <" + type.FullName + "> to <T>");
+            }
+
+            if (t.IsEnum)
+            {
+                return (T) Enum.Parse(t, value.ToString());
+            }
+            else
+            {
+                T o = default(T);
+
+                if (typeof(IConvertible).IsAssignableFrom(t))
+                {
+                    try
+                    {
+                        o = (T)Convert.ChangeType(value, t);
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError(e.Message + "\n" + e.StackTrace);
+                    }
+                }
+
+                if (o == null)
+                {
+                    ConstructorInfo ci = type.GetConstructor(new Type[] { typeof(U) });
+
+                    if (ci is ConstructorInfo)
+                    {
+                        try
+                        {
+                            o = (T)ci.Invoke(new object[] { value });
+                        }
+                        catch (Exception e)
+                        {
+                            Trace.TraceError(e.Message + "\n" + e.StackTrace);
+                        }
+                    }
+                }
+
+                if (o == null)
+                {
+                    MethodInfo mi = t.GetMethod("Parse", new Type[] { typeof(string) });
+
+                    if (mi is MemberInfo && mi.IsStatic)
+                    {
+                        o = (T)mi.Invoke(null, new object[] { value });
+                    }
+                }
+
+                return o;
+            }
+        }
+
+        public static IEnumerable<T> ParseTo<T, U>(this IEnumerable<U> value, [Optional] Type type)
+        {
+            foreach (U v in value)
+            {
+                yield return v.ParseTo<T, U>(type);
+            }
+        }
+
+
+
+
+        [Obsolete]
         public static object ParseTo(this object value, Type type, bool ThrowError = false)
         {
             string str = value.ToString();
@@ -45,6 +118,7 @@ namespace PA.Converters.Extensions
                         }
                     }
                 }
+
 
                 if (o == null)
                 {
@@ -83,6 +157,7 @@ namespace PA.Converters.Extensions
             }
         }
 
+        [Obsolete]
         internal static Array ParseTo(this object[] value, Type type, bool ThrowError = false)
         {
             if (!type.IsArray)

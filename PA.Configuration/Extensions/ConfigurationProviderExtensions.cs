@@ -185,7 +185,6 @@ namespace PA.Configuration
                 yield break;
             }
 
-
             if (definition.Cardinality == ImportCardinality.ZeroOrMore)
             {
                 if (cp.Source.ContainsSetting(contract.Name + "/size"))
@@ -200,11 +199,11 @@ namespace PA.Configuration
                         }
                         else
                         {
-                            string value =  cp.Source.GetSetting(contract.Name + "/" + i);
+                            string value = cp.Source.GetSetting(contract.Name + "/" + i);
 
                             if (value.StartsWith(">"))
                             {
-                                yield return new Item(value, new Contract(contract.Name + "/" + i,typeof(object)));
+                                yield return new Item(value, new Contract(contract.Name + "/" + i, typeof(object)));
                             }
                             else
                             {
@@ -224,5 +223,35 @@ namespace PA.Configuration
 
         }
 
+        public static IEnumerable<Export> GetExports(this IEnumerable<ConfigurationProviderExtensions.Item> ci, Func<Type, string, Export> getExport)
+        {
+            foreach (ConfigurationProviderExtensions.Item Configuration in ci)
+            {
+                if (!Configuration.Contract.Name.StartsWith("#/"))
+                {
+                    Type targetType = Configuration.Contract.Type;
+
+                    if (targetType.IsArray)
+                    {
+                        foreach (string configvalue in Configuration.Value.AsArray())
+                        {
+                            Export e = getExport(targetType.GetElementType(), configvalue);
+                            if (e is Export)
+                            {
+                                yield return e;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Export e = getExport(targetType, Configuration.Value);
+                        if (e is Export)
+                        {
+                            yield return e;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

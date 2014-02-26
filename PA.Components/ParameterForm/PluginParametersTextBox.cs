@@ -18,7 +18,12 @@ namespace PA.Plugin.Components.ParameterForm
 
         private void label_Resize(object sender, EventArgs e)
         {
-            this.textBox.Left = this.label.Left + 6;
+            this.textBox.Left = this.label.Right + 6;
+        }
+
+        private void label_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

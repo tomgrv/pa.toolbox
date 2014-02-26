@@ -37,7 +37,6 @@ namespace PA.Configuration
 
                     if (int.TryParse(keys[i].Substring(keys[i].LastIndexOf("/") + 1), out index))
                     {
-
                         string root = keys[i].Substring(0, keys[i].LastIndexOf('/'));
                         CreateImportDefinition(root, index, value.Substring(1));
                     }

@@ -8,6 +8,7 @@ using PA.Plugin.Components;
 using PA.Configuration;
 using System.ComponentModel;
 using System.Collections.Generic;
+using PA.Plugin.Configuration;
 
 namespace UnitTests.Plugin
 {
@@ -19,6 +20,15 @@ namespace UnitTests.Plugin
 
         [Import("TestSection/TestUrl", AllowRecomposition = true)]
         private Uri UrlToTest { get; set; }
+
+        [Import("TestSection/TestUrl", AllowRecomposition = true)]
+        private ConfigurationItem<string> UrlItemToTest { get; set; }
+
+        [Import("TestSection/TestUrl", AllowRecomposition = true)]
+        public IPlugin<Uri> PluginForUri { get; set; }
+
+        [ImportMany("TestSection/TestUrls", AllowRecomposition = true)]
+        public IPlugin<Uri>[] PluginsForUri { get; set; }
 
         [ImportMany("TestSection/Many", AllowRecomposition = true)]
         public IEnumerable<Lazy<IPlugin, IPluginIndex>> ManyPluginToLoad1 { get; set; }
@@ -114,7 +124,11 @@ namespace UnitTests.Plugin
                 loader.EndInit();
 
                 Assert.AreEqual("Correct", this.ValueToTest, "String", "String Parsing");
-                Assert.AreEqual(new Uri("http://www.google.fr", true), this.UrlToTest, "Url Parsing");
+                Assert.AreEqual(new Uri("http://www.google.fr"), this.UrlToTest, "Url Parsing");
+
+                Assert.AreEqual(typeof(PluginForUriHttp), this.PluginForUri.GetType(), "Object selection & init");
+                Assert.AreEqual(new Uri("http://www.google.fr"), this.PluginForUri.Value, "plugin selection Parsing");
+
 
                 Assert.AreEqual(1, this.ManyPluginToLoad1.Count(), "TestSection/Many Plugin Loading");
                 Assert.IsInstanceOfType(this.ManyPluginToLoad1.ElementAt(0).Value, typeof(PluginForSpecificArrayTest));

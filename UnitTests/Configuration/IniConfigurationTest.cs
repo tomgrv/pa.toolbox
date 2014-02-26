@@ -25,6 +25,8 @@ namespace UnitTests.Configuration
             Assert.AreEqual("Correct", src.GetSetting("TestSection/TestString"));
         }
 
+
+
         [TestMethod]
         public void Write()
         {

@@ -8,18 +8,23 @@ using System.Text;
 
 namespace UnitTests.Plugin
 {
-    [Export]
+    [ExportWithLabel(typeof(IPlugin<Uri>),"file")]
     [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-    public class PluginForSpecificArrayTest : IPlugin
+    public class PluginForUriFile : IPlugin<Uri>
     {
-        [Import("#/Param")]
-        public string Parameter { get; set; }
+        public Uri  Value { get; set; }
 
-        public PluginForSpecificArrayTest()
+        public PluginForUriFile()
         {
-            
+          
+
         }
 
+        public PluginForUriFile(Uri value)
+        {
+            this.Value = value;
+            
+        }
 
         public void Dispose()
         {

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using PA.Plugin.Components.Interfaces;
+using PA.Converters.Extensions;
 
 namespace PA.Plugin.Components.ParameterForm
 {
@@ -17,7 +18,6 @@ namespace PA.Plugin.Components.ParameterForm
         {
             InitializeComponent();
         }
-
 
         [Browsable(false)]
         public IPlugin Plugin { get; private set; }
@@ -68,9 +68,8 @@ namespace PA.Plugin.Components.ParameterForm
                             else if (pi.PropertyType.IsSerializable)
                             {
                                 PluginParametersTextBox cb = new PluginParametersTextBox();
-                                cb.AutoSize = true;
                                 cb.label.Text = pda.Description + (pda.Name is string ? " (" + pda.Name + ")" : "");
-                                cb.textBox.Text = pi.GetValue(this.Plugin, null).ToString();
+                                cb.textBox.Text = pi.GetValue(this.Plugin, null).ToString().Trim();
                                 cb.Tag = pi;
                                 this.Controls.Add(cb);
                             }
@@ -79,7 +78,6 @@ namespace PA.Plugin.Components.ParameterForm
                     }
 
                     this.Count = this.Controls.Count;
-                    this.Refresh();
                 }
             }
 
@@ -108,7 +106,7 @@ namespace PA.Plugin.Components.ParameterForm
                             }
                             else if (pi.PropertyType.IsSerializable)
                             {
-                                pi.SetValue(this.Plugin, (c as PluginParametersTextBox).textBox.Text, null);
+                                pi.SetValue(this.Plugin, (c as PluginParametersTextBox).textBox.Text.ParseTo(pi.PropertyType), null);
                             }
                         }
                     }
