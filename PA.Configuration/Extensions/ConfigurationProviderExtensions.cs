@@ -60,8 +60,9 @@ namespace PA.Configuration
             where T : ComposablePartDefinition
         {
             return parts.FirstOrDefault(p => p.ExportDefinitions
-                .Any(ed => ReflectionModelServices.GetExportingMember(ed).GetAccessors()
-                    .Any(a => (a is Type && (a as Type).FullName == TypeName))
+                .Any(ed => ReflectionModelServices.GetExportingMember(ed)
+                                        .GetAccessors()
+                                        .Any(a => (a is Type && (a as Type).FullName == TypeName))
                     )
                 );
         }
@@ -223,7 +224,8 @@ namespace PA.Configuration
 
         }
 
-        public static IEnumerable<Export> GetExports(this IEnumerable<ConfigurationProviderExtensions.Item> ci, Func<Type, string, Export> getExport)
+
+        public static IEnumerable<Export> GetExports<T>(this IEnumerable<ConfigurationProviderExtensions.Item> ci, ImportDefinition definition, Func<Type, string, T> getInstance)
         {
             foreach (ConfigurationProviderExtensions.Item Configuration in ci)
             {
@@ -233,21 +235,25 @@ namespace PA.Configuration
 
                     if (targetType.IsArray)
                     {
-                        foreach (string configvalue in Configuration.Value.AsArray())
+                        Array value = Configuration.Value.AsArray(targetType, (t, s) => getInstance(t, s));
+
+                        //Array value = Configuration.Value
+                        //    .AsArray()
+                        //    .Select(s => getInstance(targetType.GetElementType(), s))
+                        //    .ToArray(targetType.GetElementType());
+
+                        if (value is Array && value.Length > 0)
                         {
-                            Export e = getExport(targetType.GetElementType(), configvalue);
-                            if (e is Export)
-                            {
-                                yield return e;
-                            }
+                            yield return new Export(definition.ContractName, () => value);
                         }
                     }
                     else
                     {
-                        Export e = getExport(targetType, Configuration.Value);
-                        if (e is Export)
+                        object value = getInstance(targetType, Configuration.Value);
+
+                        if (value is object)
                         {
-                            yield return e;
+                            yield return new Export(definition.ContractName, () => value);
                         }
                     }
                 }

@@ -21,14 +21,24 @@ namespace UnitTests.Plugin
         [Import("TestSection/TestUrl", AllowRecomposition = true)]
         private Uri UrlToTest { get; set; }
 
+        [Import("TestSection/Date", AllowRecomposition = true)]
+        private DateTime Date1 { get; set; }
+
+        [Import("TestSection/Date", AllowRecomposition = true)]
+        private ConfigurationItem<DateTime> Date2 { get; set; }
+
+
         [Import("TestSection/TestUrl", AllowRecomposition = true)]
         private ConfigurationItem<string> UrlItemToTest { get; set; }
 
         [Import("TestSection/TestUrl", AllowRecomposition = true)]
         public IPlugin<Uri> PluginForUri { get; set; }
 
-        [ImportMany("TestSection/TestUrls", AllowRecomposition = true)]
-        public IPlugin<Uri>[] PluginsForUri { get; set; }
+        [Import("TestSection/TestUrls", AllowRecomposition = true)]
+        public Uri[] Uris { get; set; }
+
+        [Import("TestSection/TestUrls", AllowRecomposition = true)]
+        public IPlugin<Uri>[] PluginForUris { get; set; }
 
         [ImportMany("TestSection/Many", AllowRecomposition = true)]
         public IEnumerable<Lazy<IPlugin, IPluginIndex>> ManyPluginToLoad1 { get; set; }
@@ -148,7 +158,7 @@ namespace UnitTests.Plugin
 
                 Assert.AreEqual(1, this.ManyPluginToLoad6.Count(), "Default Plugin Loading with Class");
                 Assert.IsInstanceOfType(this.ManyPluginToLoad6.ElementAt(0), typeof(PluginForSpecificImportTest));
-                Assert.AreEqual("OKIMPORT", this.ManyPluginToLoad6.ElementAt(0).Parameter);
+                Assert.AreEqual(3, this.ManyPluginToLoad6.ElementAt(0).Parameter.Length);
 
                 Assert.IsInstanceOfType(this.GenericPluginToTest, typeof(PluginForSpecificImportTest));
                 Assert.IsInstanceOfType(this.SpecificPluginToTest, typeof(PluginForSpecificImportTest));

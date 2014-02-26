@@ -29,25 +29,26 @@ namespace PA.Configuration
         {
             lock (this.Source)
             {
-                foreach (Export e in this.GetConfigurationItems(definition).GetExports((t, s) => this.GetUnitaryExport(definition, t, s)))
+                foreach (Export e in this.GetConfigurationItems(definition)
+                    .GetExports<object>(definition, (t,s) => this.GetInstance(definition, t, s)))
                 {
                     yield return e;
                 }
             }
         }
 
-        private Export GetUnitaryExport(ImportDefinition definition, Type type, string configvalue)
+        private object GetInstance(ImportDefinition definition, Type type, string configvalue)
         {
             if (typeof(ConfigurationItem).IsAssignableFrom(type) && type.IsGenericType)
             {
-                return new Export(definition.ContractName, () => Activator.CreateInstance(type, definition.ContractName, this.Source, configvalue));
+                return Activator.CreateInstance(type, definition.ContractName, this.Source);
             }
 
             object value = configvalue.ParseTo<object, string>(type);
 
             if (value is object)
             {
-                return new Export(definition.ContractName, () => value); ;
+                return value;
             }
 
             return null;

@@ -24,7 +24,7 @@ namespace PA.Converters.Extensions
 
             if (t.IsEnum)
             {
-                return (T) Enum.Parse(t, value.ToString());
+                return (T)Enum.Parse(t, value.ToString());
             }
             else
             {
@@ -69,6 +69,16 @@ namespace PA.Converters.Extensions
                     }
                 }
 
+                if (o == null)
+                {
+                    MethodInfo mi = t.GetMethod("CreateFrom", new Type[] { typeof(string) });
+
+                    if (mi is MemberInfo && mi.IsStatic)
+                    {
+                        o = (T)mi.Invoke(null, new object[] { value });
+                    }
+                }
+
                 return o;
             }
         }
@@ -81,100 +91,12 @@ namespace PA.Converters.Extensions
             }
         }
 
-
-
-
-        [Obsolete]
-        public static object ParseTo(this object value, Type type, bool ThrowError = false)
+        public static Array ToArray<T>(this IEnumerable<T> value, Type type)
         {
-            string str = value.ToString();
-            Type[] targetTypes = new Type[] { value.GetType() };
-
-            if (type.IsArray)
-            {
-                return str.Split(new char[] { str[0] }, StringSplitOptions.RemoveEmptyEntries).ParseTo(type, ThrowError);
-            }
-            else if (type.IsEnum)
-            {
-                return Enum.Parse(type, value.ToString());
-            }
-            else
-            {
-                object o = null;
-
-                if (o == null && typeof(IConvertible).IsAssignableFrom(type))
-                {
-                    try
-                    {
-                        o = Convert.ChangeType(value, type);
-                    }
-                    catch (Exception e)
-                    {
-                        Trace.TraceError(e.Message + "\n" + e.StackTrace);
-
-                        if (ThrowError)
-                        {
-                            throw new InvalidOperationException("Cannot parse/convert object " + value + " to <" + type.FullName + ">", e);
-                        }
-                    }
-                }
-
-
-                if (o == null)
-                {
-                    ConstructorInfo ci = type.GetConstructor(targetTypes);
-
-                    if (ci is ConstructorInfo)
-                    {
-                        try
-                        {
-                            o = ci.Invoke(new object[] { value });
-                        }
-                        catch (Exception e)
-                        {
-                            Trace.TraceError(e.Message + "\n" + e.StackTrace);
-
-                            if (ThrowError)
-                            {
-                                throw new InvalidOperationException("Cannot parse/convert object " + value + " to <" + type.FullName + ">", e);
-                            }
-                        }
-                    }
-
-                }
-
-                if (o == null)
-                {
-                    MethodInfo mi = type.GetMethod("Parse", targetTypes);
-
-                    if (mi is MemberInfo && mi.IsStatic)
-                    {
-                        o = mi.Invoke(null, new object[] { value });
-                    }
-                }
-
-                return o;
-            }
-        }
-
-        [Obsolete]
-        internal static Array ParseTo(this object[] value, Type type, bool ThrowError = false)
-        {
-            if (!type.IsArray)
-            {
-                throw new ArgumentException("Type <" + type.FullName + "> is not an array");
-            }
-
-            Type eType = type.GetElementType();
-
-            var obj = value
-                .Select(s => s.ParseTo(eType, ThrowError))
-                .Where(s => s != null)
-                .ToArray();
-
-            var arr = Array.CreateInstance(eType, obj.Length);
-            Array.Copy(obj, arr, obj.Length);
-            return arr;
+            Array source = value.Where(s => s != null && type.IsAssignableFrom(s.GetType())).ToArray();
+            Array destination = Array.CreateInstance(type, source.Length);
+            Array.Copy(source, destination, source.Length);
+            return destination;
         }
     }
 }

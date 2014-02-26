@@ -13,7 +13,7 @@ namespace UnitTests.Plugin
     public class PluginForSpecificImportTest : IPlugin
     {
         [Import("SpecificImport/Param")]
-        public string Parameter { get; set; }
+        public string[][] Parameter { get; set; }        
 
         public PluginForSpecificImportTest()
         {
