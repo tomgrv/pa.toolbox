@@ -13,7 +13,7 @@ namespace PA.Converters.Extensions
 {
     public static class StringExtensions
     {
-        public static IEnumerable<string> AsArray(this string value)
+        public static string[] AsArray(this string value)
         {
             return value.Split(new char[] { value[0] }, StringSplitOptions.RemoveEmptyEntries);
         }

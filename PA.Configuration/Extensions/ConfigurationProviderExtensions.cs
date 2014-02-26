@@ -130,7 +130,7 @@ namespace PA.Configuration
                 }
                 else if (targetType.IsValueType || targetType.IsArray || targetType.IsSerializable)
                 {
-                    return (T)stringValue.ParseTo(targetType);
+                    return stringValue.ParseTo<T, string>(targetType);
                 }
             }
             catch

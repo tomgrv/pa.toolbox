@@ -106,7 +106,7 @@ namespace PA.Plugin.Components.ParameterForm
                             }
                             else if (pi.PropertyType.IsSerializable)
                             {
-                                pi.SetValue(this.Plugin, (c as PluginParametersTextBox).textBox.Text.ParseTo(pi.PropertyType), null);
+                                pi.SetValue(this.Plugin, (c as PluginParametersTextBox).textBox.Text.ParseTo<object,string>(pi.PropertyType), null);
                             }
                         }
                     }

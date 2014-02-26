@@ -44,6 +44,7 @@ namespace PA.Configuration
             }
 
             object value = configvalue.ParseTo<object, string>(type);
+
             if (value is object)
             {
                 return new Export(definition.ContractName, () => value); ;

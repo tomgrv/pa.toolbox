@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.Converters.Extensions;
 
@@ -11,7 +12,7 @@ namespace UnitTests.Converters
         public void ArrayConvertion()
         {
             string input = ":a:b:c:d";
-            string[] array = (string[])input.ParseTo(typeof(string[]));
+            string[] array = input.AsArray().ParseTo<string, string>().ToArray();
 
             Assert.IsTrue(array.Length == 4 && array[0] == "a" && array[1] == "b" && array[2] == "c" && array[3] == "d");
         }
@@ -20,7 +21,7 @@ namespace UnitTests.Converters
         public void UriConvertion()
         {
             string input = "http://www.test.fr/app/index.php?q=valid";
-            Uri url = (Uri)input.ParseTo(typeof(Uri));
+            Uri url =input.ParseTo<Uri, string>();
 
             Assert.IsTrue(url.Authority == "www.test.fr");
         }
