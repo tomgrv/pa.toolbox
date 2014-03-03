@@ -49,11 +49,12 @@ namespace PA.Plugin.Components.ParameterForm
                         {
                             if (pi.PropertyType.IsEnum)
                             {
-                                ComboBox cb = new ComboBox();
+                                PluginParametersComboBox cb = new PluginParametersComboBox();
                                 cb.AutoSize = true;
                                 cb.Tag = pi;
-                                cb.Items.AddRange(Enum.GetNames(pi.PropertyType));
-                                cb.SelectedIndex = 0;
+                                cb.label.Text = pda.Description + (pda.Name is string ? " (" + pda.Name + ")" : "");
+                                cb.comboBox.Items.AddRange(Enum.GetNames(pi.PropertyType));
+                                cb.comboBox.SelectedIndex = 0;
                                 this.Controls.Add(cb);
                             }
                             else if (pi.PropertyType.Equals(typeof(bool)))
@@ -96,9 +97,9 @@ namespace PA.Plugin.Components.ParameterForm
 
                         if (pi is PropertyInfo)
                         {
-                            if (pi.PropertyType.IsEnum && (c as ComboBox).SelectedItem != null && Enum.IsDefined(pi.PropertyType, (c as ComboBox).SelectedItem))
+                            if (pi.PropertyType.IsEnum  && (c as PluginParametersComboBox).comboBox.SelectedItem != null && Enum.IsDefined(pi.PropertyType, (c as PluginParametersComboBox).comboBox.SelectedItem))
                             {
-                                pi.SetValue(this.Plugin, Enum.Parse(pi.PropertyType, (c as ComboBox).SelectedItem.ToString(), true), null);
+                                pi.SetValue(this.Plugin, (c as PluginParametersComboBox).comboBox.SelectedItem.ToString().ParseTo<object, string>(pi.PropertyType), null);
                             }
                             else if (pi.PropertyType.Equals(typeof(bool)))
                             {

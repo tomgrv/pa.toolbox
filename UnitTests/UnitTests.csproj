@@ -45,6 +45,8 @@
       <Private>True</Private>
       <HintPath>..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -65,6 +67,7 @@
     <Compile Include="Configuration\IniConfigurationTest.cs" />
     <Compile Include="Configuration\SettingsTest.cs" />
     <Compile Include="Converters\Extensions.cs" />
+    <Compile Include="Plugin.Components\ParameterForm.cs" />
     <Compile Include="Plugin\Plugin2ForUriHttp.cs" />
     <Compile Include="Plugin\PluginForUriHttp.cs" />
     <Compile Include="Plugin\PluginForUriFile.cs" />

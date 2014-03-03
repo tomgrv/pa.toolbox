@@ -79,6 +79,12 @@
     <Compile Include="Interfaces\IPluginHandler.cs" />
     <Compile Include="IPluginHelper.cs" />
     <Compile Include="IPluginSource.cs" />
+    <Compile Include="ParameterForm\PluginParametersComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ParameterForm\PluginParametersComboBox.designer.cs">
+      <DependentUpon>PluginParametersComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="ParameterForm\PluginParametersButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PluginLoader.resx">
       <DependentUpon>PluginLoader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParameterForm\PluginParametersComboBox.resx">
+      <DependentUpon>PluginParametersComboBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterForm\PluginParametersTextBox.resx">
       <DependentUpon>PluginParametersTextBox.cs</DependentUpon>

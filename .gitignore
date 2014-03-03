@@ -9,3 +9,4 @@ publish/
 *.user
 /TestResults/
 /*.suo
+/*.nupkg*
