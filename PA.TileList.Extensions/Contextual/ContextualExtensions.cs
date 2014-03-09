@@ -11,19 +11,19 @@ namespace PA.TileList.Contextual
     public static class ContextualExtensions
     {
         public static IContextual<T> Contextualize<T>(this ITile t, T item)
-          where T : ICoordinate, IDisposable
+          where T : ICoordinate
         {
             return t.Contextualize<T>(item, t.Area.SizeX, t.Area.SizeY);
         }
 
         public static IContextual<T> Contextualize<T>(this ITile t, T item, IArea a)
-            where T : ICoordinate, IDisposable
+            where T : ICoordinate
         {
             return t.Contextualize<T>(item, a.SizeX, a.SizeY);
         }
 
         public static IContextual<T> Contextualize<T>(this ITile t, T item, ushort sizeX, ushort sizeY)
-            where T : ICoordinate, IDisposable
+            where T : ICoordinate
         {
             return new Contextual<T>(item.X + t.X * sizeX, item.Y + t.Y * sizeY, item);
         }
@@ -73,7 +73,7 @@ namespace PA.TileList.Contextual
         }
 
         public static ITile<IContextual<T>> Flatten<U, T>(this ITile<U> t)
-            where T : ICoordinate, IDisposable
+            where T : ICoordinate
             where U : ITile<T>
         {
             IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);

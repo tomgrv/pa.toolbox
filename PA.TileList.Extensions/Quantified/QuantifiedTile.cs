@@ -29,6 +29,11 @@ namespace PA.TileList.Quantified
         public QuantifiedTile(ITile<T> t, double sizeX, double sizeY, double stepX, double stepY, double offsetX, double offsetY)
             :base(t)
         {
+            if (stepX < sizeX || stepY < sizeY)
+            {
+                throw new ArgumentOutOfRangeException("stepX/stepY", "step must be greater than size for QuantifiedTile");
+            }
+
             this.ElementSizeX = sizeX;
             this.ElementSizeY = sizeY;
             this.ElementStepX = stepX;
