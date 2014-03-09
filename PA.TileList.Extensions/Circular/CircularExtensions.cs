@@ -2,36 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PA.TileList.Circular
 {
     public static class CircularExtensions
     {
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list)
-             where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(list);
-        }
-
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list, double sizeX, double sizeY)
-            where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(list, sizeX, sizeY);
-        }
-
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list, double sizeX, double sizeY, double stepX, double stepY)
-           where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(list, sizeX, sizeY, stepX, stepY);
-        }
-
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list, double sizeX, double sizeY, double stepX, double stepY, double offsetX, double offsetY)
-           where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(list, sizeX, sizeY, stepX, stepY, offsetX, offsetY);
-        }
-
         public static IEnumerable<KeyValuePair<T, double>> Distance<T>(this IQuantifiedTile<T> list)
             where T : ICoordinate
         {
@@ -39,7 +14,7 @@ namespace PA.TileList.Circular
             {
                 double testX = (c.X - list.Reference.X) * list.ElementStepX + list.RefOffsetX;
                 double testY = (c.Y - list.Reference.Y) * list.ElementStepY + list.RefOffsetY;
-                double radius2 = Math.Pow(testX ,2) + Math.Pow(testY, 2);
+                double radius2 = Math.Pow(testX, 2) + Math.Pow(testY, 2);
                 yield return new KeyValuePair<T, double>(c, Math.Sqrt(radius2));
             }
         }
@@ -76,7 +51,7 @@ namespace PA.TileList.Circular
                         }
                         else
                         {
-                            double angle = Math.Abs(Math.Atan2(testY, testX));
+                            double angle = Math.Atan2(testY, testX);
                             double radius = p.Profile.ElementAt(0).Radius;
 
                             for (int k = 1; k < p.Profile.Count(); k++)
@@ -108,8 +83,6 @@ namespace PA.TileList.Circular
                 yield return new KeyValuePair<T, float>(c.Key, (float)c.Value / config.MaxSurface);
             }
         }
-
-
 
         public static IEnumerable<T> Take<T>(this IQuantifiedTile<T> list, CircularProfile p, CircularConfiguration config)
            where T : ICoordinate

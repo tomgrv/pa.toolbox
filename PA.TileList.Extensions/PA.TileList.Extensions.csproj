@@ -57,12 +57,13 @@
     <Compile Include="Quadrant\Quadrant.cs" />
     <Compile Include="Quadrant\QuadrantExtension.cs" />
     <Compile Include="Quantified\IQuantifiedTile.cs" />
+    <Compile Include="Quantified\QuantifiedExtensions.cs" />
     <Compile Include="Quantified\QuantifiedTile.cs" />
     <Compile Include="Rotation\RotationExtensions.cs" />
     <Compile Include="Rotation\RotationTable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PA.TileList.Extension.nuspec" />
+    <None Include="PA.TileList.Extensions.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.TileList\PA.TileList.csproj">
