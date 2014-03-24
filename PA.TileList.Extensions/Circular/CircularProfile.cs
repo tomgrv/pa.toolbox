@@ -40,7 +40,20 @@ namespace PA.TileList.Circular
 
         private List<ProfileStep> profile;
 
-        public IEnumerable<ProfileStep> Profile { get { return this.profile.OrderBy(p => p.Angle); } }
+        public ProfileStep[] Profile
+        {
+            get
+            {
+                if (this.profile.Count > 0)
+                {
+                    return this.profile.OrderBy(p => p.Angle).ToArray();
+                }
+                else
+                {
+                    return new ProfileStep[] { new ProfileStep(0, this.Radius) };
+                }
+            }
+        }
 
         public CircularProfile(Double radius)
         {
@@ -52,9 +65,9 @@ namespace PA.TileList.Circular
         {
             ProfileStep last = new ProfileStep(this.Profile.Last());
 
-            while ( last.Angle > -Math.PI)
+            while (last.Angle > -Math.PI)
             {
-                 last.Angle =  last.Angle - 2*Math.PI;
+                last.Angle = last.Angle - 2 * Math.PI;
             }
 
             return last;
@@ -62,17 +75,17 @@ namespace PA.TileList.Circular
 
         public double GetMinRadius()
         {
-            return this.profile.Min<ProfileStep>(p => p.Radius);
+            return this.Profile.Min<ProfileStep>(p => p.Radius);
         }
 
         public double GetMaxRadius()
         {
-            return this.profile.Max<ProfileStep>(p => p.Radius);
+            return this.Profile.Max<ProfileStep>(p => p.Radius);
         }
 
         public double GetRadius()
         {
-            return this.profile.Sum<ProfileStep>(p => p.Radius) / this.profile.Count();
+            return this.Profile.Sum<ProfileStep>(p => p.Radius) / this.Profile.Count();
         }
 
         /// <summary>
@@ -82,7 +95,7 @@ namespace PA.TileList.Circular
         public void ResetProfile()
         {
             this.profile = new List<ProfileStep>();
-     //       this.AddProfileStep(-Math.PI, this.Radius);
+            //       this.AddProfileStep(-Math.PI, this.Radius);
         }
 
         public void AddProfileStep(ProfileStep step)

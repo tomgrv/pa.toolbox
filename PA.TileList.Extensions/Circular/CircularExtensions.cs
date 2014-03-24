@@ -51,19 +51,21 @@ namespace PA.TileList.Circular
                         }
                         else
                         {
-                            double angle = Math.Atan2(testY, testX);
-                            double radius = p.Profile.ElementAt(0).Radius;
 
-                            for (int k = 1; k < p.Profile.Count(); k++)
+                            double angle = Math.Atan2(-testY, testX);
+                           
+                            CircularProfile.ProfileStep last = p.GetFirst();
+
+                            foreach (CircularProfile.ProfileStep current in p.Profile)
                             {
-                                if (p.Profile.ElementAt(k).Angle >= angle)
+                                if (current.Angle >= angle)
                                 {
-                                    radius = p.Profile.ElementAt(k - 1).Radius;
                                     break;
                                 }
+                                last = current;
                             }
 
-                            if (radius2 < Math.Pow(radius, 2))
+                            if (radius2 < Math.Pow(last.Radius, 2))
                             {
                                 points += 1;
                             }
