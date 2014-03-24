@@ -44,7 +44,7 @@ namespace PA.Converters.Extensions
 
                 if (o == null)
                 {
-                    ConstructorInfo ci = type.GetConstructor(new Type[] { typeof(U) });
+                    ConstructorInfo ci = t.GetConstructor(new Type[] { typeof(U) });
 
                     if (ci is ConstructorInfo)
                     {
