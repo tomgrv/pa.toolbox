@@ -12,10 +12,9 @@ namespace UnitTests.TileList.Extensions
         [TestMethod]
         public void AsQuantified()
         {
-            ITile<ITile<UnitTests.TileList.TileTests.Item>> t2 = UnitTests.TileList.TileTests.GetTile();
+            ITile<ITile<UnitTests.TileList.TileTests.Item>> t2 = UnitTests.TileList.TileTests.GetTile(1);
             ITile<IContextual<UnitTests.TileList.TileTests.Item>> t3 = t2.Flatten<ITile<UnitTests.TileList.TileTests.Item>, UnitTests.TileList.TileTests.Item>();
             IQuantifiedTile<IContextual<UnitTests.TileList.TileTests.Item>> t4 = t3.AsQuantified(5, 5);
-
         }
     }
 }

@@ -2,9 +2,18 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList.Circular;
+using PA.TileList.Quantified;
+using PA.TileList.Contextual;
+using PA.TileList.Extensions;
+using PA.TileList.Drawing;
 using System.Drawing;
+using PA.TileList;
+using System.Collections.Generic;
+using UnitTests.TileList;
+using System.IO;
+using System.Security.Cryptography;
 
-namespace UnitTests.TileList.Extensions
+namespace UnitTests.Drawing
 {
     [TestClass]
     public class CircularTests
@@ -12,94 +21,92 @@ namespace UnitTests.TileList.Extensions
         [TestMethod]
         public void Profile()
         {
-            CircularProfile p = new CircularProfile(100);
+            CircularProfile p = new CircularProfile(1500);
+            
+            RectangleD<Image> i = p.GetImage(1000, 1000, new RectangleF(-2000, -2000, 4000, 4000));
+            
+            i.Item.Save("Profile.png");
 
-            double step = 1f;
-            double reso = 1f;
-
-            p.AddProfileFlat(-Math.PI/2, 10, 10, step);
-            p.AddProfileFlat(7 * Math.PI / 4, 10, 10, step);
-            p.AddProfileFlat(0, 10, 10, step);
-            p.AddProfileFlat(Math.PI / 3f, 20, 20, step, reso);
-            p.AddProfileFlat(2f * Math.PI / 3f, 40, 40, step, reso);
-           
-            //p.AddProfileFlat(Math.PI, 50, 50, step, reso);
-
-
-            ProfileToBmp("Profile", p, 50);
+            Assert.AreEqual("81E88BED0A483EE7E88FDC6BAC0E0E800D3E0420D2F2916B8413A562E6529EB9", this.GetHash("Profile.png"), "Image hash");
         }
 
-        private void ProfileToBmp(string testname, CircularProfile p, int ppp = 1)
+        [TestMethod]
+        public void SelectionSmallTile()
         {
-            int maxsize = ppp * (int)p.GetMaxRadius() * 2;
-            int minsize = ppp * (int)p.GetMinRadius() * 2;
-            int midsize = ppp * (int)p.Radius * 2;
-            int mid = maxsize / 2 + 3 * ppp;
+            float factor = 1f;
 
-            using (Bitmap b = new Bitmap(2 * mid, 2 * mid))
+            IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
+                .Flatten<ITile<TileTests.Item>, TileTests.Item>()
+                .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+
+            Assert.AreEqual(3025, tile.Count(), "Initial item count");
+
+            CircularProfile p = GetTestProfile(1400);
+
+            IEnumerable<IContextual<TileTests.Item>> l = tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside));
+
+            Assert.AreEqual(1800, l.Count(), "Selected item count");
+
+            IQuantifiedTile<IContextual<TileTests.Item>> q = l.AsTile(tile.Area).AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor);
+
+            RectangleD<Image> pi = p.GetImage(1000, 1000, tile.GetBounds());
+
+            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "|" + z.Item.Y));
+
+            i.Item.Save("SelectionSmallTile.png");
+
+            Assert.AreEqual("63FC3E364774AB7492106359F15957B0E925355953BCF32B558124D466A6CBE3", this.GetHash("SelectionSmallTile.png"), "Image hash");
+        }
+
+        [TestMethod]
+        public void SelectionMediumTile()
+        {
+            float factor = 5f;
+
+            IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
+                .Flatten<ITile<TileTests.Item>, TileTests.Item>()
+                .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+
+            Assert.AreEqual(65025, tile.Count(), "Initial item count");
+
+            CircularProfile p = GetTestProfile(1400);
+
+            IEnumerable<IContextual<TileTests.Item>> l = tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside));
+
+            Assert.AreEqual(47860, l.Count(), "Selected item count");
+
+            IQuantifiedTile<IContextual<TileTests.Item>> q = l.AsTile(tile.Area).AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor);
+
+            RectangleD<Image> pi = p.GetImage(5000, 5000, tile.GetBounds());
+
+            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "|" + z.Item.Y));
+
+            i.Item.Save("SelectionMediumTile.png");
+
+            Assert.AreEqual("68FC8370B131B421E3DB81FBB255209671D3036AC3302B33BE132C9D668C48D6", this.GetHash("SelectionMediumTile.png"), "Image hash");
+        }
+
+        private string GetHash(string filename)
+        {
+            using (FileStream stream = File.OpenRead(filename))
             {
-                using (Graphics g = Graphics.FromImage(b))
-                {
-                    g.DrawEllipse(Pens.Blue, mid - maxsize / 2, mid - maxsize / 2, maxsize, maxsize);
-                    g.DrawEllipse(Pens.Blue, mid - minsize / 2, mid - minsize / 2, minsize, minsize);
-                    g.DrawEllipse(Pens.Black, mid - midsize / 2, mid - midsize / 2, midsize, midsize);
-
-                    for (int f = 0; f < 8; f++)
-                    {
-                        double angle = f * Math.PI / 4f;
-                        g.DrawLine(new Pen(Color.Yellow, 1), mid, mid, mid + (int)Math.Round(ppp * (p.Radius + 10) * Math.Cos(angle)), mid - (int)Math.Round(ppp * (p.Radius + 10) * Math.Sin(angle)));
-                    }
-
-                    Color[] c = new Color[] { Color.Transparent, Color.Transparent };
-
-                    CircularProfile.ProfileStep s = p.GetFirst();
-
-                    double a = s.Angle  ;
-                    double r = s.Radius;
-
-                    int[] pos = Plot(g, ppp, mid, c[0], a, r, "X");
-
-                    int i = 1;
-
-                    foreach (CircularProfile.ProfileStep ps in p.Profile)
-                    {
-                        int[] end = Plot(g, ppp, mid, Color.Transparent, ps.Angle, r, i % 10 == 0 ? i.ToString() : "");
-                        int[] cur = Plot(g, ppp, mid, c[i % c.Length], ps.Angle, ps.Radius, i % 10 == 0 ? i.ToString() : "");
-
-                        int ad = (int)Math.Round(180 * -a / Math.PI);
-                        int sw = (int)Math.Round(180 * -(ps.Angle - a) / Math.PI);
-
-                        g.DrawArc(new Pen(Color.Red, 3), (int)Math.Round(mid - r * ppp), (int)Math.Round(mid - r * ppp), (int)Math.Round(r * 2 * ppp), (int)Math.Round(r * 2 * ppp), ad, sw);
-                        g.DrawLine(new Pen(Color.Red, 3), end[0], end[1], cur[0], cur[1]);
-
-
-                        pos = cur;
-                        a = ps.Angle;
-                        r = ps.Radius;
-                        i++;
-                    }
-                }
-
-                b.Save(testname + ".png");
+                SHA256Managed sha = new SHA256Managed();
+                byte[] hash = sha.ComputeHash(stream);
+                return BitConverter.ToString(hash).Replace("-", String.Empty);
             }
         }
 
-        private int[] Plot(Graphics g, int ppp, int mid, Color c, double a, double r, string s)
+        private CircularProfile GetTestProfile(float radius, double stepping = 1f, double resolution = 1f)
         {
-            int plotsize = 3;
+            CircularProfile p = new CircularProfile(radius);
 
-            int x0 = (int)Math.Round(mid + r * Math.Cos(a) * ppp);
-            int y0 = (int)Math.Round(mid - r * Math.Sin(a) * ppp);
+            p.AddProfileFlat(-Math.PI / 2, 100, 100, stepping);
+            p.AddProfileFlat(7 * Math.PI / 4, 200, 100, stepping);
+            p.AddProfileFlat(0, 300, 100, stepping, resolution);
+            p.AddProfileFlat(Math.PI / 3f, 400, 200, stepping, resolution);
+            p.AddProfileFlat(2f * Math.PI / 3f, 500, 400, stepping, resolution);
 
-            g.FillRectangle(new SolidBrush(c), x0 - plotsize * ppp / 2, y0 - plotsize * ppp / 2, plotsize * ppp, plotsize * ppp);
-
-            if (s != "")
-            {
-                int x1 = (int)Math.Round(mid + (r + plotsize + s.Length) * Math.Cos(a) * ppp);
-                int y1 = (int)Math.Round(mid - (r + plotsize + s.Length) * Math.Sin(a) * ppp);
-                g.DrawString(s, SystemFonts.DefaultFont, Brushes.Black, x1, y1);
-            }
-            return new int[] { x0, y0 };
+            return p;
         }
     }
 

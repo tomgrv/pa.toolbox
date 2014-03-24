@@ -17,7 +17,7 @@ namespace UnitTests.Configuration
             using (Settings stg = new Settings(Process.GetCurrentProcess().ProcessName + ".ini", Settings.Format.IniFormat))
             {
                 string[] keys = stg.AllKeys();
-                Assert.AreEqual(23, keys.Length);
+                Assert.AreEqual(24, keys.Length);
                 Assert.AreEqual("TestSection/Param", keys[1]);
 
                 string[] chd = stg.ChildKeys();
@@ -30,11 +30,11 @@ namespace UnitTests.Configuration
                 stg.BeginGroup("TestSection");
 
                 keys = stg.AllKeys();
-                Assert.AreEqual(11, keys.Length);
+                Assert.AreEqual(12, keys.Length);
                 Assert.AreEqual("Param", keys[1]);
 
                 chd = stg.ChildKeys();
-                Assert.AreEqual(7, chd.Length);
+                Assert.AreEqual(8, chd.Length);
                 Assert.AreEqual("Param", keys[1]);
 
                 grp = stg.ChildGroups();

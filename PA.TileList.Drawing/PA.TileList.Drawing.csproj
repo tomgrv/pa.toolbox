@@ -47,8 +47,9 @@
     <Compile Include="Controls\TilePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Core\RectangleD.cs" />
     <Compile Include="Core\ImageExtentions.cs" />
-    <Compile Include="Core\ImagePortion.cs" />
+    <Compile Include="Circular\ProfileExtentions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
