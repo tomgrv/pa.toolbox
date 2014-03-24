@@ -17,16 +17,16 @@ namespace UnitTests.Drawing
         {
             float factor = 1f;
 
-            ITile<ITile<UnitTests.TileList.TileTests.Item>> t2 = TileTests.GetTile(factor);
+            TileTests.MainTile t2 = TileTests.GetTile(factor);
 
             AjouterDetourage(
                 t2
                 .AsQuantified((int)(50 / factor), (int)(50 / factor), (int)(55 / factor),(int)( 55 / factor))
-                .GetImage(1000, 1000, ImageExtentions.ScaleMode.CENTER | ImageExtentions.ScaleMode.CENTERSTEP | ImageExtentions.ScaleMode.EXACTPIXEL,
+                .GetImage(1000, 1000,
                  p1 => AjouterDetourage(
                      p1.Item
                      .AsQuantified()
-                     .GetImage(100, 100, ImageExtentions.ScaleMode.CENTER | ImageExtentions.ScaleMode.SCALE | ImageExtentions.ScaleMode.CENTERSTEP,
+                     .GetImage(100, 100,
                         p2 => p2.Item.ToBitmap(20, 20, p2.Item.X + "|" + p2.Item.Y)
                      ).Item
                     )

@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="TileList.Extensions\LinearTests.cs" />
     <Compile Include="TileList.Extensions\CircularTests.cs" />
+    <Compile Include="TileList.Extensions\QuadrantTest.cs" />
     <Compile Include="TileList.Extensions\QuantifiedTests.cs" />
     <Compile Include="TileList\CoordinateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +99,10 @@
     <ProjectReference Include="..\..\PA.Converters\PA.Converters.csproj">
       <Project>{b09f91a1-df25-4dae-8e45-40df0fa9334f}</Project>
       <Name>PA.Converters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.File\PA.File.csproj">
+      <Project>{69c9ea62-e168-4241-89db-a44e8387e846}</Project>
+      <Name>PA.File</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>

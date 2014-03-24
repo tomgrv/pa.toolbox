@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
+using PA.TileList.Quadrant;
 using System.Drawing;
 
 namespace UnitTests.TileList
@@ -8,6 +9,39 @@ namespace UnitTests.TileList
     [TestClass]
     public class TileTests
     {
+
+        internal class MainTile : Tile<SubTile>, IQuadrant<SubTile>
+        {
+            public MainTile(IArea a, SubTile t)
+                : base(a, t)
+            { }
+
+            public Quadrant Quadrant { get; private set; }
+
+            public void SetQuadrant(Quadrant q)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        internal class SubTile : Tile<Item>, IQuadrant<Item>
+        {
+            public SubTile(IArea a, Item t)
+                : base(a, t)
+            { }
+
+            public SubTile(SubTile t)
+                : base(t)
+            { }
+
+            public Quadrant Quadrant { get; private set; }
+
+            public void SetQuadrant(Quadrant q)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         internal class Item : Coordinate
         {
             public Color Color { get; set; }
@@ -20,39 +54,36 @@ namespace UnitTests.TileList
 
             public Bitmap ToBitmap(int w, int h, string s)
             {
+
+
                 Bitmap b = new Bitmap(w, h);
 
                 using (Graphics g = Graphics.FromImage(b))
                 {
                     g.DrawRectangle(Pens.Pink, 0, 0, w - 1, h - 1);
                     g.FillRectangle(new SolidBrush(this.Color), 1, 1, w - 2, h - 2);
-                    g.DrawString(s, new Font(FontFamily.GenericSansSerif, w / 3), Brushes.Gray, 0, 0);
+                    g.DrawString(s, new Font(FontFamily.GenericSansSerif, (float) w / 3f), Brushes.Gray, 0, 0);
                 }
 
                 return b;
             }
         }
 
-        [TestMethod]
-        public void Tile()
-        {
-        }
 
-
-        internal static ITile<ITile<Item>> GetTile(float factor)
+        internal static MainTile GetTile(float factor)
         {
             IArea a1 = new Area(1, 1, 5, 5);
-            IArea a2 = new Area((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
+            IArea a0 = new Area((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
 
-            Item t0 = new Item(1, 1, Color.Green);
+            Item t2 = new Item(1, 1, Color.Green);
 
-            Tile<Item> t1 = new Tile<Item>(a1, t0);
-            t1.Fill<Item>(c => c.X + c.Y == 6 ? t0.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
+            SubTile t1 = new SubTile(a1, t2);
+            t1.Fill<Item>(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
 
-            Tile<ITile<Item>> t2 = new Tile<ITile<Item>>(a2, t1);
-            t2.Fill<Tile<Item>>(c => new Tile<Item>(t1));
+            MainTile t0 = new MainTile(a0, t1);
+            t0.Fill<SubTile>(c => new SubTile(t1));
 
-            return t2;
+            return t0;
         }
     }
 }

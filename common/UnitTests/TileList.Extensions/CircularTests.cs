@@ -8,6 +8,7 @@ using PA.TileList.Extensions;
 using PA.TileList.Drawing;
 using System.Drawing;
 using PA.TileList;
+using PA.File.Extensions;
 using System.Collections.Generic;
 using UnitTests.TileList;
 using System.IO;
@@ -36,7 +37,7 @@ namespace UnitTests.Drawing
             float factor = 1f;
 
             IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
-                .Flatten<ITile<TileTests.Item>, TileTests.Item>()
+                .Flatten<TileTests.SubTile, TileTests.Item>()
                 .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
 
             Assert.AreEqual(3025, tile.Count(), "Initial item count");
@@ -64,7 +65,7 @@ namespace UnitTests.Drawing
             float factor = 5f;
 
             IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
-                .Flatten<ITile<TileTests.Item>, TileTests.Item>()
+                .Flatten<TileTests.SubTile, TileTests.Item>()
                 .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
 
             Assert.AreEqual(65025, tile.Count(), "Initial item count");
@@ -90,9 +91,7 @@ namespace UnitTests.Drawing
         {
             using (FileStream stream = File.OpenRead(filename))
             {
-                SHA256Managed sha = new SHA256Managed();
-                byte[] hash = sha.ComputeHash(stream);
-                return BitConverter.ToString(hash).Replace("-", String.Empty);
+                return stream.GetSignature();
             }
         }
 
