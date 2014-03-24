@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PA.TileList.Contextual;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,10 @@ namespace PA.TileList.Quadrant
 {
     public static class QuadrantExtension
     {
+
+
+
+
         #region ChangeQuadrant
 
         public static void SetCoordinatesInQuadrant<T>(this IQuadrant<T> zl, Quadrant target)
@@ -72,6 +77,79 @@ namespace PA.TileList.Quadrant
             }
         }
 
+
+        #region Inline
+
+        public static IEnumerable<IContextual<T>> ChangeQuadrant<T>(this IQuadrant<T> c, Quadrant target)
+           where T : ICoordinate
+        {
+            foreach (T e in c)
+            {
+                IContextual<T> i = new Contextual<T>(e.X, e.Y, e);
+                yield return i.ChangeQuadrant(c.Quadrant, target, c.Area);
+            }
+        }
+
+        public static IEnumerable<IContextual<T>> ChangeQuadrant<T>(this ITile<T> c, Quadrant source, Quadrant target)
+            where T : ICoordinate
+        {
+            foreach (T e in c)
+            {
+                IContextual<T> i = new Contextual<T>(e.X, e.Y, e);
+                yield return i.ChangeQuadrant(source, target, c.Area);
+            }
+        }
+
+        internal static IContextual<T> ChangeQuadrant<T>(this IContextual<T> item, Quadrant source, Quadrant target, IArea a)
+            where T : ICoordinate
+        {
+
+            // Source ==> Array
+            switch (source)
+            {
+                case Quadrant.TopRight:
+                    item.X = -(item.X - a.Min.X - a.SizeX + 1);
+                    item.Y = (item.Y - a.Min.Y);
+                    break;
+                case Quadrant.TopLeft:
+                    item.X = (item.X - a.Min.X);
+                    item.Y = (item.Y - a.Min.Y);
+                    break;
+                case Quadrant.BottomLeft:
+                    item.X = (item.X - a.Min.X);
+                    item.Y = -(item.Y - a.Min.Y - a.SizeY + 1);
+                    break;
+                case Quadrant.BottomRight:
+                    item.X = -(item.X - a.Min.X - a.SizeX + 1);
+                    item.Y = -(item.Y - a.Min.Y - a.SizeY + 1);
+                    break;
+            }
+
+            // Array ==> Target
+            switch (target)
+            {
+                case Quadrant.TopRight:
+                    item.X = -item.X + a.Min.X + a.SizeX - 1;
+                    item.Y = item.Y + a.Min.Y;
+                    break;
+                case Quadrant.TopLeft:
+                    item.X = item.X + a.Min.X;
+                    item.Y = item.Y + a.Min.Y;
+                    break;
+                case Quadrant.BottomLeft:
+                    item.X = item.X + a.Min.X;
+                    item.Y = -item.Y + a.Min.Y + a.SizeY - 1;
+                    break;
+                case Quadrant.BottomRight:
+                    item.X = -item.X + a.Min.X + a.SizeX - 1;
+                    item.Y = -item.Y + a.Min.Y + a.SizeY - 1;
+                    break;
+            }
+
+            return item;
+        }
+
+        #endregion
 
         public static decimal ChangeQuadrantFromOriginX(Quadrant source, decimal x, Quadrant target)
         {
