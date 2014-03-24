@@ -67,6 +67,7 @@ namespace PA.TileList.Contextual
 
             Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.GetArea(), t.Where<U>(predicate).SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
 
+            list.UpdateArea();
             list.SetReference(list.Find(reference.X, reference.Y));
 
             return list;
@@ -80,6 +81,7 @@ namespace PA.TileList.Contextual
 
             Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.GetArea(), t.SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
 
+            list.UpdateArea();
             list.SetReference(list.Find(reference.X, reference.Y));
 
             return list;
