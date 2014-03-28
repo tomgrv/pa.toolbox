@@ -7,28 +7,28 @@ namespace PA.TileList.Quantified
 {
     public static class QuantifiedExtensions
     {
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list)
+        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l)
              where T : ICoordinate
         {
-            return new QuantifiedTile<T>(list);
+            return l as IQuantifiedTile<T> ?? new QuantifiedTile<T>(l);
         }
 
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list, double sizeX, double sizeY)
+        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l, double sizeX, double sizeY)
             where T : ICoordinate
         {
-            return new QuantifiedTile<T>(list, sizeX, sizeY);
+            return new QuantifiedTile<T>(l, sizeX, sizeY);
         }
 
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list, double sizeX, double sizeY, double stepX, double stepY)
+        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l, double sizeX, double sizeY, double stepX, double stepY)
            where T : ICoordinate
         {
-            return new QuantifiedTile<T>(list, sizeX, sizeY, stepX, stepY);
+            return new QuantifiedTile<T>(l, sizeX, sizeY, stepX, stepY);
         }
 
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> list, double sizeX, double sizeY, double stepX, double stepY, double offsetX, double offsetY)
+        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l, double sizeX, double sizeY, double stepX, double stepY, double offsetX, double offsetY)
            where T : ICoordinate
         {
-            return new QuantifiedTile<T>(list, sizeX, sizeY, stepX, stepY, offsetX, offsetY);
+            return new QuantifiedTile<T>(l, sizeX, sizeY, stepX, stepY, offsetX, offsetY);
         }
 
         public static double GetScaleFactor(this IQuantifiedTile list, double sizeX, double sizeY)

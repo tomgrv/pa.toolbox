@@ -20,16 +20,16 @@ namespace PA.TileList.Extensions
             return new Coordinate(c.X, c.Y);
         }
 
-        public static Tile<T> AsTile<T>(this IEnumerable<T> l, int referenceIndex = 0)
+        public static ITile<T> AsTile<T>(this IEnumerable<T> l, int referenceIndex = 0)
            where T : ICoordinate
         {
-            return new Tile<T>(l, referenceIndex);
+            return l as ITile<T> ?? new Tile<T>(l, referenceIndex);
         }
 
-        public static Tile<T> AsTile<T>(this IEnumerable<T> l, IArea a, int referenceIndex = 0)
+        public static ITile<T> AsTile<T>(this IEnumerable<T> l, IArea a, int referenceIndex = 0)
            where T : ICoordinate
         {
-            return new Tile<T>(a, l, referenceIndex);
+            return l as ITile<T> ?? new Tile<T>(a, l, referenceIndex);
         }
     }
 
