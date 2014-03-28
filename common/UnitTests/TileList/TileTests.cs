@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
 using PA.TileList.Quadrant;
 using System.Drawing;
+using PA.TileList.Quantified;
 
 namespace UnitTests.TileList
 {
@@ -10,7 +11,7 @@ namespace UnitTests.TileList
     public class TileTests
     {
 
-        internal class MainTile : Tile<SubTile>, IQuadrant<SubTile>
+        internal class MainTile : Tile<SubTile>, IQuadrant<SubTile>, IQuantifiedTile<SubTile>
         {
             public MainTile(IArea a, SubTile t)
                 : base(a, t)
@@ -22,6 +23,18 @@ namespace UnitTests.TileList
             {
                 throw new NotImplementedException();
             }
+
+            public double ElementSizeX { get; internal set; }
+
+            public double ElementSizeY { get; internal set; }
+
+            public double ElementStepX { get; internal set; }
+
+            public double ElementStepY { get; internal set; }
+
+            public double RefOffsetX { get; internal set; }
+
+            public double RefOffsetY { get; internal set; }
         }
 
         internal class SubTile : Tile<Item>, IQuadrant<Item>
@@ -62,7 +75,7 @@ namespace UnitTests.TileList
                 {
                     g.DrawRectangle(Pens.Pink, 0, 0, w - 1, h - 1);
                     g.FillRectangle(new SolidBrush(this.Color), 1, 1, w - 2, h - 2);
-                    g.DrawString(s, new Font(FontFamily.GenericSansSerif, (float) w / 3f), Brushes.Gray, 0, 0);
+                    g.DrawString(s, new Font(FontFamily.GenericSansSerif, (float)w / 3f), Brushes.Gray, 0, 0);
                 }
 
                 return b;
@@ -82,6 +95,13 @@ namespace UnitTests.TileList
 
             MainTile t0 = new MainTile(a0, t1);
             t0.Fill<SubTile>(c => new SubTile(t1));
+
+            t0.ElementSizeX = 50f / factor * a1.SizeX;
+            t0.ElementSizeY = 50f / factor * a1.SizeY;
+            t0.ElementStepX = 55f / factor * a1.SizeX;
+            t0.ElementStepY = 55f / factor * a1.SizeY;
+            t0.RefOffsetX = 0;
+            t0.RefOffsetY = 0;
 
             return t0;
         }

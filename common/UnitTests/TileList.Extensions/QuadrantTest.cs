@@ -25,8 +25,7 @@ namespace UnitTests
             TileTests.MainTile tile = TileTests.GetTile(factor);
 
             IQuantifiedTile<IContextual<TileTests.Item>> t1 = tile
-               .Flatten<TileTests.SubTile, TileTests.Item>()
-               .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+               .Flatten<TileTests.SubTile, TileTests.Item>();
 
             t1.GetImage(5000, 5000, z => z.Item.Context.ToBitmap(100, 100, z.Item.X + "\n" + z.Item.Y)).Item.Save("TopLeft.png");
 
@@ -34,9 +33,7 @@ namespace UnitTests
 
             IQuantifiedTile<IContextual<IContextual<TileTests.Item>>> t2 = tile
                  .Flatten<TileTests.SubTile, TileTests.Item>()
-                 .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomLeft)
-                 .AsTile()
-                 .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+                 .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomLeft);
 
             t2.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.Save("BottomLeft.png");
 
@@ -44,9 +41,7 @@ namespace UnitTests
 
             IQuantifiedTile<IContextual<IContextual<TileTests.Item>>> t3 = tile
                .Flatten<TileTests.SubTile, TileTests.Item>()
-               .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomRight)
-               .AsTile()
-               .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+               .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomRight);
 
             t3.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.Save("BottomRight.png");
 
@@ -54,9 +49,7 @@ namespace UnitTests
 
             IQuantifiedTile<IContextual<IContextual<TileTests.Item>>> t4 = tile
              .Flatten<TileTests.SubTile, TileTests.Item>()
-             .ChangeQuadrant(Quadrant.TopLeft, Quadrant.TopRight)
-             .AsTile()
-             .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+             .ChangeQuadrant(Quadrant.TopLeft, Quadrant.TopRight);
 
             t4.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.Save("TopRight.png");
 

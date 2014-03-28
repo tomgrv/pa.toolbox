@@ -5,6 +5,7 @@ using System.Text;
 using PA.TileList;
 using PA.TileList.Contextual;
 using PA.TileList.Quantified;
+using PA.TileList.Extensions;
 
 namespace PA.TileList.Contextual
 {
@@ -29,7 +30,7 @@ namespace PA.TileList.Contextual
         }
 
         public static IEnumerable<T> ToContext<T>(this IEnumerable<IContextual<T>> t)
-           where T : ICoordinate, IDisposable
+           where T : ICoordinate
         {
             foreach (IContextual<T> c in t)
             {
@@ -37,54 +38,53 @@ namespace PA.TileList.Contextual
             }
         }
 
-        public static IQuantifiedTile<IContextual<T>> Flatten<U, T>(this IQuantifiedTile<U> t)
+        public static IQuantifiedTile<IContextual<T>> Flatten<U, T>(this IQuantifiedTile<U> t, Func<U, bool> predicate = null)
             where U : ITile<T>
-            where T : ICoordinate, IDisposable
-        {
-            IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);
-
-            QuantifiedTile<IContextual<T>> list = new QuantifiedTile<IContextual<T>>((t as ITile<U>).Flatten<U,T>(),
-                                                               t.ElementSizeX, t.ElementSizeY, t.ElementStepX, t.ElementStepY, t.RefOffsetX, t.RefOffsetY);
-
-            list.SetReference(list.Find(reference.X, reference.Y));
-
-            return list;
-        }
-
-        public static IQuantifiedTile<IContextual<T>> Flatten<U, T>(this IQuantifiedTile<U> t, Func<U, bool> predicate)
-            where U : ITile<T>
-            where T : ICoordinate, IDisposable
-        {
-            return new QuantifiedTile<IContextual<T>>(ContextualExtensions.Flatten<U,T>(t as ITile<U>,predicate),
-                t.ElementSizeX, t.ElementSizeY, t.ElementStepX, t.ElementStepY, t.RefOffsetX, t.RefOffsetY);
-        }
-
-        public static ITile<IContextual<T>> Flatten<U, T>(this ITile<U> t, Func<U, bool> predicate)
-            where U : ITile<T>
-            where T : ICoordinate, IDisposable
-        {
-            IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);
-
-            Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.GetArea(), t.Where<U>(predicate).SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
-
-            list.UpdateArea();
-            list.SetReference(list.Find(reference.X, reference.Y));
-
-            return list;
-        }
-
-        public static ITile<IContextual<T>> Flatten<U, T>(this ITile<U> t)
             where T : ICoordinate
-            where U : ITile<T>
         {
             IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);
 
-            Tile<IContextual<T>> list = new Tile<IContextual<T>>(t.GetArea(), t.SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c))));
+            // Sizes in flattened output Tile
+            double sizeX = t.ElementSizeX / t.Reference.Area.SizeX;
+            double sizeY = t.ElementSizeY / t.Reference.Area.SizeY;
+            double stepX = t.ElementStepX / t.Reference.Area.SizeX;
+            double stepY = t.ElementStepY / t.Reference.Area.SizeY;
 
-            list.UpdateArea();
+            // Convert offset<U> (relative to <U> center) to Offset<T> (relative to  <T> center), expressed in {number of <T>} 
+            double distX = (t.Reference.Reference.X - t.Reference.Area.Min.X) - ((t.Reference.Area.SizeX - 1) / 2f);
+            double distY = (t.Reference.Reference.Y - t.Reference.Area.Min.Y) - ((t.Reference.Area.SizeY - 1) / 2f);
+
+            QuantifiedTile<IContextual<T>> list = new QuantifiedTile<IContextual<T>>(ContextualExtensions.Flatten<U, T>(t as ITile<U>, predicate),
+               sizeX, sizeY, stepX, stepY, distX * stepX + t.RefOffsetX, distY * stepY + t.RefOffsetY
+            );
+
             list.SetReference(list.Find(reference.X, reference.Y));
 
             return list;
+        }
+
+
+        public static ITile<IContextual<T>> Flatten<U, T>(this ITile<U> t, Func<U, bool> predicate = null)
+            where U : ITile<T>
+            where T : ICoordinate
+        {
+            IContextual<T> reference = t.Reference.Contextualize(t.Reference.Reference);
+
+            IEnumerable<IContextual<T>> list;
+
+            if (predicate is Func<U, bool>)
+            {
+                list = t.Where<U>(predicate).SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c)));
+            }
+            else
+            {
+                list = t.SelectMany<U, IContextual<T>>(subtile => subtile.Select(c => subtile.Contextualize(c)));
+            }
+
+            Tile<IContextual<T>> tile = new Tile<IContextual<T>>(t.GetArea(), list);
+            tile.UpdateArea();
+            tile.SetReference(tile.Find(reference.X, reference.Y));
+            return tile;
         }
     }
 }

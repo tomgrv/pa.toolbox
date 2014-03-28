@@ -37,8 +37,7 @@ namespace UnitTests.Drawing
             float factor = 1f;
 
             IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
-                .Flatten<TileTests.SubTile, TileTests.Item>()
-                .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+                .Flatten<TileTests.SubTile, TileTests.Item>();
 
             Assert.AreEqual(3025, tile.Count(), "Initial item count");
 
@@ -65,8 +64,7 @@ namespace UnitTests.Drawing
             float factor = 5f;
 
             IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
-                .Flatten<TileTests.SubTile, TileTests.Item>()
-                .AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor, -55f * 2f / factor, -55f * 2f / factor);
+                .Flatten<TileTests.SubTile, TileTests.Item>();
 
             Assert.AreEqual(65025, tile.Count(), "Initial item count");
 
