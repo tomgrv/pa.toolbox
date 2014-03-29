@@ -51,11 +51,13 @@ namespace UnitTests.Drawing
 
             RectangleD<Image> pi = p.GetImage(1000, 1000, tile.GetBounds());
 
-            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "|" + z.Item.Y));
+            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
 
-            i.Item.Save("SelectionSmallTile.png");
+            string file = "SelectionSmallTile_" + DateTime.Now.Ticks + ".png";
 
-            Assert.AreEqual("63FC3E364774AB7492106359F15957B0E925355953BCF32B558124D466A6CBE3", this.GetHash("SelectionSmallTile.png"), "Image hash");
+            i.Item.Save(file);
+
+            Assert.AreEqual("85B42DE7F503442B81CEEE13D9B6DF20A5673DC50EC17E506E20D5208312FEEE", this.GetHash(file), "Image hash");
         }
 
         [TestMethod]
@@ -78,11 +80,13 @@ namespace UnitTests.Drawing
 
             RectangleD<Image> pi = p.GetImage(5000, 5000, tile.GetBounds());
 
-            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "|" + z.Item.Y));
+            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
 
-            i.Item.Save("SelectionMediumTile.png");
+            string file = "SelectionMediumTile_" + DateTime.Now.Ticks + ".png";
 
-            Assert.AreEqual("68FC8370B131B421E3DB81FBB255209671D3036AC3302B33BE132C9D668C48D6", this.GetHash("SelectionMediumTile.png"), "Image hash");
+            i.Item.Save(file);
+
+            Assert.AreEqual("3DA34BD290F3DEE192A836AB61F4A1308016BF2BE56E4F8EBBAC54995E5109D5", this.GetHash(file), "Image hash");
         }
 
         private string GetHash(string filename)

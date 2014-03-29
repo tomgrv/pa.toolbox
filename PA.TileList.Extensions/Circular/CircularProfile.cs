@@ -40,13 +40,13 @@ namespace PA.TileList.Circular
 
         private List<ProfileStep> profile;
 
-        public ProfileStep[] Profile
+        public IEnumerable<ProfileStep> Profile
         {
             get
             {
                 if (this.profile.Count > 0)
                 {
-                    return this.profile.OrderBy(p => p.Angle).ToArray();
+                    return this.profile.OrderBy(p => p.Angle);
                 }
                 else
                 {
