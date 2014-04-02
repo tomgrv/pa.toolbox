@@ -32,7 +32,7 @@ namespace UnitTests.Plugin
         private ConfigurationItem<string> UrlItemToTest { get; set; }
 
         [Import("TestSection/TestUrl", AllowRecomposition = true)]
-        public IPlugin<Uri> PluginForUri { get; set; }
+        public IPluginUri PluginForUri { get; set; }
 
         [Import("TestSection/TestUrls", AllowRecomposition = true)]
         public Uri[] Uris { get; set; }

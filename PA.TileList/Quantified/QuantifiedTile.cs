@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PA.TileList.Quantified
+namespace PA.TileList
 {
     public class QuantifiedTile<T> : Tile<T>, IQuantifiedTile<T>, ITile<T>
         where T : ICoordinate
@@ -17,6 +17,9 @@ namespace PA.TileList.Quantified
         public double RefOffsetX { get; private set; }
         public double RefOffsetY { get; private set; }
 
+        public QuantifiedTile(IQuantifiedTile<T> t)
+            : this(t, t.ElementSizeX, t.ElementSizeY, t.ElementStepX, t.ElementStepY, t.RefOffsetX, t.RefOffsetY) { }
+
         public QuantifiedTile(ITile<T> t)
             : this(t, 1, 1, 1, 1, 0, 0) { }
 
@@ -27,7 +30,7 @@ namespace PA.TileList.Quantified
             : this(t, sizeX, sizeY, stepX, stepY, 0, 0) { }
 
         public QuantifiedTile(ITile<T> t, double sizeX, double sizeY, double stepX, double stepY, double offsetX, double offsetY)
-            :base(t)
+            : base(t)
         {
             if (stepX < sizeX || stepY < sizeY)
             {

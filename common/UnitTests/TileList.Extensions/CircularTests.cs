@@ -20,12 +20,28 @@ namespace UnitTests.Drawing
     public class CircularTests
     {
         [TestMethod]
+        public void ProfileWith0()
+        {
+            CircularProfile search = new CircularProfile(1000);
+
+            for (int a = 0; a < 4; a++)
+            {
+                double a0 = -13f * Math.PI / 12f + a * Math.PI / 2f;
+                double a1 = -11f * Math.PI / 12f + a * Math.PI / 2f;
+                search.AddProfileStep(a0, 0);
+                search.AddProfileStep(a1, 1000);
+            }
+
+            search.GetImage(1000, 1000).Item.Save("SelectTarget.png");
+        }
+
+        [TestMethod]
         public void Profile()
         {
             CircularProfile p = new CircularProfile(1500);
-            
+
             RectangleD<Image> i = p.GetImage(1000, 1000, new RectangleF(-2000, -2000, 4000, 4000));
-            
+
             i.Item.Save("Profile.png");
 
             Assert.AreEqual("81E88BED0A483EE7E88FDC6BAC0E0E800D3E0420D2F2916B8413A562E6529EB9", this.GetHash("Profile.png"), "Image hash");
@@ -43,11 +59,12 @@ namespace UnitTests.Drawing
 
             CircularProfile p = GetTestProfile(1400);
 
-            IEnumerable<IContextual<TileTests.Item>> l = tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside));
+            bool change = true;
 
-            Assert.AreEqual(1800, l.Count(), "Selected item count");
+            IQuantifiedTile<IContextual<TileTests.Item>> q = tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside), ref change);
 
-            IQuantifiedTile<IContextual<TileTests.Item>> q = l.AsTile(tile.Area).AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor);
+            Assert.AreEqual(false, change, "Reference Changed");
+            Assert.AreEqual(1800, q.Count(), "Selected item count");
 
             RectangleD<Image> pi = p.GetImage(1000, 1000, tile.GetBounds());
 

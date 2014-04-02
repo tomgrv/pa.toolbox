@@ -72,6 +72,7 @@
     <Compile Include="Converters\Extensions.cs" />
     <Compile Include="Drawing\BitmapTest.cs" />
     <Compile Include="Plugin.Components\ParameterForm.cs" />
+    <Compile Include="Plugin\IPluginUri.cs" />
     <Compile Include="Plugin\Plugin2ForUriHttp.cs" />
     <Compile Include="Plugin\PluginForUriHttp.cs" />
     <Compile Include="Plugin\PluginForUriFile.cs" />

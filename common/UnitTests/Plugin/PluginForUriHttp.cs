@@ -8,9 +8,9 @@ using System.Text;
 
 namespace UnitTests.Plugin
 {
-    [ExportWithLabel(typeof(IPlugin<Uri>), "http")]
+    [ExportWithLabel(typeof(IPluginUri), "http")]
     [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
-    public class PluginForUriHttp : IPlugin<Uri>
+    public class PluginForUriHttp : IPluginUri
     {
         public Uri Value { get; set; }
 
@@ -19,9 +19,6 @@ namespace UnitTests.Plugin
         {
             this.Value = value;
         }
-
-       
-
 
         public void Dispose()
         {

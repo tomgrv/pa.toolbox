@@ -8,7 +8,7 @@ using System.Text;
 
 namespace UnitTests.Plugin
 {
-    [ExportWithLabel(typeof(IPlugin<Uri>),"file")]
+    [ExportWithLabel(typeof(IPlugin<Uri>), "file")]
     [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
     public class PluginForUriFile : IPlugin<Uri>
     {
