@@ -68,7 +68,10 @@ namespace PA.TileList.Drawing
                     int ad = (int)Math.Round(180 * -last.Angle / Math.PI);
                     int sw = (int)Math.Round(180 * -(current.Angle - last.Angle) / Math.PI);
 
-                    g.DrawArc(new Pen(Color.Red), offset - (float)last.Radius, offset - (float)last.Radius, (float)last.Radius * 2f, (float) last.Radius * 2f, ad, sw);
+                    if (last.Radius > 0)
+                    {
+                        g.DrawArc(new Pen(Color.Red), offset - (float)last.Radius, offset - (float)last.Radius, (float)last.Radius * 2f, (float)last.Radius * 2f, ad, sw);
+                    }
 
                     if (last.Radius != current.Radius)
                     {

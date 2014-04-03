@@ -8,10 +8,9 @@ namespace PA.TileList.Problems
 {
     public static class Geometry
     {
-        public static IArea GetMaxArea<T>(this IEnumerable<T> tile)
+        public static IArea GetBiggestArea<T>(this IEnumerable<T> tile)
             where T : ICoordinate
         {
-
             T[] data = tile.ToArray();
             int maxA = 0;
             IArea area = null;
@@ -25,7 +24,7 @@ namespace PA.TileList.Problems
                         var tR = data.FirstOrDefault(t => t.Y == tx.Y && t.X == ty.X);
                         if (tR is T)
                         {
-                            int s = (tR.X - t0.X) * (tR.Y - t0.Y);
+                            int s = Math.Abs((tR.X - t0.X) * (tR.Y - t0.Y));
                             if (s > maxA)
                             {
                                 maxA = s;
