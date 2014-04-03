@@ -15,12 +15,31 @@ namespace PA.TileList.Circular
             Under = 0x01
         }
 
+        /// <summary>
+        /// Calc resolution
+        /// </summary>
         public float Resolution { get; private set; }
+        
+        /// <summary>
+        /// Percentage to be under
+        /// </summary>
         public float Tolerance { get; private set; }
 
+        /// <summary>
+        /// Calc stepping (based on resolution)
+        /// </summary>
         public int Steps { get; private set; }
+
+        /// <summary>
+        /// Number of Point required for under
+        /// </summary>
         public float MinSurface { get; private set; }
+
+        /// <summary>
+        /// Number Of Points required for inside
+        /// </summary>
         public float MaxSurface { get; private set; }
+
         public SelectionFlag SelectionType { get; private set; }
 
 

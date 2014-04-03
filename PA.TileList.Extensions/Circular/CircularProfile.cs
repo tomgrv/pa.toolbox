@@ -88,6 +88,11 @@ namespace PA.TileList.Circular
             return this.Profile.Sum<ProfileStep>(p => p.Radius) / this.Profile.Count();
         }
 
+        public ProfileStep GetStep(double angle)
+        {
+            return this.Profile.Where(p => p.Angle < angle).LastOrDefault() ?? this.GetFirst();
+        }
+
         /// <summary>
         /// 
         /// </summary>
