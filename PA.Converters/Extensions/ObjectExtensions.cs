@@ -6,76 +6,76 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices;
 
 namespace PA.Converters.Extensions
 {
     public static class ObjectExtensions
     {
-   
-        public static object ParseTo(this object value, Type type, bool ThrowError = false)
+        public static T ParseTo<T, U>(this U value, [Optional] Type type)
         {
-            string str = value.ToString();
-            Type[] targetTypes = new Type[] { value.GetType() };
+            Type t = type ?? typeof(T);
 
-            if (type.IsArray)
+            if (!typeof(T).IsAssignableFrom(t))
             {
-                return str.Split(new char[] { str[0] }, StringSplitOptions.RemoveEmptyEntries).ParseTo(type, ThrowError);
+                throw new InvalidCastException("Cannot cast <" + type.FullName + "> to <T>");
             }
-            else if (type.IsEnum)
+
+            if (t.IsEnum)
             {
-                return Enum.Parse(type, value.ToString());
+                return (T)Enum.Parse(t, value.ToString());
             }
             else
             {
-                object o = null;
+                T o = default(T);
 
-                if (o == null && typeof(IConvertible).IsAssignableFrom(type))
+                if (typeof(IConvertible).IsAssignableFrom(t))
                 {
                     try
                     {
-                        o = Convert.ChangeType(value, type);
+                        o = (T)Convert.ChangeType(value, t);
                     }
                     catch (Exception e)
                     {
                         Trace.TraceError(e.Message + "\n" + e.StackTrace);
-
-                        if (ThrowError)
-                        {
-                            throw new InvalidOperationException("Cannot parse/convert object " + value + " to <" + type.FullName + ">", e);
-                        }
                     }
                 }
 
                 if (o == null)
                 {
-                    ConstructorInfo ci = type.GetConstructor(targetTypes);
+                    ConstructorInfo ci = t.GetConstructor(new Type[] { typeof(U) });
 
                     if (ci is ConstructorInfo)
                     {
                         try
                         {
-                            o = ci.Invoke(new object[] { value });
+                            o = (T)ci.Invoke(new object[] { value });
                         }
                         catch (Exception e)
                         {
                             Trace.TraceError(e.Message + "\n" + e.StackTrace);
-
-                            if (ThrowError)
-                            {
-                                throw new InvalidOperationException("Cannot parse/convert object " + value + " to <" + type.FullName + ">", e);
-                            }
                         }
                     }
-
                 }
 
                 if (o == null)
                 {
-                    MethodInfo mi = type.GetMethod("Parse", targetTypes);
+                    MethodInfo mi = t.GetMethod("Parse", new Type[] { typeof(string) });
 
                     if (mi is MemberInfo && mi.IsStatic)
                     {
-                        o = mi.Invoke(null, new object[] { value });
+                        o = (T)mi.Invoke(null, new object[] { value });
+                    }
+                }
+
+                if (o == null)
+                {
+                    MethodInfo mi = t.GetMethod("CreateFrom", new Type[] { typeof(string) });
+
+                    if (mi is MemberInfo && mi.IsStatic)
+                    {
+                        o = (T)mi.Invoke(null, new object[] { value });
                     }
                 }
 
@@ -83,23 +83,20 @@ namespace PA.Converters.Extensions
             }
         }
 
-        internal static Array ParseTo(this object[] value, Type type, bool ThrowError = false)
+        public static IEnumerable<T> ParseTo<T, U>(this IEnumerable<U> value, [Optional] Type type)
         {
-            if (!type.IsArray)
+            foreach (U v in value)
             {
-                throw new ArgumentException("Type <" + type.FullName + "> is not an array");
+                yield return v.ParseTo<T, U>(type);
             }
+        }
 
-            Type eType = type.GetElementType();
-
-            var obj = value
-                .Select(s => s.ParseTo(eType, ThrowError))
-                .Where(s => s != null)
-                .ToArray();
-
-            var arr = Array.CreateInstance(eType, obj.Length);
-            Array.Copy(obj, arr, obj.Length);
-            return arr;
+        public static Array ToArray<T>(this IEnumerable<T> value, Type type)
+        {
+            Array source = value.Where(s => s != null && type.IsAssignableFrom(s.GetType())).ToArray();
+            Array destination = Array.CreateInstance(type, source.Length);
+            Array.Copy(source, destination, source.Length);
+            return destination;
         }
     }
 }

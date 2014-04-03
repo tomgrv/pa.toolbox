@@ -60,8 +60,9 @@ namespace PA.Configuration
             where T : ComposablePartDefinition
         {
             return parts.FirstOrDefault(p => p.ExportDefinitions
-                .Any(ed => ReflectionModelServices.GetExportingMember(ed).GetAccessors()
-                    .Any(a => (a is Type && (a as Type).FullName == TypeName))
+                .Any(ed => ReflectionModelServices.GetExportingMember(ed)
+                                        .GetAccessors()
+                                        .Any(a => (a is Type && (a as Type).FullName == TypeName))
                     )
                 );
         }
@@ -130,7 +131,7 @@ namespace PA.Configuration
                 }
                 else if (targetType.IsValueType || targetType.IsArray || targetType.IsSerializable)
                 {
-                    return (T)stringValue.ParseTo(targetType);
+                    return stringValue.ParseTo<T, string>(targetType);
                 }
             }
             catch
@@ -185,7 +186,6 @@ namespace PA.Configuration
                 yield break;
             }
 
-
             if (definition.Cardinality == ImportCardinality.ZeroOrMore)
             {
                 if (cp.Source.ContainsSetting(contract.Name + "/size"))
@@ -200,11 +200,11 @@ namespace PA.Configuration
                         }
                         else
                         {
-                            string value =  cp.Source.GetSetting(contract.Name + "/" + i);
+                            string value = cp.Source.GetSetting(contract.Name + "/" + i);
 
                             if (value.StartsWith(">"))
                             {
-                                yield return new Item(value, new Contract(contract.Name + "/" + i,typeof(object)));
+                                yield return new Item(value, new Contract(contract.Name + "/" + i, typeof(object)));
                             }
                             else
                             {
@@ -224,5 +224,40 @@ namespace PA.Configuration
 
         }
 
+
+        public static IEnumerable<Export> GetExports<T>(this IEnumerable<ConfigurationProviderExtensions.Item> ci, ImportDefinition definition, Func<Type, string, T> getInstance)
+        {
+            foreach (ConfigurationProviderExtensions.Item Configuration in ci)
+            {
+                if (!Configuration.Contract.Name.StartsWith("#/"))
+                {
+                    Type targetType = Configuration.Contract.Type;
+
+                    if (targetType.IsArray)
+                    {
+                        Array value = Configuration.Value.AsArray(targetType, (t, s) => getInstance(t, s));
+
+                        //Array value = Configuration.Value
+                        //    .AsArray()
+                        //    .Select(s => getInstance(targetType.GetElementType(), s))
+                        //    .ToArray(targetType.GetElementType());
+
+                        if (value is Array && value.Length > 0)
+                        {
+                            yield return new Export(definition.ContractName, () => value);
+                        }
+                    }
+                    else
+                    {
+                        object value = getInstance(targetType, Configuration.Value);
+
+                        if (value is object)
+                        {
+                            yield return new Export(definition.ContractName, () => value);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -92,6 +92,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\common\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Extensibility\AcceptAttribute.cs" />
     <Compile Include="Browser.cs">
       <SubType>Component</SubType>
@@ -121,6 +124,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PA.Components\PA.Plugin.Components.csproj">
+      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
+      <Name>PA.Plugin.Components</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
       <Name>PA.Plugin</Name>

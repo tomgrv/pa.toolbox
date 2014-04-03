@@ -1,4 +1,5 @@
-﻿namespace PA.SimiliBrowser
+﻿
+namespace PA.SimiliBrowser
 {
     partial class Browser
     {
@@ -28,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pluginHost1 = new PA.Components.PluginLoader();
+            this.pluginHost1 = new PA.Plugin.Components.Controls.PluginLoader();
             ((System.ComponentModel.ISupportInitialize)(this.pluginHost1)).BeginInit();
             // 
             // pluginHost1
@@ -42,6 +43,6 @@
 
         #endregion
 
-        private PA.Components.PluginLoader pluginHost1;
+        private PA.Plugin.Components.Controls.PluginLoader pluginHost1;
     }
 }
