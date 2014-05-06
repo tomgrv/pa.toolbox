@@ -44,5 +44,24 @@ namespace PA.TileList.Quantified
         {
             return new QuantifiedTile<T>(list, list.ElementSizeX * scaleFactor, list.ElementSizeY * scaleFactor, list.ElementStepX * scaleFactor, list.ElementStepY * scaleFactor, list.RefOffsetX * scaleFactor, list.RefOffsetY * scaleFactor);
         }
+
+        public static T FirstOrDefault<T>(this IQuantifiedTile<T> list, double x, double y)
+             where T : ICoordinate
+        {
+            double offsetX = list.ElementSizeX / 2f ;
+            double offsetY = list.ElementSizeY / 2f;
+
+            //return list.FirstOrDefault(t => t.X * list.ElementStepX - offsetX < x && x < t.X * list.ElementStepX + offsetX && t.Y * list.ElementStepY - offsetY < y && y < t.Y * list.ElementStepY + offsetY);
+
+            foreach (T t in list)
+            {
+                if (t.X * list.ElementStepX - offsetX + list.RefOffsetX < x && x < t.X * list.ElementStepX + offsetX + list.RefOffsetX && t.Y * list.ElementStepY - offsetY + list.RefOffsetY < y && y < t.Y * list.ElementStepY + offsetY + list.RefOffsetY)
+                {
+                    return t;
+                }
+            }
+
+            return default(T);
+        }
     }
 }

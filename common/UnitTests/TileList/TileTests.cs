@@ -4,6 +4,8 @@ using PA.TileList;
 using PA.TileList.Quadrant;
 using System.Drawing;
 using PA.TileList.Quantified;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace UnitTests.TileList
 {
@@ -37,7 +39,7 @@ namespace UnitTests.TileList
             public double RefOffsetY { get; internal set; }
         }
 
-        internal class SubTile : Tile<Item>, IQuadrant<Item>
+        internal class SubTile : Tile<Item>, IQuadrant<Item>, ICloneable
         {
             public SubTile(IArea a, Item t)
                 : base(a, t)
@@ -47,15 +49,24 @@ namespace UnitTests.TileList
                 : base(t)
             { }
 
+            public SubTile(IEnumerable<Item> t, int referenceIndex = 0)
+                : base(t, referenceIndex)
+            { }
+
             public Quadrant Quadrant { get; private set; }
 
             public void SetQuadrant(Quadrant q)
             {
                 throw new NotImplementedException();
             }
+
+            public object Clone()
+            {
+                return new SubTile(this.ConvertAll(i => i.Clone() as Item), this.IndexOf(this.Reference));
+            }
         }
 
-        internal class Item : Coordinate
+        internal class Item : Coordinate, ICloneable
         {
             public Color Color { get; set; }
 
@@ -68,7 +79,6 @@ namespace UnitTests.TileList
             public Bitmap ToBitmap(int w, int h, string s)
             {
 
-
                 Bitmap b = new Bitmap(w, h);
 
                 using (Graphics g = Graphics.FromImage(b))
@@ -79,6 +89,11 @@ namespace UnitTests.TileList
                 }
 
                 return b;
+            }
+
+            public override object Clone()
+            {
+                return new Item(base.X, base.Y, this.Color);
             }
         }
 
@@ -94,7 +109,7 @@ namespace UnitTests.TileList
             t1.Fill<Item>(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
 
             MainTile t0 = new MainTile(a0, t1);
-            t0.Fill<SubTile>(c => new SubTile(t1));
+            t0.Fill<SubTile>(c => t1.Clone() as SubTile);
 
             t0.ElementSizeX = 50f / factor * a1.SizeX;
             t0.ElementSizeY = 50f / factor * a1.SizeY;
