@@ -49,8 +49,9 @@
     </Compile>
     <Compile Include="Core\RectangleD.cs" />
     <Compile Include="Core\ImageExtentions.cs" />
-    <Compile Include="Circular\ProfileExtentions.cs" />
+    <Compile Include="Extra\ProfileExtentions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extra\RulersExtentions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.TileList.Drawing.nuspec" />

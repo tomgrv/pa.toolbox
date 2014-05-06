@@ -48,20 +48,10 @@ namespace PA.TileList.Quantified
         public static T FirstOrDefault<T>(this IQuantifiedTile<T> list, double x, double y)
              where T : ICoordinate
         {
-            double offsetX = list.ElementSizeX / 2f ;
-            double offsetY = list.ElementSizeY / 2f;
+            double xx = (x - list.RefOffsetX) / list.ElementStepX;
+            double yy = (y - list.RefOffsetY) / list.ElementStepY;
 
-            //return list.FirstOrDefault(t => t.X * list.ElementStepX - offsetX < x && x < t.X * list.ElementStepX + offsetX && t.Y * list.ElementStepY - offsetY < y && y < t.Y * list.ElementStepY + offsetY);
-
-            foreach (T t in list)
-            {
-                if (t.X * list.ElementStepX - offsetX + list.RefOffsetX < x && x < t.X * list.ElementStepX + offsetX + list.RefOffsetX && t.Y * list.ElementStepY - offsetY + list.RefOffsetY < y && y < t.Y * list.ElementStepY + offsetY + list.RefOffsetY)
-                {
-                    return t;
-                }
-            }
-
-            return default(T);
+            return list.FirstOrDefault(t => (t.X - list.Reference.X) <= xx && xx < (t.X - list.Reference.X + 1) && (t.Y - list.Reference.Y) <= yy && yy < (t.Y - list.Reference.Y + 1));
         }
     }
 }
