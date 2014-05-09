@@ -44,9 +44,6 @@
     <Compile Include="..\common\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Controls\TilePictureBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Core\RectangleD.cs" />
     <Compile Include="Core\ImageExtentions.cs" />
     <Compile Include="Extra\ProfileExtentions.cs" />
@@ -57,10 +54,6 @@
     <None Include="PA.TileList.Drawing.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PA.Picture\PA.Picture.csproj">
-      <Project>{3b0b93a1-4a55-412b-8f9d-7e94a60867ea}</Project>
-      <Name>PA.Picture</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PA.TileList.Extensions\PA.TileList.Extensions.csproj">
       <Project>{a16e749b-7556-41bd-a9b9-253b3253578c}</Project>
       <Name>PA.TileList.Extensions</Name>

@@ -18,6 +18,15 @@ namespace UnitTests.Converters
         }
 
         [TestMethod]
+        public void FloatConvertion()
+        {
+            string input = "900.56";
+            float output = input.ParseTo<float, string>();
+
+            Assert.AreEqual(-900.56, output);
+        }
+
+        [TestMethod]
         public void UriConvertion()
         {
             string input = "http://www.test.fr/app/index.php?q=valid";

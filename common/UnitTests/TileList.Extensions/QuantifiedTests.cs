@@ -33,6 +33,23 @@ namespace UnitTests.TileList.Extensions
         }
 
         [TestMethod]
+        public void Coordinates()
+        {
+            TileTests.MainTile tile = TileTests.GetTile(1);
+
+            IQuantifiedTile<IContextual<TileTests.Item>> t1 = tile
+               .Flatten<TileTests.SubTile, TileTests.Item>();
+
+            IContextual<TileTests.Item> item = t1.FirstOrDefault(1000, 500);
+            item.Context.Color = Color.Red;
+
+            Coordinate coord = t1.GetCoordinatesAt(1000, 500);
+
+            Assert.AreEqual(item.X, coord.X);
+            Assert.AreEqual(item.Y, coord.Y);
+        }
+
+        [TestMethod]
         public void Rulers()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);

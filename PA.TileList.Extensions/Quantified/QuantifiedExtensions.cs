@@ -53,5 +53,14 @@ namespace PA.TileList.Quantified
 
             return list.FirstOrDefault(t => (t.X - list.Reference.X) <= xx && xx < (t.X - list.Reference.X + 1) && (t.Y - list.Reference.Y) <= yy && yy < (t.Y - list.Reference.Y + 1));
         }
+
+        public static Coordinate GetCoordinatesAt<T>(this IQuantifiedTile<T> list, double x, double y)
+             where T : ICoordinate
+        {
+            double xx = (x - list.RefOffsetX) / list.ElementStepX;
+            double yy = (y - list.RefOffsetY) / list.ElementStepY;
+
+            return new Coordinate((int)xx + list.Reference.X, (int)yy + list.Reference.Y);
+        }
     }
 }
