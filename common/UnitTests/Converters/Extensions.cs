@@ -2,6 +2,8 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.Converters.Extensions;
+using System.Threading;
+using System.Globalization;
 
 namespace UnitTests.Converters
 {
@@ -20,10 +22,12 @@ namespace UnitTests.Converters
         [TestMethod]
         public void FloatConvertion()
         {
-            string input = "900.56";
-            float output = input.ParseTo<float, string>();
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-            Assert.AreEqual(-900.56, output);
+            string input = "-900.56";
+            string output = input.ParseTo<float, string>().ToString();
+
+            Assert.AreEqual(input, output);
         }
 
         [TestMethod]

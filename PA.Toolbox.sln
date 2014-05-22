@@ -17,6 +17,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{42C256BC-3CAA-4684-B5A7-8DB7401D2C25}"
 	ProjectSection(SolutionItems) = preProject
 		common\GlobalAssemblyInfo.cs = common\GlobalAssemblyInfo.cs
+		common\PA.Toolbox.pfx = common\PA.Toolbox.pfx
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.SimiliBrowser", "PA.SimiliBrowser\PA.SimiliBrowser.csproj", "{A717A9F8-AEA4-4B9A-A0BA-8E6D0C856AEE}"

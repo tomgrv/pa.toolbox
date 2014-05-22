@@ -1,4 +1,4 @@
-﻿namespace PA.Plugin.Operations.Controls
+﻿namespace PA.Plugin
 {
     partial class PluginRunner
     {
@@ -28,10 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.AsyncOperation = new System.ComponentModel.BackgroundWorker();
+            // 
+            // AsyncOperation
+            // 
+            this.AsyncOperation.WorkerSupportsCancellation = true;
+            this.AsyncOperation.DoWork += new System.ComponentModel.DoWorkEventHandler(this.AsyncOperation_DoWork);
+            this.AsyncOperation.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.AsyncOperation_RunWorkerCompleted);
 
         }
 
         #endregion
 
+        private System.ComponentModel.BackgroundWorker AsyncOperation;
     }
 }
