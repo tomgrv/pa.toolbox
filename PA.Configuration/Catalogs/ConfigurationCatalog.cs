@@ -37,7 +37,6 @@ namespace PA.Configuration
 
                     if (int.TryParse(keys[i].Substring(keys[i].LastIndexOf("/") + 1), out index))
                     {
-
                         string root = keys[i].Substring(0, keys[i].LastIndexOf('/'));
                         CreateImportDefinition(root, index, value.Substring(1));
                     }
@@ -141,26 +140,26 @@ namespace PA.Configuration
             }
         }
 
+
+
         public IEnumerable<string> GetEntries()
         {
             foreach (string section in this.Source.GetSectionNames())
             {
-                string[] settings = this.Source.GetSettings(section);
+                IEnumerable<string> settings = this.Source.GetSettings(section);
 
-                string array = settings.SingleOrDefault(s => s.EndsWith("/size"));
+                IEnumerable<string> arraysettings = this.Source.GetArrays(section);
 
-                if (array is string)
+                foreach (string setting in settings.Where(s => !arraysettings.Any(a => s.StartsWith(a))))
                 {
-                    foreach (string setting in settings)
-                    {
-                        yield return section + "/" + setting;
-                    }
+                    yield return section + "/" + setting;
                 }
-                else
+
+                foreach (string array in arraysettings.ToArray())
                 {
-                    foreach (string setting in settings)
+                    foreach (string setting in this.Source.GetArraySettings(section, array).ToArray())
                     {
-                        yield return section + "/" + setting;
+                        yield return section + "/" + array + "/" + setting;
                     }
                 }
             }

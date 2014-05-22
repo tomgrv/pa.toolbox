@@ -8,10 +8,12 @@ using System.Windows.Forms;
 using System.ComponentModel.Composition;
 using PA.Plugin.Components.Interfaces;
 using PA.Plugin.Components;
+using PA.Plugin.Operations.Interfaces;
 
 
 namespace PA.Plugin.Components.Controls
 {
+     [ToolboxItem(typeof(IPluginHandler))]
     public partial class PluginComboBox : ComboBox, IPluginHandler, ISupportInitialize
     {
         #region Plugin Management

@@ -97,10 +97,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\common\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Catalogs\ConfigurationCatalog.cs" />
     <Compile Include="Core\ConfigurationItem.cs" />
     <Compile Include="Core\ConfigurationItemExportProvider.cs" />
     <Compile Include="Extensions\ConfigurationProviderExtensions.cs" />
+    <Compile Include="Extensions\ConfigurationSourceExtensions.cs" />
     <Compile Include="Interfaces\IConfigurationItem.cs" />
     <Compile Include="Interfaces\IConfigurationProvider.cs" />
     <Compile Include="Utilities\Settings.cs" />

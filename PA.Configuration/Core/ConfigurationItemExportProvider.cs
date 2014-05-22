@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using PA.Converters.Extensions;
 using System.Diagnostics;
+using PA.Configuration;
 
 namespace PA.Configuration
 {
@@ -28,69 +29,29 @@ namespace PA.Configuration
         {
             lock (this.Source)
             {
-                foreach (ConfigurationProviderExtensions.Item ConfigurationData in this.GetConfigurationItems(definition))
+                foreach (Export e in this.GetConfigurationItems(definition)
+                    .GetExports<object>(definition, (t,s) => this.GetInstance(definition, t, s)))
                 {
-                    if (!ConfigurationData.Contract.Name.StartsWith("#/"))
-                    {
-                        string stringValue = ConfigurationData.Value;
-                        Type targetType = ConfigurationData.Contract.Type;
-
-                        object value = null;
-
-                        if (typeof(ConfigurationItem).IsAssignableFrom(targetType) 
-                            && targetType.IsGenericType)
-                        {
-                            try
-                            {
-                                value = Activator.CreateInstance(targetType, definition.ContractName, Source);
-                            }
-                            catch
-                            {
-                                Trace.TraceWarning("Error while configuring <" + definition.ContractName + "> as <" + targetType + "> in <" + targetType.DeclaringType+">");
-                            }
-                        }
-                        else if (targetType.IsArray
-                            ? targetType.GetElementType().IsValueType || targetType.GetElementType().IsSerializable
-                            : targetType.IsValueType || targetType.IsSerializable)
-                        {
-                            try
-                            {
-                                value = stringValue.ParseTo(targetType);
-                            }
-                            catch
-                            {
-                                Trace.TraceWarning("Error while configuring <" + definition.ContractName + "> as <" + targetType + "> in <" + targetType.DeclaringType + ">");
-                            }
-                        }
-                        else if (typeof(IEnumerable).IsAssignableFrom(targetType) 
-                            && targetType.IsGenericType 
-                            && targetType.GetGenericArguments().Length == 1 
-                            && targetType.GetGenericArguments().First().IsSerializable)
-                        {
-                            try
-                            {
-                                value = stringValue.ParseTo(targetType.GetGenericArguments().First());
-                            }
-                            catch
-                            {
-                                Trace.TraceWarning("Error while configuring <" + definition.ContractName + "> as <" + targetType + "> in <" + targetType.DeclaringType + ">");
-                            }
-                        }
-                        if (typeof(IEnumerable).IsAssignableFrom(targetType)
-                           && targetType.IsGenericType
-                           && targetType.GetGenericArguments().Length == 1
-                           && stringValue.StartsWith(">"))
-                        {
-                        }
-                       
-
-                        if (value is object)
-                        {
-                            yield return new Export(definition.ContractName, () => value);
-                        }
-                    }
+                    yield return e;
                 }
             }
+        }
+
+        private object GetInstance(ImportDefinition definition, Type type, string configvalue)
+        {
+            if (typeof(ConfigurationItem).IsAssignableFrom(type) && type.IsGenericType)
+            {
+                return Activator.CreateInstance(type, definition.ContractName, this.Source);
+            }
+
+            object value = configvalue.ParseTo<object, string>(type);
+
+            if (value is object)
+            {
+                return value;
+            }
+
+            return null;
         }
     }
 }

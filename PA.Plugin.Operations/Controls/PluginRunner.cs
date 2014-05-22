@@ -6,69 +6,50 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using PA.Plugin.Operations;
-using PA.Plugin.Operations.Core;
-using System.Threading.Tasks;
+using PA.Plugin.Operations.Interfaces;
 
-namespace PA.Plugin.Operations.Controls
+namespace PA.Plugin
 {
     public partial class PluginRunner : Component
     {
-        public class RunCompletedEventArgs : EventArgs
-        {
-            public DataMap Result { get; private set; }
 
-            public RunCompletedEventArgs(DataMap r)
-            {
-                this.Result = r;
-            }
+        abstract class AsyncWrapper : IDisposable
+        {
+            public abstract object Execute();
+            public abstract void Dispose();
         }
 
-
-        internal class AsyncWrapper
+        class AsyncWrapper<T, U> : AsyncWrapper
+            where T : IPluginOperation, ICloneable
         {
-            private IJobPlugin p;
-            internal Context Context { get; private set; }
+            private T p;
+            private U o;
 
-            public AsyncWrapper(IJobPlugin p, Context c)
+            public AsyncWrapper(T p, U o)
             {
-                this.p = p;
-                this.Context = c;
+                this.p = (T) p.Clone();
+                this.o = o;
             }
 
-            public AsyncWrapper(IJobPlugin p, object o)
+            public override object Execute()
             {
-                this.p = p;
-                this.Context = new Context(new Dictionary<string, object>() { { "", o } });
+                return this.p.Execute<T>(o) as object;
             }
 
-            public AsyncWrapper(IJobPlugin p, IDictionary<string, object> map)
+            #region IDisposable Membres
+
+            public override void Dispose()
             {
-                this.p = p;
-                this.Context = new Context(map);
+                this.p.Dispose();
             }
 
-            public async Task<DataMap> ExecuteAsync()
-            {
-                return await this.p.Execute(this.Context);
-            }
-
-            public DataMap Execute()
-            {
-                using (Task<DataMap> map = this.p.Execute(this.Context))
-                {
-                    map.Start();
-                    map.Wait();
-                    return map.Result;
-                }
-            }
+            #endregion
         }
 
         public PluginRunner()
         {
             InitializeComponent();
             this.DelayedCalls = new Queue<AsyncWrapper>();
-
         }
 
         #region IPluginRunner Membres
@@ -77,7 +58,7 @@ namespace PA.Plugin.Operations.Controls
         public bool IsBusy { get { return this.DelayedCalls.Count > 0; } }
 
         [Category("Plugin Management")]
-        public event EventHandler<RunCompletedEventArgs> Done;
+        public event RunWorkerCompletedEventHandler Done;
 
         [Category("Plugin Management")]
         public event EventHandler Started;
@@ -85,28 +66,17 @@ namespace PA.Plugin.Operations.Controls
         [Category("Plugin Management")]
         public bool ContinueOnError { get; set; }
 
-        private Task<DataMap> current;
-
-        public void RunAsync(IJobPlugin p, IDictionary<string, object> map)
+        public void RunAsync<T, U>(T p, U args)
+            where T : IPluginOperation, ICloneable
         {
-            this.DelayedCalls.Enqueue(new AsyncWrapper(p, map));
+            this.DelayedCalls.Enqueue(new AsyncWrapper<T, U>(p, args));
             this.RunNext();
-        }
-
-        public async Task<DataMap> Run(IJobPlugin p, IDictionary<string, object> map)
-        {
-            if (this.current is Task<DataMap> && !this.current.IsCompleted && !this.current.IsCanceled &&  !this.current.IsFaulted)
-            {
-                this.current.Wait();
-            }
-
-            this.current = p.Execute(new Context(map));
-            return await this.current;
         }
 
         public virtual void Cancel()
         {
             this.DelayedCalls.Clear();
+            this.AsyncOperation.CancelAsync();
         }
 
         #endregion
@@ -115,29 +85,48 @@ namespace PA.Plugin.Operations.Controls
 
         private Queue<AsyncWrapper> DelayedCalls;
 
-        public void RunNext()
+        private void RunNext()
         {
-            if (this.Started != null)
+            if (!this.AsyncOperation.IsBusy && this.DelayedCalls.Count > 0)
             {
-                this.Started(this, EventArgs.Empty);
-            }
+                this.AsyncOperation.RunWorkerAsync(this.DelayedCalls.Dequeue());
 
-            while (this.DelayedCalls.Count > 0)
-            {
-                DataMap map  = await this.DelayedCalls.Dequeue().ExecuteAsync();
-            }
-
-            foreach (DataMap d in 
-            {
-                if (this.Done != null)
+                if (this.Started != null)
                 {
-                    this.Done(this, new RunCompletedEventArgs(d));
+                    this.Started(this, EventArgs.Empty);
                 }
+
             }
         }
 
-      
+        private void AsyncOperation_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (e.Argument is AsyncWrapper)
+            {
+                e.Result = (e.Argument as AsyncWrapper).Execute();
+            }
+        }
+
+        private void AsyncOperation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.OnRunWorkerCompleted(e);
+        }
+
+        protected virtual void OnRunWorkerCompleted(RunWorkerCompletedEventArgs e)
+        {
+            if (this.Done != null)
+            {
+                this.Done(this, e);
+            }
+
+            if (this.ContinueOnError || e.Error == null)
+            {
+                RunNext();
+            }
+        }
+
         #endregion
+
 
     }
 }

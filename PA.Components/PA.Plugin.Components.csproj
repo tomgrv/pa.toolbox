@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\common\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Controls\PluginComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,6 +81,14 @@
     <Compile Include="Interfaces\IActionPlugin.cs" />
     <Compile Include="Interfaces\IPluginProvider.cs" />
     <Compile Include="Interfaces\IPluginHandler.cs" />
+    <Compile Include="IPluginHelper.cs" />
+    <Compile Include="IPluginSource.cs" />
+    <Compile Include="ParameterForm\PluginParametersComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ParameterForm\PluginParametersComboBox.designer.cs">
+      <DependentUpon>PluginParametersComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="ParameterForm\PluginParametersButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,6 +116,7 @@
     <Compile Include="ParameterForm\PluginParametersPanel.designer.cs">
       <DependentUpon>PluginParametersPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="PluginItemEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PluginLoader.resx">
       <DependentUpon>PluginLoader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParameterForm\PluginParametersComboBox.resx">
+      <DependentUpon>PluginParametersComboBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterForm\PluginParametersTextBox.resx">
       <DependentUpon>PluginParametersTextBox.cs</DependentUpon>
@@ -132,6 +147,10 @@
     <ProjectReference Include="..\PA.Converters\PA.Converters.csproj">
       <Project>{b09f91a1-df25-4dae-8e45-40df0fa9334f}</Project>
       <Name>PA.Converters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+      <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
+      <Name>PA.Plugin.Operations</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>

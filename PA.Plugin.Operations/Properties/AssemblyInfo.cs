@@ -5,15 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PA.Plugin.Operation")]
+[assembly: AssemblyTitle("PA.Plugin.Operations")]
 [assembly: AssemblyDescription("Windows Form components for PA.Plugin")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Thomas GERVAIS")]
-[assembly: AssemblyProduct("PA.Toolbox")]
-[assembly: AssemblyCopyright("© Perspective Automation 2013")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -23,14 +16,3 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("7c51b217-60ac-468a-af32-d24339e194e5")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.*")]

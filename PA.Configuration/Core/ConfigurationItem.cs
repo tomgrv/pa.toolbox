@@ -40,7 +40,7 @@ namespace PA.Configuration
 
         public void Refresh()
         {
-            this.Value = (T) this.source.GetSetting(this.Contract).ParseTo(typeof(T));
+            this.Value = this.source.GetSetting(this.Contract).ParseTo<T,string>();
         }
 
         public void Save()

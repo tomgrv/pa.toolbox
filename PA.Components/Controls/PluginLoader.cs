@@ -66,6 +66,7 @@ namespace PA.Plugin.Components.Controls
 
         public void BeginInit()
         {
+            this._configurator = new CompositionConfigurator();
         }
 
         public void EndInit()
@@ -144,18 +145,18 @@ namespace PA.Plugin.Components.Controls
                 this.Location = this.Configuration.GetSetting(Process.GetCurrentProcess().ProcessName + "/Plugins");
             }
 
-            this._configurator = new CompositionConfigurator();
             this._configurator.WithDirectory(this.Location);
-            this._configurator.With(new UriHandlerExportProvider(this._configurator.Catalog, true, this.Configuration));
-            this._configurator.With(new ConfigurationCatalog(this.Configuration, this._configurator.Catalog));
             this._configurator.With(new ConfigurationItemExportProvider(this.Configuration));
-
+            this._configurator.With(new ConfigurationCatalog(this.Configuration, this._configurator.Catalog));
+            this._configurator.With(new WithLabelExportProvider<Uri>(this._configurator.Catalog, true, this.Configuration,
+                  label: u => u.Scheme,
+                  validation: s => Uri.IsWellFormedUriString(s, UriKind.Absolute),
+                  creation: s => new Uri(s)
+            ));
+            
             this._container = this._configurator.GetContainer();
-         
             this._container.ComposeParts(this.Parent);
             this._container.ComposeParts(this.toCompose);
         }
-
-
     }
 }
