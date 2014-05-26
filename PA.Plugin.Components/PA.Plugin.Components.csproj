@@ -169,7 +169,6 @@
   <ItemGroup>
     <None Include="PA.Plugin.Components.nuspec" />
     <None Include="PA.Toolbox.pfx" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -79,7 +79,6 @@
   <ItemGroup>
     <None Include="PA.Plugin.Operations.nuspec" />
     <None Include="PA.Toolbox.pfx" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">

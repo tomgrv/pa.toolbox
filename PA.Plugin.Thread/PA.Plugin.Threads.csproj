@@ -88,9 +88,6 @@
     <Reference Include="System.ComponentModel.Composition">
       <HintPath>..\..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.Composition.Initialization">
-      <HintPath>..\..\packages\System.ComponentModel.Composition.Initialization.2010.2.11.1\lib\net35\System.ComponentModel.Composition.Initialization.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -114,7 +111,6 @@
   <ItemGroup>
     <None Include="PA.Plugin.Threads.nuspec" />
     <None Include="PA.Toolbox.pfx" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">

@@ -129,7 +129,6 @@
   <ItemGroup>
     <None Include="PA.Configuration.nuspec" />
     <None Include="PA.Toolbox.pfx" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Converters\PA.Converters.csproj">
