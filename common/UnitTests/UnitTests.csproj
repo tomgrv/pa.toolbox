@@ -107,10 +107,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PA.Components\PA.Plugin.Components.csproj">
-      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
-      <Name>PA.Plugin.Components</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PA.Configuration\PA.Configuration.csproj">
       <Project>{40fa1f2a-3b4e-470b-87ca-d8b3792f3e8a}</Project>
       <Name>PA.Configuration</Name>
@@ -130,6 +126,10 @@
     <ProjectReference Include="..\..\PA.Picture\PA.Picture.csproj">
       <Project>{3b0b93a1-4a55-412b-8f9d-7e94a60867ea}</Project>
       <Name>PA.Picture</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Components\PA.Plugin.Components.csproj">
+      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
+      <Name>PA.Plugin.Components</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
       <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>

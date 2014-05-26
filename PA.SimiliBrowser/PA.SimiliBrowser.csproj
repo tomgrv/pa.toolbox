@@ -131,7 +131,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PA.Components\PA.Plugin.Components.csproj">
+    <ProjectReference Include="..\PA.Plugin.Components\PA.Plugin.Components.csproj">
       <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
       <Name>PA.Plugin.Components</Name>
     </ProjectReference>
