@@ -75,6 +75,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
@@ -116,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.SimiliBrowser.nuspec" />
+    <None Include="PA.Toolbox.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +131,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PA.Components\PA.Plugin.Components.csproj">
+    <ProjectReference Include="..\PA.Plugin.Components\PA.Plugin.Components.csproj">
       <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
       <Name>PA.Plugin.Components</Name>
     </ProjectReference>

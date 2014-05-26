@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTests</RootNamespace>
     <AssemblyName>UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -42,12 +42,18 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">net20</MinFramework>
+    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 3.5 ">net35</MinFramework>
+    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.0 ">net40</MinFramework>
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition">
-      <Private>True</Private>
+    <Reference Include="System.ComponentModel.Composition, Version=2010.2.11.1, Culture=neutral, processorArchitecture=MSIL" Condition="$(MinFramework) == net35">
       <HintPath>..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" Condition="$(MinFramework) == net40" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -92,10 +98,15 @@
     <Compile Include="TileList\TileTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PA.Components\PA.Plugin.Components.csproj">
-      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
-      <Name>PA.Plugin.Components</Name>
-    </ProjectReference>
+    <None Include="vstest.executionengine.x86.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="vstest.executionengine.x86.clr20.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\PA.Configuration\PA.Configuration.csproj">
       <Project>{40fa1f2a-3b4e-470b-87ca-d8b3792f3e8a}</Project>
       <Name>PA.Configuration</Name>
@@ -104,9 +115,29 @@
       <Project>{b09f91a1-df25-4dae-8e45-40df0fa9334f}</Project>
       <Name>PA.Converters</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PA.Data\PA.Data.csproj">
+      <Project>{dde40a86-a8a4-4a0e-a964-a4e0c233611f}</Project>
+      <Name>PA.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PA.File\PA.File.csproj">
       <Project>{69c9ea62-e168-4241-89db-a44e8387e846}</Project>
       <Name>PA.File</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Picture\PA.Picture.csproj">
+      <Project>{3b0b93a1-4a55-412b-8f9d-7e94a60867ea}</Project>
+      <Name>PA.Picture</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Components\PA.Plugin.Components.csproj">
+      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
+      <Name>PA.Plugin.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+      <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
+      <Name>PA.Plugin.Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Thread\PA.Plugin.Threads.csproj">
+      <Project>{96daeb75-b658-4d5e-83b5-55745dd983d2}</Project>
+      <Name>PA.Plugin.Threads</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
@@ -125,13 +156,6 @@
       <Name>PA.TileList</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="vstest.executionengine.x86.clr20.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -59,7 +59,7 @@ namespace UnitTests.Configuration
             {
                 stg.BeginGroup("TestLoader");
 
-                Assert.AreEqual("2", stg.Value("AnotherArray/size"));
+                Assert.AreEqual("3", stg.Value("AnotherArray/size"));
 
                 stg.EndGroup();
                 stg.BeginGroup("TestSection");
@@ -76,7 +76,7 @@ namespace UnitTests.Configuration
                 stg.BeginGroup("TestLoader");
                 stg.BeginReadArray("AnotherArray");
                 stg.SetArrayIndex(1);
-                Assert.AreEqual(">PA.Plugin.IPlugin", stg.Value(""));
+                Assert.AreEqual(">UnitTests.Plugin.PluginForSpecificArrayTest", stg.Value(""));
                 stg.SetArrayIndex(0);
                 Assert.AreEqual("OKMANY2", stg.Value("Param"));
             }

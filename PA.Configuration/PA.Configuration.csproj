@@ -26,6 +26,12 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -35,7 +41,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PA.Configuration</RootNamespace>
     <AssemblyName>PA.Configuration</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -88,9 +94,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition, Version=2010.2.11.1, Culture=neutral, processorArchitecture=MSIL" Condition="$(MinFramework) == net35">
-      <HintPath>..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
-    </Reference>
     <Reference Include="System.ComponentModel.Composition" Condition="$(MinFramework) == net40" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -125,7 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.Configuration.nuspec" />
-    <None Include="packages.config" />
+    <None Include="PA.Toolbox.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Converters\PA.Converters.csproj">

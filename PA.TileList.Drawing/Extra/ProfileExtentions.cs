@@ -42,7 +42,8 @@ namespace PA.TileList.Drawing
             float maxsize = (float)p.GetMaxRadius() * 2f;
             float minsize = (float)p.GetMinRadius() * 2f;
             float midsize = (float)p.Radius * 2f;
-            float offset = image.Inner.Left + image.Inner.Width / 2f;
+            float offsetX = image.Inner.Left + image.Inner.Width / 2f;
+            float offsetY = image.Inner.Top + image.Inner.Height / 2f;
 
             using (Graphics g = Graphics.FromImage(image.Item))
             {
@@ -52,13 +53,13 @@ namespace PA.TileList.Drawing
                 if (extra)
                 {
                     g.DrawRectangle(Pens.Black, (int)image.Inner.Location.X, (int)image.Inner.Location.Y, (int)image.Inner.Width - 1, (int)image.Inner.Height - 1);
-                    g.DrawLine(Pens.Black, image.Inner.Left, offset, image.Inner.Right, offset);
-                    g.DrawLine(Pens.Black, offset, image.Inner.Top, offset, image.Inner.Bottom);
+                    g.DrawLine(Pens.Black, image.Inner.Left, offsetY, image.Inner.Right, offsetY);
+                    g.DrawLine(Pens.Black, offsetX, image.Inner.Top, offsetX, image.Inner.Bottom);
                     g.DrawLine(Pens.Black, image.Inner.Left, image.Inner.Top, image.Inner.Right, image.Inner.Bottom);
                     g.DrawLine(Pens.Black, image.Inner.Right, image.Inner.Top, image.Inner.Left, image.Inner.Bottom);
-                    g.DrawEllipse(Pens.Blue, offset - maxsize / 2f, offset - maxsize / 2f, maxsize, maxsize);
-                    g.DrawEllipse(Pens.Black, offset - midsize / 2f, offset - midsize / 2f, midsize, midsize);
-                    g.DrawEllipse(Pens.Blue, offset - minsize / 2f, offset - minsize / 2f, minsize, minsize);
+                    g.DrawEllipse(Pens.Blue, offsetX - maxsize / 2f, offsetY - maxsize / 2f, maxsize, maxsize);
+                    g.DrawEllipse(Pens.Black, offsetX - midsize / 2f, offsetY - midsize / 2f, midsize, midsize);
+                    g.DrawEllipse(Pens.Blue, offsetX - minsize / 2f, offsetY - minsize / 2f, minsize, minsize);
                 }
 
                 CircularProfile.ProfileStep last = p.GetFirst();
@@ -70,15 +71,15 @@ namespace PA.TileList.Drawing
 
                     if (last.Radius > 0)
                     {
-                        g.DrawArc(new Pen(Color.Red), offset - (float)last.Radius, offset - (float)last.Radius, (float)last.Radius * 2f, (float)last.Radius * 2f, ad, sw);
+                        g.DrawArc(new Pen(Color.Red), offsetX - (float)last.Radius, offsetY - (float)last.Radius, (float)last.Radius * 2f, (float)last.Radius * 2f, ad, sw);
                     }
 
                     if (last.Radius != current.Radius)
                     {
-                        int x1 = (int)Math.Round(offset + last.Radius * Math.Cos(current.Angle));
-                        int y1 = (int)Math.Round(offset - last.Radius * Math.Sin(current.Angle));
-                        int x2 = (int)Math.Round(offset + current.Radius * Math.Cos(current.Angle));
-                        int y2 = (int)Math.Round(offset - current.Radius * Math.Sin(current.Angle));
+                        int x1 = (int)Math.Round(offsetX + last.Radius * Math.Cos(current.Angle));
+                        int y1 = (int)Math.Round(offsetY - last.Radius * Math.Sin(current.Angle));
+                        int x2 = (int)Math.Round(offsetX + current.Radius * Math.Cos(current.Angle));
+                        int y2 = (int)Math.Round(offsetY - current.Radius * Math.Sin(current.Angle));
                         g.DrawLine(new Pen(Color.Red), x1, y1, x2, y2);
                     }
 

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PA.Plugin.Components</RootNamespace>
     <AssemblyName>PA.Plugin.Components</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -32,12 +32,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">net20</MinFramework>
+    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 3.5 ">net35</MinFramework>
+    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.0 ">net40</MinFramework>
+    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition">
-      <Private>True</Private>
+    <Reference Include="System.ComponentModel.Composition, Version=2010.2.11.1, Culture=neutral, processorArchitecture=MSIL" Condition="$(MinFramework) == net35">
       <HintPath>..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" Condition="$(MinFramework) == net40" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
@@ -75,6 +87,7 @@
     <Compile Include="Controls\PluginLoader.Designer.cs">
       <DependentUpon>PluginLoader.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IActionPlugin.cs" />
     <Compile Include="Interfaces\IPluginProvider.cs" />
     <Compile Include="Interfaces\IPluginHandler.cs" />
     <Compile Include="IPluginHelper.cs" />
@@ -155,7 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.Plugin.Components.nuspec" />
-    <None Include="packages.config" />
+    <None Include="PA.Toolbox.pfx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
