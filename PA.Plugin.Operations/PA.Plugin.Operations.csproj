@@ -35,7 +35,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">net20</MinFramework>
@@ -78,7 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.Plugin.Operations.nuspec" />
-    <None Include="PA.Toolbox.pfx" />
     <None Include="PA.Toolbox.snk" />
   </ItemGroup>
   <ItemGroup>
