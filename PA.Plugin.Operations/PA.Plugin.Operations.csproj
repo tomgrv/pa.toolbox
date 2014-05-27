@@ -67,7 +67,7 @@
     <Compile Include="Controls\PluginRunner.Designer.cs">
       <DependentUpon>PluginRunner.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IPluginAction.cs" />
+    <Compile Include="Interfaces\IActionPlugin.cs" />
     <Compile Include="Interfaces\IPluginOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -79,6 +79,7 @@
   <ItemGroup>
     <None Include="PA.Plugin.Operations.nuspec" />
     <None Include="PA.Toolbox.pfx" />
+    <None Include="PA.Toolbox.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">

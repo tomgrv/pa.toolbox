@@ -125,7 +125,7 @@ namespace PA.Plugin.Components.Controls
         #region IPartImportsSatisfiedNotification Members
 
         [ImportMany(AllowRecomposition = true)]
-        protected virtual IEnumerable<IActionPlugin> Imports { get; set; }
+        protected virtual IEnumerable<IPluginOperation> Imports { get; set; }
 
         public virtual void OnImportsSatisfied()
         {

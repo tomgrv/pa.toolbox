@@ -36,7 +36,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">net20</MinFramework>
@@ -87,7 +87,6 @@
     <Compile Include="Controls\PluginLoader.Designer.cs">
       <DependentUpon>PluginLoader.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IActionPlugin.cs" />
     <Compile Include="Interfaces\IPluginProvider.cs" />
     <Compile Include="Interfaces\IPluginHandler.cs" />
     <Compile Include="IPluginHelper.cs" />
@@ -168,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.Plugin.Components.nuspec" />
-    <None Include="PA.Toolbox.pfx" />
+    <None Include="PA.Toolbox.snk" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
