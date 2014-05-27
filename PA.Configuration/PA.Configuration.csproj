@@ -30,7 +30,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -128,7 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.Configuration.nuspec" />
-    <None Include="PA.Toolbox.pfx" />
+    <None Include="PA.Toolbox.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Converters\PA.Converters.csproj">

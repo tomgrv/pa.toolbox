@@ -79,7 +79,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PA.Toolbox.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>PA.Toolbox.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
@@ -122,7 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PA.SimiliBrowser.nuspec" />
-    <None Include="PA.Toolbox.pfx" />
+    <None Include="PA.Toolbox.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
