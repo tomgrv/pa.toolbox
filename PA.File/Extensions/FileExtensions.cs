@@ -17,5 +17,7 @@ namespace PA.File.Extensions
                 return BitConverter.ToString(hash).Replace("-", String.Empty);
             }
         }
+
+       
     }
 }

@@ -25,11 +25,8 @@ namespace UnitTests.TileList.Extensions
             IContextual<TileTests.Item> item = t1.FirstOrDefault(10, 10);
             item.Context.Color = Color.Red;
 
-            string file = "FirstOrDefault_" + DateTime.Now.Ticks + ".png";
-
-            t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(1000, 500, z.Item.X + "\n" + z.Item.Y)).Item.Save(file);
-
-            Assert.AreEqual("6B93EB09F16B30AAF482EE2CEBE9F28289D25CFE6FFCBAF646FFAA7178A4FFEE", this.GetHash(file), "Image hash");
+            string signature = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(1000, 500, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            Assert.AreEqual("B9AB99CBC9FD35ECABBEE8C833B77BA3363BFE18084F3DA9EDAAF25708A8E406", signature, "Image hash");
         }
 
         [TestMethod]
@@ -70,18 +67,11 @@ namespace UnitTests.TileList.Extensions
 
             string file = "Rulers_" + DateTime.Now.Ticks + ".png";
 
-            t1.GetRulers(i2, new float[] { 100f, 500f }).Item.Save(file);
-
-            Assert.AreEqual("A6313D498F4906070C8D96A20FD3EF19CDADDC73F35BB0E49D4BAF3516BBE80A", this.GetHash(file), "Image hash");
+            string signature = t1.GetRulers(i2, new float[] { 100f, 500f }).Item.GetSignature();
+            Assert.AreEqual("9E0B91534E9C29934BF8D353666F986606BE968612756DAFE261B2A3C52D97B0", signature, "Image hash");
         }
 
-        private string GetHash(string filename)
-        {
-            using (FileStream stream = File.OpenRead(filename))
-            {
-                return stream.GetSignature();
-            }
-        }
+      
     }
 }
 
