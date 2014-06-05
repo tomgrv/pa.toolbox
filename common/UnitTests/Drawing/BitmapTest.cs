@@ -19,9 +19,9 @@ namespace UnitTests.Drawing
 
             TileTests.MainTile t2 = TileTests.GetTile(factor);
 
-            AjouterDetourage(
+            string signature = AjouterDetourage(
                 t2
-                .AsQuantified((int)(50 / factor), (int)(50 / factor), (int)(55 / factor),(int)( 55 / factor))
+                .AsQuantified((int)(50 / factor), (int)(50 / factor), (int)(55 / factor), (int)(55 / factor))
                 .GetImage(1000, 1000,
                  p1 => AjouterDetourage(
                      p1.Item
@@ -31,9 +31,9 @@ namespace UnitTests.Drawing
                      ).Item
                     )
                 ).Item
-                ).Save("Tile.png");
+                ).GetSignature();
 
-
+            Assert.AreEqual("0D69EAE26282AA3780BD0E4E2F1A906F70EED8C1E956614D1C22AF2632DC102F", signature, "Image hash");
         }
 
         public static Image AjouterDetourage(Image i)

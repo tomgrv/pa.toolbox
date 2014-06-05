@@ -28,33 +28,31 @@ namespace UnitTests
             IQuantifiedTile<IContextual<TileTests.Item>> t1 = tile
                .Flatten<TileTests.SubTile, TileTests.Item>();
 
-            t1.GetImage(5000, 5000, z => z.Item.Context.ToBitmap(100, 100, z.Item.X + "\n" + z.Item.Y)).Item.Save("TopLeft.png");
-
-            Assert.AreEqual("3B6438BFF33561F88678CB99059E524C73D09E03C1B7E06323C2609669B0B47D", File.OpenRead("TopLeft.png").GetSignature());
+            string signature1 = t1.GetImage(5000, 5000, z => z.Item.Context.ToBitmap(100, 100, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature("TopLeft");
+            Assert.AreEqual("7D26EB8C9A43C5A80901C93013EE573C6A732EDA96BC50605B2300FCFE5F1DC2", signature1,"TopLeft");
 
             IQuantifiedTile<IContextual<IContextual<TileTests.Item>>> t2 = tile
                  .Flatten<TileTests.SubTile, TileTests.Item>()
                  .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomLeft);
 
-            t2.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.Save("BottomLeft.png");
-
-            Assert.AreEqual("EEE628FE50280186EE13B6ED5FA1DD92BD49818E35EB1CB742B44D6328E48AF1", File.OpenRead("BottomLeft.png").GetSignature());
+            string signature2 = t2.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.GetSignature("BottomLeft");
+            Assert.AreEqual("2407B38641F28F13196AECB9B8E19B625319712288C6E91AD6533EF5DA1698E3", signature2, "BottomLeft");
 
             IQuantifiedTile<IContextual<IContextual<TileTests.Item>>> t3 = tile
                .Flatten<TileTests.SubTile, TileTests.Item>()
                .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomRight);
 
-            t3.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.Save("BottomRight.png");
+            string signature3 = t3.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.GetSignature("BottomRight");
 
-            Assert.AreEqual("F01A71D8E9576A12F532540CC082F00DF1AC540328FF2DDA70DE9056B6EBE163", File.OpenRead("BottomRight.png").GetSignature());
+            Assert.AreEqual("68C94ECC7077829ABDD3C064AC54EC709018553EFFF596E404A400062C98071E", signature3, "BottomRight");
 
             IQuantifiedTile<IContextual<IContextual<TileTests.Item>>> t4 = tile
              .Flatten<TileTests.SubTile, TileTests.Item>()
              .ChangeQuadrant(Quadrant.TopLeft, Quadrant.TopRight);
 
-            t4.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.Save("TopRight.png");
+            string signature4 = t4.GetImage(5000, 5000, z => z.Item.Context.Context.ToBitmap(100, 100, z.Item.Context.X + "\n" + z.Item.Context.Y)).Item.GetSignature("TopRight");
 
-            Assert.AreEqual("DFB20F2C276C221488717113B0F6866FC5E64EA100C40B33F1B0DFD523D36FDE", File.OpenRead("TopRight.png").GetSignature());
+            Assert.AreEqual("3D7210B4561E628184F033755C353947F93E588402883BC18DD6D83D5012B967", signature4, "TopRight");
         }
 
     }
