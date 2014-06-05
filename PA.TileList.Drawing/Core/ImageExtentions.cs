@@ -7,6 +7,9 @@ using System.Drawing;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Circular;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace PA.TileList.Drawing
 {
@@ -152,6 +155,35 @@ namespace PA.TileList.Drawing
 
         #endregion
 
+        public static byte[] GetRawData(this Image image)
+        {
+            MemoryStream ms = new MemoryStream();
+            image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            return ms.ToArray();
+        }
+
+        public static string GetSignature(this Image image, string tag = null)
+        {
+            using (SHA256Managed sha = new SHA256Managed())
+            {
+                byte[] hash = sha.ComputeHash(image.GetRawData());
+                string key = BitConverter.ToString(hash).Replace("-", String.Empty);
+
+
+#if DEBUG
+                StackTrace st = new StackTrace();
+                StackFrame sf = st.GetFrames().FirstOrDefault(s => s.GetMethod().GetCustomAttributes(false)
+                                                .Any(i => i.ToString().EndsWith("TestMethodAttribute")));
+
+                if (sf is StackFrame)
+                {
+                    image.Save(sf.GetMethod().Name + (tag is string ?  "_" + tag : string.Empty)  + "_" + key + ".png", System.Drawing.Imaging.ImageFormat.Png);
+                }
+#endif
+
+                return key;
+            }
+        }
     }
 
 

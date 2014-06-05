@@ -32,7 +32,8 @@ namespace UnitTests.Drawing
                 search.AddProfileStep(a1, 1000);
             }
 
-            search.GetImage(1000, 1000).Item.Save("SelectTarget.png");
+            string signature = search.GetImage(1000, 1000).Item.GetSignature();
+            Assert.AreEqual("8F615A0FB128A718C2AD74857E45D72CAF108C6B5FC11EB41565437FC952E1B0", signature, "Image hash");
         }
 
         [TestMethod]
@@ -42,9 +43,8 @@ namespace UnitTests.Drawing
 
             RectangleD<Image> i = p.GetImage(1000, 1000, new RectangleF(-2000, -2000, 4000, 4000));
 
-            i.Item.Save("Profile.png");
-
-            Assert.AreEqual("81E88BED0A483EE7E88FDC6BAC0E0E800D3E0420D2F2916B8413A562E6529EB9", this.GetHash("Profile.png"), "Image hash");
+            string signature = i.Item.GetSignature();
+            Assert.AreEqual("AD15FBB9C02516913B3D962FB2095872B3A01A7B41CBFE2A2F6EA48C17884386", signature, "Image hash");
         }
 
         [TestMethod]
@@ -70,11 +70,8 @@ namespace UnitTests.Drawing
 
             RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
 
-            string file = "SelectionSmallTile_" + DateTime.Now.Ticks + ".png";
-
-            i.Item.Save(file);
-
-            Assert.AreEqual("85B42DE7F503442B81CEEE13D9B6DF20A5673DC50EC17E506E20D5208312FEEE", this.GetHash(file), "Image hash");
+            string signature = i.Item.GetSignature();
+            Assert.AreEqual("A0D730CAEB492786F539B437A98201D0427F7D27E4BDBCC02E59F47AA7F1F2A1", signature, "Image hash");
         }
 
         [TestMethod]
@@ -101,17 +98,8 @@ namespace UnitTests.Drawing
 
             string file = "SelectionMediumTile_" + DateTime.Now.Ticks + ".png";
 
-            i.Item.Save(file);
-
-            Assert.AreEqual("3DA34BD290F3DEE192A836AB61F4A1308016BF2BE56E4F8EBBAC54995E5109D5", this.GetHash(file), "Image hash");
-        }
-
-        private string GetHash(string filename)
-        {
-            using (FileStream stream = File.OpenRead(filename))
-            {
-                return stream.GetSignature();
-            }
+            string signature = i.Item.GetSignature();
+            Assert.AreEqual("0FC687D0C5567AABD690D1AECA13E9EE93BC2933FF43A66F9B6D2E3BE85084A5", signature, "Image hash");
         }
 
         private CircularProfile GetTestProfile(float radius, double stepping = 1f, double resolution = 1f)
