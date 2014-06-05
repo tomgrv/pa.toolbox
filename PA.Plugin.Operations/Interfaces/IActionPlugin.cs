@@ -10,7 +10,7 @@ namespace PA.Plugin.Components.Interfaces
     [InheritedExport]
     public interface IActionPlugin : IPlugin 
     {
-        bool CanExecute(IDictionary<string, object> data) ;
-        object Execute(IDictionary<string, object> data) ;
+        bool CanExecute(IDictionary<object, object> data);
+        object Execute(IDictionary<object, object> data);
     }
 }
