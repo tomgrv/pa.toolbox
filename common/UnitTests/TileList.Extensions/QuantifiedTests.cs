@@ -59,11 +59,11 @@ namespace UnitTests.TileList.Extensions
             IContextual<TileTests.Item> item = t1.FirstOrDefault(500, 1000);
             item.Context.Color = Color.Red;
 
-            RectangleD<Image> i1 = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(100, 100, z.Item.X + "\n" + z.Item.Y));
+            RectangleD<Bitmap> i1 = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(100, 100, z.Item.X + "\n" + z.Item.Y));
 
             CircularProfile p = new CircularProfile(1000);
 
-            RectangleD<Image> i2 = p.GetImage(i1);
+            RectangleD<Bitmap> i2 = p.GetImage(i1);
 
             string file = "Rulers_" + DateTime.Now.Ticks + ".png";
 

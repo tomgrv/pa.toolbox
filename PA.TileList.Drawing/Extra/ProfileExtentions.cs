@@ -18,9 +18,9 @@ namespace PA.TileList.Drawing
             return new SizeF(max, max);
         }
 
-        public static RectangleD<Image> GetImage(this CircularProfile p, int width, int height)
+        public static RectangleD<Bitmap> GetImage(this CircularProfile p, int width, int height)
         {
-            return p.GetImage(new RectangleD<Image>(new Bitmap(width, height), PointF.Empty, p.GetSize()));
+            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height) , PointF.Empty, p.GetSize()));
         }
 
 
@@ -32,12 +32,13 @@ namespace PA.TileList.Drawing
         /// <param name="height"></param>
         /// <param name="inner"></param>
         /// <returns></returns>
-        public static RectangleD<Image> GetImage(this CircularProfile p, int width, int height, RectangleF inner)
+        public static RectangleD<Bitmap> GetImage(this CircularProfile p, int width, int height, RectangleF inner)
         {
-            return p.GetImage(new RectangleD<Image>(new Bitmap(width, height), inner, inner));
+            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height), inner, inner));
         }
 
-        public static RectangleD<Image> GetImage(this CircularProfile p, RectangleD<Image> image, bool extra = true)
+        public static RectangleD<U> GetImage<U>(this CircularProfile p, RectangleD<U> image, bool extra = true)
+            where U:Image
         {
             float maxsize = (float)p.GetMaxRadius() * 2f;
             float minsize = (float)p.GetMinRadius() * 2f;

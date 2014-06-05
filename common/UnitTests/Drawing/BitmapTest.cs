@@ -36,7 +36,8 @@ namespace UnitTests.Drawing
             Assert.AreEqual("0D69EAE26282AA3780BD0E4E2F1A906F70EED8C1E956614D1C22AF2632DC102F", signature, "Image hash");
         }
 
-        public static Image AjouterDetourage(Image i)
+        public static U AjouterDetourage<U>(U i)
+            where U:Image
         {
             using (Graphics g = Graphics.FromImage(i))
             {

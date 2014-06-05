@@ -41,7 +41,7 @@ namespace UnitTests.Drawing
         {
             CircularProfile p = new CircularProfile(1500);
 
-            RectangleD<Image> i = p.GetImage(1000, 1000, new RectangleF(-2000, -2000, 4000, 4000));
+            RectangleD<Bitmap> i = p.GetImage(1000, 1000, new RectangleF(-2000, -2000, 4000, 4000));
 
             string signature = i.Item.GetSignature();
             Assert.AreEqual("AD15FBB9C02516913B3D962FB2095872B3A01A7B41CBFE2A2F6EA48C17884386", signature, "Image hash");
@@ -66,9 +66,9 @@ namespace UnitTests.Drawing
             Assert.AreEqual(false, change, "Reference Changed");
             Assert.AreEqual(1800, q.Count(), "Selected item count");
 
-            RectangleD<Image> pi = p.GetImage(1000, 1000, tile.GetBounds());
+            RectangleD<Bitmap> pi = p.GetImage(1000, 1000, tile.GetBounds());
 
-            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
+            RectangleD<Bitmap> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
 
             string signature = i.Item.GetSignature();
             Assert.AreEqual("A0D730CAEB492786F539B437A98201D0427F7D27E4BDBCC02E59F47AA7F1F2A1", signature, "Image hash");
@@ -92,9 +92,9 @@ namespace UnitTests.Drawing
 
             IQuantifiedTile<IContextual<TileTests.Item>> q = l.AsTile(tile.Area).AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor);
 
-            RectangleD<Image> pi = p.GetImage(5000, 5000, tile.GetBounds());
+            RectangleD<Bitmap> pi = p.GetImage(5000, 5000, tile.GetBounds());
 
-            RectangleD<Image> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
+            RectangleD<Bitmap> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
 
             string file = "SelectionMediumTile_" + DateTime.Now.Ticks + ".png";
 
