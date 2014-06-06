@@ -10,6 +10,7 @@ using PA.TileList.Circular;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace PA.TileList.Drawing
 {
@@ -74,10 +75,10 @@ namespace PA.TileList.Drawing
             where T : ICoordinate
             where U : Image
         {
-            return c.GetImage<T,U>(image, ScaleMode.CENTER | ScaleMode.SCALE | ScaleMode.CENTERSTEP | ScaleMode.EXACTPIXEL, getImagePart);
+            return c.GetImage<T, U>(image, ScaleMode.CENTER | ScaleMode.SCALE | ScaleMode.CENTERSTEP | ScaleMode.EXACTPIXEL, getImagePart);
         }
 
-        public static RectangleD<U> GetImage<T,U>(this IQuantifiedTile<T> c, RectangleD<U> image, ScaleMode mode, Func<RectangleD<T>, U> getImagePart)
+        public static RectangleD<U> GetImage<T, U>(this IQuantifiedTile<T> c, RectangleD<U> image, ScaleMode mode, Func<RectangleD<T>, U> getImagePart)
             where T : ICoordinate
             where U : Image
         {
@@ -160,21 +161,31 @@ namespace PA.TileList.Drawing
 
         #endregion
 
-        public static byte[] GetRawData(this Image image)
+        public static byte[] GetRawData(this Bitmap image)
         {
-            MemoryStream ms = new MemoryStream();
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            return ms.ToArray();
+            BitmapData bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
+
+            // Get the address of the first line.
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.
+            int bytes = Math.Abs(bmpData.Stride) * image.Height;
+            byte[] rgbValues = new byte[bytes];
+
+            // Copy the RGB values into the array.
+            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            image.UnlockBits(bmpData);
+
+            return rgbValues;
         }
 
-        public static string GetSignature(this Image image, string tag = null)
+        public static string GetSignature(this Bitmap image, string tag = null)
         {
             using (SHA256Managed sha = new SHA256Managed())
             {
                 byte[] hash = sha.ComputeHash(image.GetRawData());
                 string key = BitConverter.ToString(hash).Replace("-", String.Empty);
-
-
 #if DEBUG
                 StackTrace st = new StackTrace();
                 StackFrame sf = st.GetFrames().FirstOrDefault(s => s.GetMethod().GetCustomAttributes(false)
@@ -185,7 +196,6 @@ namespace PA.TileList.Drawing
                     image.Save(sf.GetMethod().Name + (tag is string ? "_" + tag : string.Empty) + "_" + key + ".png", System.Drawing.Imaging.ImageFormat.Png);
                 }
 #endif
-
                 return key;
             }
         }
