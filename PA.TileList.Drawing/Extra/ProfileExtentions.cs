@@ -46,6 +46,8 @@ namespace PA.TileList.Drawing
             float offsetX = image.Inner.Left + image.Inner.Width / 2f;
             float offsetY = image.Inner.Top + image.Inner.Height / 2f;
 
+            float resolution = Math.Min((float)image.Item.Width / image.Outer.Width, (float)image.Item.Height / image.Outer.Height);
+
             using (Graphics g = Graphics.FromImage(image.Item))
             {
                 g.ScaleTransform((float)image.Item.Width / image.Outer.Width, (float)image.Item.Height / image.Outer.Height);
@@ -67,21 +69,21 @@ namespace PA.TileList.Drawing
 
                 foreach (CircularProfile.ProfileStep current in p.Profile)
                 {
-                    int ad = (int)Math.Round(180 * -last.Angle / Math.PI);
-                    int sw = (int)Math.Round(180 * -(current.Angle - last.Angle) / Math.PI);
+                    double ad = 180f * -last.Angle /  Math.PI;
+                    double sw = 180f * -(current.Angle - last.Angle) /Math.PI;
 
                     if (last.Radius > 0)
                     {
-                        g.DrawArc(new Pen(Color.Red), offsetX - (float)last.Radius, offsetY - (float)last.Radius, (float)last.Radius * 2f, (float)last.Radius * 2f, ad, sw);
+                        g.DrawArc(Pens.Red, offsetX - (float)last.Radius, offsetY - (float)last.Radius, (float)last.Radius * 2f, (float)last.Radius * 2f, (float)ad, (float)sw);
                     }
 
-                    if (last.Radius != current.Radius)
+                    if (Math.Round(last.Radius ) != Math.Round(current.Radius))
                     {
-                        int x1 = (int)Math.Round(offsetX + last.Radius * Math.Cos(current.Angle));
-                        int y1 = (int)Math.Round(offsetY - last.Radius * Math.Sin(current.Angle));
-                        int x2 = (int)Math.Round(offsetX + current.Radius * Math.Cos(current.Angle));
-                        int y2 = (int)Math.Round(offsetY - current.Radius * Math.Sin(current.Angle));
-                        g.DrawLine(new Pen(Color.Red), x1, y1, x2, y2);
+                        double x1 = offsetX + last.Radius * Math.Cos(current.Angle);
+                        double y1 = offsetY - last.Radius * Math.Sin(current.Angle);
+                        double x2 = offsetX + current.Radius * Math.Cos(current.Angle);
+                        double y2 = offsetY - current.Radius * Math.Sin(current.Angle);
+                        g.DrawLine(Pens.Orange, (float)x1, (float)y1, (float)x2, (float)y2);
                     }
 
                     last = current;

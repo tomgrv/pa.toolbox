@@ -37,11 +37,8 @@ namespace PA.TileList.Drawing
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-
                 g.DrawSteps(steps, image.Inner.Left, image.Inner.Right, offsetX, Direction.Horizontal, scaleX);
                 g.DrawSteps(steps, image.Inner.Top, image.Inner.Bottom, offsetY , Direction.Vertical, scaleY);
-
-
             }
 
             return image;

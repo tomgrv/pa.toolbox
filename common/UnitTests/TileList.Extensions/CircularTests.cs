@@ -35,6 +35,21 @@ namespace UnitTests.Drawing
             string signature = search.GetImage(1000, 1000).Item.GetSignature();
             Assert.AreEqual("8F615A0FB128A718C2AD74857E45D72CAF108C6B5FC11EB41565437FC952E1B0", signature, "Image hash");
         }
+          
+        [TestMethod]
+        public void ProfileWithFlat()
+        {
+            CircularProfile search = new CircularProfile(1000);
+
+            search.AddProfileFlatByLength(0, 1500);
+            search.AddProfileFlatByLength(Math.PI, 500, 0.0001,500);
+            search.AddProfileFlat(Math.PI/2f, 200,1000);
+            search.AddProfileStep(-Math.PI/4, 1000);
+            search.AddProfileStep(-3*Math.PI/4, 800);
+
+            string signature = search.GetImage(1000, 1000).Item.GetSignature();
+            Assert.AreEqual("8F615A0FB128A718C2AD74857E45D72CAF108C6B5FC11EB41565437FC952E1B0", signature, "Image hash");
+        }
 
         [TestMethod]
         public void Profile()

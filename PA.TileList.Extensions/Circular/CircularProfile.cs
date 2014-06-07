@@ -146,15 +146,56 @@ namespace PA.TileList.Circular
         /// <param name="angle">Flat center angle (flat is orthogonal to radius at this angle)</param>
         /// <param name="thickness">Radius delta relative to profile base radius at specified angle</param>
         /// <param name="length">Flat lenght, centered on specified angle</param>
+        /// <param name="step">Calculation step (Profile is curved between each step)</param> 
+        /// <param name="resolution">Calculation step (Profile is curved between each step)</param>
+        public void AddProfileFlatByThickness(double angle, double thickness, double step = 1f, double resolution = 1f)
+        {
+            // Rayon central
+            double r0 = this.Radius - thickness;
+
+            // Arc de demi-flat
+            double delta_flat = Math.Acos(r0 / this.Radius);
+
+            // flat
+            double length = 2 * this.Radius * Math.Sin(delta_flat);
+
+            this.AddProfileFlat(angle,r0, length, step, resolution);
+        }
+
+        /// <summary>
+        /// Add tengential flat
+        /// </summary>
+        /// <param name="angle">Flat center angle (flat is orthogonal to radius at this angle)</param>
+        /// <param name="thickness">Radius delta relative to profile base radius at specified angle</param>
+        /// <param name="length">Flat lenght, centered on specified angle</param>
         /// <param name="step">Calculation step (Profile is curved between each step)</param>
         /// <param name="resolution">Calculation step (Profile is curved between each step)</param>
-        public void AddProfileFlat(double angle, double thickness, double length, double step = 1f, double resolution = 1f)
+        public void AddProfileFlatByLength(double angle, double length, double step = 1f, double resolution = 1f)
         {
             // Arc de demi-flat
-            double delta_flat = Math.Atan2(length / 2, this.Radius);
+            double delta_flat = Math.Atan2((length / 2f), this.Radius);
+
+            // Rayon central
+            double r0 = Math.Cos(delta_flat) * this.Radius;
+
+            this.AddProfileFlat(angle, r0, length, step, resolution);
+        }
+
+        /// <summary>
+        /// Add tengential flat
+        /// </summary>
+        /// <param name="angle">Flat center angle (flat is orthogonal to radius at this angle)</param>
+        /// <param name="radius">Profile base radius at specified angle</param>
+        /// <param name="length">Flat lenght, centered on specified angle</param>
+        /// <param name="step">Calculation step (Profile is curved between each step)</param>
+        /// <param name="resolution">Calculation step (Profile is curved between each step)</param>
+        public void AddProfileFlat(double angle, double radius , double length , double step = 1f, double resolution = 1f)
+        {
+            // Arc de demi-flat
+            double delta_flat = Math.Atan2((length / 2f) , this.Radius);
 
             // Rayon orthogonal au flat, corrigé selon la bordure
-            double r0 = this.Radius - thickness;
+            double r0 = radius;
 
             double delta = Math.Atan2(step, this.Radius) * resolution;
 
