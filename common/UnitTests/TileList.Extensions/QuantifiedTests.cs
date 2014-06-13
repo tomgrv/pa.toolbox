@@ -25,8 +25,10 @@ namespace UnitTests.TileList.Extensions
             IContextual<TileTests.Item> item = t1.FirstOrDefault(10, 10);
             item.Context.Color = Color.Red;
 
-            string signature = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(1000, 500, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
-            Assert.AreEqual("B9AB99CBC9FD35ECABBEE8C833B77BA3363BFE18084F3DA9EDAAF25708A8E406", signature, "Image hash");
+           RectangleD<Bitmap> i1 = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y));
+            
+            string signature = i1.Item.GetSignature();
+            Assert.AreEqual("A56EBC8E87772EA73D38342AF45FF00B5489A22DB73E7ED5996C6AF7EEE3DE0A", signature, "Image hash");
         }
 
         [TestMethod]
@@ -68,7 +70,7 @@ namespace UnitTests.TileList.Extensions
             string file = "Rulers_" + DateTime.Now.Ticks + ".png";
 
             string signature = t1.GetRulers(i2, new float[] { 100f, 500f }).Item.GetSignature();
-            Assert.AreEqual("9E0B91534E9C29934BF8D353666F986606BE968612756DAFE261B2A3C52D97B0", signature, "Image hash");
+            Assert.AreEqual("9272D2C42A039C2122B649DAD516B390A3A2A3C51BA861B6E615F27BA0F1BDA3", signature, "Image hash");
         }
 
       

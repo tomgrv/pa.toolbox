@@ -79,7 +79,7 @@ namespace UnitTests.TileList
             public Bitmap ToBitmap(int w, int h, string s)
             {
                 Bitmap b = new Bitmap(w, h);
-
+                
                 using (Graphics g = Graphics.FromImage(b))
                 {
                     g.DrawRectangle(Pens.Pink, 0, 0, w - 1, h - 1);
