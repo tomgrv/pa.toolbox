@@ -33,7 +33,7 @@ namespace UnitTests.Drawing
                 ).Item
                 ).GetSignature();
 
-            Assert.AreEqual("C5AFDAA5F5CC5E8E1B15F02E164355FE90230A44DE34A775E6CFB22AF9619F68", signature, "Image hash");
+            Assert.AreEqual("0428457778FC3ACBAABEBB93953AB330", signature, "Image hash");
         }
 
         public static U AjouterDetourage<U>(U i)
