@@ -7,7 +7,6 @@ using System.Drawing;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Circular;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.IO;
 using System.Drawing.Imaging;
@@ -161,39 +160,28 @@ namespace PA.TileList.Drawing
 
         #endregion
 
-        public static byte[] GetRawData(this Bitmap image)
+        public static byte[] GetRawData(this Image image)
         {
-            BitmapData bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
-
-            // Get the address of the first line.
-            IntPtr ptr = bmpData.Scan0;
-
-            // Declare an array to hold the bytes of the bitmap.
-            int bytes = Math.Abs(bmpData.Stride) * image.Height;
-            byte[] rgbValues = new byte[bytes];
-
-            // Copy the RGB values into the array.
-            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            image.UnlockBits(bmpData);
-
-            return rgbValues;
+            ImageConverter converter = new ImageConverter();
+            return converter.ConvertTo(image, typeof(byte[])) as byte[];
         }
 
-        public static string GetSignature(this Bitmap image, string tag = null)
+        public static string GetSignature(this Image image, string tag = null)
         {
-            using (SHA256Managed sha = new SHA256Managed())
+            using (MD5CryptoServiceProvider sha = new MD5CryptoServiceProvider())
             {
                 byte[] hash = sha.ComputeHash(image.GetRawData());
                 string key = BitConverter.ToString(hash).Replace("-", String.Empty);
 #if DEBUG
-                StackTrace st = new StackTrace();
-                StackFrame sf = st.GetFrames().FirstOrDefault(s => s.GetMethod().GetCustomAttributes(false)
+
+                System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                System.Diagnostics.StackFrame sf = st.GetFrames().FirstOrDefault(s => s.GetMethod().GetCustomAttributes(false)
                                                 .Any(i => i.ToString().EndsWith("TestMethodAttribute")));
 
-                if (sf is StackFrame)
+                if (sf is System.Diagnostics.StackFrame)
                 {
-                    image.Save(sf.GetMethod().Name + (tag is string ? "_" + tag : string.Empty) + "_" + key + ".png", System.Drawing.Imaging.ImageFormat.Png);
+                    string name = sf.GetMethod().Name + (tag is string ? "_" + tag : string.Empty);
+                    image.Save(name + "_" + key + ".png", System.Drawing.Imaging.ImageFormat.Png);
                 }
 #endif
                 return key;
