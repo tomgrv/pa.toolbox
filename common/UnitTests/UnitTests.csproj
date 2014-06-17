@@ -93,6 +93,7 @@
     <Compile Include="TileList.Extensions\CircularTests.cs" />
     <Compile Include="TileList.Extensions\QuadrantTest.cs" />
     <Compile Include="TileList.Extensions\QuantifiedTests.cs" />
+    <Compile Include="TileList.Geometrics\GeometricTests.cs" />
     <Compile Include="TileList\CoordinateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TileList\TileTests.cs" />
@@ -150,6 +151,10 @@
     <ProjectReference Include="..\..\PA.TileList.Extensions\PA.TileList.Extensions.csproj">
       <Project>{a16e749b-7556-41bd-a9b9-253b3253578c}</Project>
       <Name>PA.TileList.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.TileList.Geometrics\PA.TileList.Geometrics.csproj">
+      <Project>{b64bcac4-3bd8-414d-8f5c-f55728fa109e}</Project>
+      <Name>PA.TileList.Geometrics</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PA.TileList\PA.TileList.csproj">
       <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
