@@ -13,15 +13,16 @@ namespace PA.TileList.Drawing
     public static class RulersExtentions
     {
 
-        public static RectangleD<Image> GetRulers<T>(this IQuantifiedTile<T> c, int width, int height, float[] steps)
+        public static RectangleD<Bitmap> GetRulers<T>(this IQuantifiedTile<T> c, int width, int height, float[] steps)
            where T : ICoordinate
         {
             RectangleF b = c.GetBounds();
-            return c.GetRulers(new RectangleD<Image>(new Bitmap(width, height), b, b), steps);
+            return c.GetRulers(new RectangleD<Bitmap>(new Bitmap(width, height), b, b), steps);
         }
 
-        public static RectangleD<Image> GetRulers<T>(this IQuantifiedTile<T> c, RectangleD<Image> image, float[] steps)
+        public static RectangleD<U> GetRulers<T,U>(this IQuantifiedTile<T> c, RectangleD<U> image, float[] steps)
            where T : ICoordinate
+            where U:Image
         {
             using (Graphics g = Graphics.FromImage(image.Item))
             {
@@ -36,11 +37,8 @@ namespace PA.TileList.Drawing
                 g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-
                 g.DrawSteps(steps, image.Inner.Left, image.Inner.Right, offsetX, Direction.Horizontal, scaleX);
                 g.DrawSteps(steps, image.Inner.Top, image.Inner.Bottom, offsetY , Direction.Vertical, scaleY);
-
-
             }
 
             return image;
