@@ -45,15 +45,32 @@ namespace PA.TileList.Quantified
             return new QuantifiedTile<T>(list, list.ElementSizeX * scaleFactor, list.ElementSizeY * scaleFactor, list.ElementStepX * scaleFactor, list.ElementStepY * scaleFactor, list.RefOffsetX * scaleFactor, list.RefOffsetY * scaleFactor);
         }
 
+        /// <summary>
+        /// Get coordinate at specified location.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static ICoordinate GetCoordinateAt<T>(this IQuantifiedTile<T> list, double x, double y)
+             where T : ICoordinate
+        {
+            return list.GetArea().FirstOrDefault(c =>
+                list.Corners(c, 2, 1, (xc, yc) =>
+                    Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
+        }
 
         public static T FirstOrDefault<T>(this IQuantifiedTile<T> list, double x, double y)
              where T : ICoordinate
         {
-            return list.FirstOrDefault(e => list.Corners(e, 2, 1, (xc, yc) => Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
-          
+            return list.FirstOrDefault(e => 
+                list.Corners(e, 2, 1, (xc, yc) => 
+                    Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
+
         }
 
-        internal static int Corners<T>(this IQuantifiedTile<T> tile, T c, int steps, float resolution, Func<double, double, bool> predicate)
+        internal static int Corners<T>(this IQuantifiedTile<T> tile, ICoordinate c, int steps, float resolution, Func<double, double, bool> predicate)
             where T : ICoordinate
         {
             int points = 0;

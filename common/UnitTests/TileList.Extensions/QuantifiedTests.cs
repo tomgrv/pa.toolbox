@@ -45,8 +45,10 @@ namespace UnitTests.TileList.Extensions
             IContextual<TileTests.Item> item = t1.FirstOrDefault(1000, 500);
             item.Context.Color = Color.Red;
 
-            //Assert.AreEqual(item.X, coord.X);
-            //Assert.AreEqual(item.Y, coord.Y);
+            ICoordinate coord = t1.GetCoordinateAt(1000, 500);
+ 
+            Assert.AreEqual(item.X, coord.X);
+            Assert.AreEqual(item.Y, coord.Y);
         }
 
         [TestMethod]
