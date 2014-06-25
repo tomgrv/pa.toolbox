@@ -7,9 +7,9 @@ using System.Drawing;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Circular;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace PA.TileList.Drawing
 {
@@ -49,32 +49,37 @@ namespace PA.TileList.Drawing
 
         #region Image
 
-        private static RectangleD<Image> GetBaseImage<T>(this IQuantifiedTile<T> c, int width, int height)
+        private static RectangleD<U> GetBaseImage<T, U>(this IQuantifiedTile<T> c, int width, int height)
             where T : ICoordinate
+            where U : Image
         {
-            return new RectangleD<Image>(new Bitmap(width, height), c.GetOrigin(), c.GetSize());
+            return new RectangleD<U>(new Bitmap(width, height) as U, c.GetOrigin(), c.GetSize());
         }
 
-        public static RectangleD<Image> GetImage<T>(this IQuantifiedTile<T> c, int width, int height, Func<RectangleD<T>, Image> getImagePart)
+        public static RectangleD<U> GetImage<T, U>(this IQuantifiedTile<T> c, int width, int height, Func<RectangleD<T>, U> getImagePart)
             where T : ICoordinate
+            where U : Image
         {
-            return c.GetImage(c.GetBaseImage(width, height), ScaleMode.CENTER | ScaleMode.SCALE | ScaleMode.CENTERSTEP | ScaleMode.EXACTPIXEL, getImagePart);
+            return c.GetImage<T, U>(c.GetBaseImage<T, U>(width, height), ScaleMode.CENTER | ScaleMode.SCALE | ScaleMode.CENTERSTEP | ScaleMode.EXACTPIXEL, getImagePart);
         }
 
-        public static RectangleD<Image> GetImage<T>(this IQuantifiedTile<T> c, int width, int height, ScaleMode mode, Func<RectangleD<T>, Image> getImagePart)
+        public static RectangleD<U> GetImage<T, U>(this IQuantifiedTile<T> c, int width, int height, ScaleMode mode, Func<RectangleD<T>, U> getImagePart)
             where T : ICoordinate
+            where U : Image
         {
-            return c.GetImage(c.GetBaseImage(width, height), mode, getImagePart);
+            return c.GetImage<T, U>(c.GetBaseImage<T, U>(width, height), mode, getImagePart);
         }
 
-        public static RectangleD<Image> GetImage<T>(this IQuantifiedTile<T> c, RectangleD<Image> image, Func<RectangleD<T>, Image> getImagePart)
-          where T : ICoordinate
+        public static RectangleD<U> GetImage<T, U>(this IQuantifiedTile<T> c, RectangleD<U> image, Func<RectangleD<T>, U> getImagePart)
+            where T : ICoordinate
+            where U : Image
         {
-            return c.GetImage<T>(image, ScaleMode.CENTER | ScaleMode.SCALE | ScaleMode.CENTERSTEP | ScaleMode.EXACTPIXEL, getImagePart);
+            return c.GetImage<T, U>(image, ScaleMode.CENTER | ScaleMode.SCALE | ScaleMode.CENTERSTEP | ScaleMode.EXACTPIXEL, getImagePart);
         }
 
-        public static RectangleD<Image> GetImage<T>(this IQuantifiedTile<T> c, RectangleD<Image> image, ScaleMode mode, Func<RectangleD<T>, Image> getImagePart)
+        public static RectangleD<U> GetImage<T, U>(this IQuantifiedTile<T> c, RectangleD<U> image, ScaleMode mode, Func<RectangleD<T>, U> getImagePart)
             where T : ICoordinate
+            where U : Image
         {
             using (Graphics g = Graphics.FromImage(image.Item))
             {
@@ -88,9 +93,9 @@ namespace PA.TileList.Drawing
                 {
                     if (e.Outer.Height >= 1 && e.Outer.Width >= 1)
                     {
-                        Image partial = getImagePart(e);
+                        U partial = getImagePart(e);
 
-                        if (partial is Image)
+                        if (partial is U)
                         {
                             g.DrawImage(partial, e.Inner);
                         }
@@ -157,30 +162,28 @@ namespace PA.TileList.Drawing
 
         public static byte[] GetRawData(this Image image)
         {
-            MemoryStream ms = new MemoryStream();
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            return ms.ToArray();
+            ImageConverter converter = new ImageConverter();
+            return converter.ConvertTo(image, typeof(byte[])) as byte[];
         }
 
         public static string GetSignature(this Image image, string tag = null)
         {
-            using (SHA256Managed sha = new SHA256Managed())
+            using (MD5CryptoServiceProvider sha = new MD5CryptoServiceProvider())
             {
                 byte[] hash = sha.ComputeHash(image.GetRawData());
                 string key = BitConverter.ToString(hash).Replace("-", String.Empty);
-
-
 #if DEBUG
-                StackTrace st = new StackTrace();
-                StackFrame sf = st.GetFrames().FirstOrDefault(s => s.GetMethod().GetCustomAttributes(false)
+
+                System.Diagnostics.StackTrace st = new System.Diagnostics.StackTrace();
+                System.Diagnostics.StackFrame sf = st.GetFrames().FirstOrDefault(s => s.GetMethod().GetCustomAttributes(false)
                                                 .Any(i => i.ToString().EndsWith("TestMethodAttribute")));
 
-                if (sf is StackFrame)
+                if (sf is System.Diagnostics.StackFrame)
                 {
-                    image.Save(sf.GetMethod().Name + (tag is string ?  "_" + tag : string.Empty)  + "_" + key + ".png", System.Drawing.Imaging.ImageFormat.Png);
+                    string name = sf.GetMethod().Name + (tag is string ? "_" + tag : string.Empty);
+                    image.Save(name + "_" + key + ".png", System.Drawing.Imaging.ImageFormat.Png);
                 }
 #endif
-
                 return key;
             }
         }

@@ -45,22 +45,62 @@ namespace PA.TileList.Quantified
             return new QuantifiedTile<T>(list, list.ElementSizeX * scaleFactor, list.ElementSizeY * scaleFactor, list.ElementStepX * scaleFactor, list.ElementStepY * scaleFactor, list.RefOffsetX * scaleFactor, list.RefOffsetY * scaleFactor);
         }
 
+        /// <summary>
+        /// Get coordinate at specified location.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static ICoordinate GetCoordinateAt<T>(this IQuantifiedTile<T> list, double x, double y)
+             where T : ICoordinate
+        {
+            return list.GetArea().FirstOrDefault(c =>
+                list.Corners(c, 2, 1, (xc, yc) =>
+                    Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
+        }
+
         public static T FirstOrDefault<T>(this IQuantifiedTile<T> list, double x, double y)
              where T : ICoordinate
         {
-            double xx = (x - list.RefOffsetX) / list.ElementStepX;
-            double yy = (y - list.RefOffsetY) / list.ElementStepY;
+            return list.FirstOrDefault(e => 
+                list.Corners(e, 2, 1, (xc, yc) => 
+                    Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
 
-            return list.FirstOrDefault(t => (t.X - list.Reference.X) <= xx && xx < (t.X - list.Reference.X + 1) && (t.Y - list.Reference.Y) <= yy && yy < (t.Y - list.Reference.Y + 1));
         }
 
-        public static Coordinate GetCoordinatesAt<T>(this IQuantifiedTile<T> list, double x, double y)
-             where T : ICoordinate
+        internal static int Corners<T>(this IQuantifiedTile<T> tile, ICoordinate c, int steps, float resolution, Func<double, double, bool> predicate)
+            where T : ICoordinate
         {
-            double xx = (x - list.RefOffsetX) / list.ElementStepX;
-            double yy = (y - list.RefOffsetY) / list.ElementStepY;
+            int points = 0;
 
-            return new Coordinate((int)xx + list.Reference.X, (int)yy + list.Reference.Y);
+            double[] testY = new double[steps];
+            double[] testY2 = new double[steps];
+
+            for (int i = 0; i < steps; i++)
+            {
+                double testX = ((c.X - tile.Reference.X) - 0.5f + i * resolution) * tile.ElementStepX + tile.RefOffsetX;
+
+                if (i == 0)
+                {
+                    for (int j = 0; j < steps; j++)
+                    {
+                        testY[j] = ((c.Y - tile.Reference.Y) - 0.5f + j * resolution) * tile.ElementStepY + tile.RefOffsetY;
+                        testY2[j] = Math.Pow(testY[j], 2);
+                        points += predicate(testX, testY[j]) ? 1 : 0;
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < steps; j++)
+                    {
+                        points += predicate(testX, testY[j]) ? 1 : 0;
+                    }
+                }
+            }
+
+            return points;
         }
     }
 }
