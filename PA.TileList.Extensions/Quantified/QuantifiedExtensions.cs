@@ -70,7 +70,21 @@ namespace PA.TileList.Quantified
             double maxY =  Math.Max(y1,y2);
 
             return list.GetArea().Where(c =>
-                list.Corners(c, 2, 1, (xc, yc) => xc >= minX && xc <= maxX && yc >= minY && yc <= maxY) >= (strict ? 4 : 1));
+                list.Corners(c, 2, 1, (xc, yc) =>
+                    xc >= minX && xc <= maxX && yc >= minY && yc <= maxY) >= (strict ? 4 : 1));
+        }
+
+        public static IEnumerable<T> Crop<T>(this IQuantifiedTile<T> list, double x1, double y1, double x2, double y2, bool strict = false)
+           where T : ICoordinate
+        {
+            double minX = Math.Min(x1, x2);
+            double minY = Math.Min(y1, y2);
+            double maxX = Math.Max(x1, x2);
+            double maxY = Math.Max(y1, y2);
+
+            return list.Where(c =>
+                list.Corners(c, 2, 1, (xc, yc) => 
+                    xc >= minX && xc <= maxX && yc >= minY && yc <= maxY) >= (strict ? 4 : 1));
         }
 
         public static T FirstOrDefault<T>(this IQuantifiedTile<T> list, double x, double y)
