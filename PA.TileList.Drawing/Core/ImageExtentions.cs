@@ -6,7 +6,7 @@ using System.Collections;
 using System.Drawing;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
-using PA.TileList.Circular;
+using PA.TileList.Geometrics.Circular;
 using System.Security.Cryptography;
 using System.IO;
 using System.Drawing.Imaging;
