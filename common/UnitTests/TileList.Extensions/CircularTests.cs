@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PA.TileList.Circular;
+using PA.TileList.Geometrics.Circular;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Extensions;
