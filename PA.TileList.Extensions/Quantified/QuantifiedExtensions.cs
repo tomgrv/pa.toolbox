@@ -53,12 +53,24 @@ namespace PA.TileList.Quantified
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static ICoordinate GetCoordinateAt<T>(this IQuantifiedTile<T> list, double x, double y)
+        public static ICoordinate GetCoordinateAt<T>(this IQuantifiedTile<T> list, double x, double y, int p = 4)
              where T : ICoordinate
         {
             return list.GetArea().FirstOrDefault(c =>
                 list.Corners(c, 2, 1, (xc, yc) =>
-                    Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
+                    Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == p);
+        }
+
+        public static IEnumerable<ICoordinate> GetCoordinatesIn<T>(this IQuantifiedTile<T> list, double x1, double y1, double x2, double y2, bool strict = false)
+            where T : ICoordinate
+        {
+            double minX =  Math.Min(x1,x2);
+            double minY =  Math.Min(y1,y2);
+            double maxX =  Math.Max(x1,x2);
+            double maxY =  Math.Max(y1,y2);
+
+            return list.GetArea().Where(c =>
+                list.Corners(c, 2, 1, (xc, yc) => xc >= minX && xc <= maxX && yc >= minY && yc <= maxY) >= (strict ? 4 : 1));
         }
 
         public static T FirstOrDefault<T>(this IQuantifiedTile<T> list, double x, double y)
