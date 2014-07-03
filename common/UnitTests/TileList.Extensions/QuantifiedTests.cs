@@ -6,7 +6,7 @@ using PA.TileList.Contextual;
 using PA.TileList.Drawing;
 using PA.File.Extensions;
 using System.Drawing;
-using PA.TileList.Circular;
+using PA.TileList.Geometrics.Circular;
 using System.IO;
 
 namespace UnitTests.TileList.Extensions

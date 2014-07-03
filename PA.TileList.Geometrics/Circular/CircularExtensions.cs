@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PA.TileList.Circular
+namespace PA.TileList.Geometrics.Circular
 {
     public static class CircularExtensions
     {
