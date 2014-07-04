@@ -20,5 +20,9 @@ namespace PA.TileList.Contextual
             this.Context = context;
         }
 
+        public ICoordinate Clone()
+        {
+            return this.MemberwiseClone() as ICoordinate;
+        }
     }
 }

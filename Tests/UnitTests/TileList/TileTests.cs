@@ -42,7 +42,7 @@ namespace UnitTests.TileList
             public double RefOffsetY { get; internal set; }
         }
 
-        internal class SubTile : Tile<Item>, IQuadrant<Item>, ICloneable
+        internal class SubTile : Tile<Item>, IQuadrant<Item>
         {
             public SubTile(IArea a, Item t)
                 : base(a, t)
@@ -63,13 +63,13 @@ namespace UnitTests.TileList
                 throw new NotImplementedException();
             }
 
-            public object Clone()
+            public override ICoordinate Clone()
             {
                 return new SubTile(this.ConvertAll(i => i.Clone() as Item), this.IndexOf(this.Reference));
             }
         }
 
-        internal class Item : Coordinate, ICloneable
+        internal class Item : Coordinate
         {
             public Color Color { get; set; }
 
@@ -93,7 +93,7 @@ namespace UnitTests.TileList
                 return b;
             }
 
-            public override object Clone()
+            public override ICoordinate Clone()
             {
                 return new Item(base.X, base.Y, this.Color);
             }

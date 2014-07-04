@@ -9,14 +9,11 @@
     <!-- Property that enables building a package from a project -->
     <BuildPackage Condition=" '$(BuildPackage)' == '' ">false</BuildPackage>
 
-    <!-- TG: Property that enables creating a package from a project -->
-    <MakePackage Condition=" '$(MakePackage)' == '' ">true</MakePackage>
-
     <!-- Determines if package restore consent is required to restore packages -->
     <RequireRestoreConsent Condition=" '$(RequireRestoreConsent)' != 'false' ">true</RequireRestoreConsent>
 
     <!-- Download NuGet.exe if it does not already exist -->
-    <DownloadNuGetExe Condition=" '$(DownloadNuGetExe)' == '' ">true</DownloadNuGetExe>
+    <DownloadNuGetExe Condition=" '$(DownloadNuGetExe)' == '' ">false</DownloadNuGetExe>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(PackageSources)' == '' ">
@@ -58,10 +55,7 @@
 
     <!-- Commands -->
     <RestoreCommand>$(NuGetCommand) install "$(PackagesConfig)" -source "$(PackageSources)"  $(NonInteractiveSwitch) $(RequireConsentSwitch) -solutionDir $(PaddedSolutionDir)</RestoreCommand>
-    <BuildCommand>$(NuGetCommand) pack "$(ProjectPath)" -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -symbols</BuildCommand>
-
-    <!-- TG: Pack -->
-    <PackCommand>$(NuGetCommand) pack "$(ProjectFileName)" -IncludeReferencedProjects -Properties "Configuration=$(Configuration);Platform=$(Platform)" -Verbosity normal -OutputDirectory $(PaddedSolutionDir)</PackCommand>
+    <BuildCommand>$(NuGetCommand) pack "$(ProjectPath)" -IncludeReferencedProjects -Properties "Configuration=$(Configuration);Platform=$(Platform)" $(NonInteractiveSwitch) -OutputDirectory "$(PackageOutputDir)" -symbols</BuildCommand>
 
     <!-- We need to ensure packages are restored prior to assembly resolve -->
     <BuildDependsOn Condition="$(RestorePackages) == 'true'">

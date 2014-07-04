@@ -6,7 +6,6 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System.Diagnostics;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.InteropServices;
 
 namespace PA.Converters.Extensions
@@ -38,7 +37,7 @@ namespace PA.Converters.Extensions
                     }
                     catch (Exception e)
                     {
-                        Trace.TraceError(e.Message + "\n" + e.StackTrace);
+                        Debug.WriteLine(e.Message + "\n" + e.StackTrace);
                     }
                 }
 
@@ -54,7 +53,7 @@ namespace PA.Converters.Extensions
                         }
                         catch (Exception e)
                         {
-                            Trace.TraceError(e.Message + "\n" + e.StackTrace);
+                            Debug.WriteLine(e.Message + "\n" + e.StackTrace);
                         }
                     }
                 }

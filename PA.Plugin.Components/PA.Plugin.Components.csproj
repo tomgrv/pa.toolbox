@@ -14,6 +14,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <ReleaseVersion>4.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,18 +39,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>PA.Toolbox.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">net20</MinFramework>
-    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 3.5 ">net35</MinFramework>
-    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.0 ">net40</MinFramework>
-    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition, Version=2010.2.11.1, Culture=neutral, processorArchitecture=MSIL" Condition="$(MinFramework) == net35">
-      <HintPath>..\packages\System.ComponentModel.Composition.2010.2.11.1\lib\net35\System.ComponentModel.Composition.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" Condition="$(MinFramework) == net40" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
@@ -149,19 +141,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Configuration\PA.Configuration.csproj">
-      <Project>{40fa1f2a-3b4e-470b-87ca-d8b3792f3e8a}</Project>
+      <Project>{40FA1F2A-3B4E-470B-87CA-D8B3792F3E8A}</Project>
       <Name>PA.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.Converters\PA.Converters.csproj">
-      <Project>{b09f91a1-df25-4dae-8e45-40df0fa9334f}</Project>
+      <Project>{B09F91A1-DF25-4DAE-8E45-40DF0FA9334F}</Project>
       <Name>PA.Converters</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
-      <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
+      <Project>{AC454838-BC18-4852-9EAA-1D2E4E72F711}</Project>
       <Name>PA.Plugin.Operations</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
-      <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
+      <Project>{557ACE88-A58E-48AB-B7CF-07925CA98530}</Project>
       <Name>PA.Plugin</Name>
     </ProjectReference>
   </ItemGroup>

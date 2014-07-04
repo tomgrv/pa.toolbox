@@ -435,7 +435,7 @@ namespace PA.TileList.Quadrant
 
         public static void Fill<T, U>(this IQuadrant<T> zl, ushort SizeX, ushort SizeY, U motif, Quadrant q = Quadrant.Array, double ShiftX = 0, double ShiftY = 0)
             where T : class,ICoordinate
-            where U : T, ICloneable
+            where U : T
         {
 
             int StartX;
@@ -492,9 +492,8 @@ namespace PA.TileList.Quadrant
             }
         }
 
-        public static void Fill<T, U>(this IQuadrant<T> zl, IArea a, U motif, Quadrant q)
+        public static void Fill<T>(this IQuadrant<T> zl, IArea a, Func<ICoordinate, T> filler, Quadrant q)
             where T : class,ICoordinate
-            where U : T, ICloneable
         {
             for (int i = a.Min.X; i <= a.Max.X; i++)
             {
@@ -507,7 +506,7 @@ namespace PA.TileList.Quadrant
                         zl.Remove(item);
                     }
 
-                    T clone = (T)motif.Clone();
+                    T clone = (T)filler(new Coordinate(i,j));
                     clone.X = i;
                     clone.Y = j;
 
@@ -530,7 +529,7 @@ namespace PA.TileList.Quadrant
 
         public static T Contextualize<R, T>(this R zl, T item, IArea a = null)
             where R : IQuadrant<T>, ICoordinate
-            where T : ICoordinate, ICloneable
+            where T : ICoordinate
         {
             if (a == null) { a = zl.GetArea(); }
 
@@ -612,7 +611,7 @@ namespace PA.TileList.Quadrant
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error in Tile<T>.ToArray(): " + e.Message);
+                    System.Diagnostics.Debug.WriteLine("Error in Tile<T>.ToArray(): " + e.Message);
                 }
             }
 

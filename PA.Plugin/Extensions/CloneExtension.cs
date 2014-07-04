@@ -8,11 +8,11 @@ using System.Runtime.Serialization;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace PA.TileList.Extensions
+namespace PA.Clone.Extensions
 {
     public static class CloneExtensions
     {
-        public static U DeepClone<U>(this U source) where U : class, ISerializable
+        public static U DeepClone<U>(this U source) where U : class, ICloneable
         {
             using (MemoryStream stream = new MemoryStream())
             {

@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A717A9F8-AEA4-4B9A-A0BA-8E6D0C856AEE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -15,6 +13,7 @@
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ReleaseVersion>4.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,7 +88,7 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -132,11 +131,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Plugin.Components\PA.Plugin.Components.csproj">
-      <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
+      <Project>{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE}</Project>
       <Name>PA.Plugin.Components</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
-      <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
+      <Project>{557ACE88-A58E-48AB-B7CF-07925CA98530}</Project>
       <Name>PA.Plugin</Name>
     </ProjectReference>
   </ItemGroup>

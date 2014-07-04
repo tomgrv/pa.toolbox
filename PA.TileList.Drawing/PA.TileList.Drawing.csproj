@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,15 +64,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.TileList.Extensions\PA.TileList.Extensions.csproj">
-      <Project>{a16e749b-7556-41bd-a9b9-253b3253578c}</Project>
+      <Project>{A16E749B-7556-41BD-A9B9-253B3253578C}</Project>
       <Name>PA.TileList.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.TileList.Geometrics\PA.TileList.Geometrics.csproj">
-      <Project>{b64bcac4-3bd8-414d-8f5c-f55728fa109e}</Project>
+      <Project>{B64BCAC4-3BD8-414D-8F5C-F55728FA109E}</Project>
       <Name>PA.TileList.Geometrics</Name>
     </ProjectReference>
     <ProjectReference Include="..\PA.TileList\PA.TileList.csproj">
-      <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
+      <Project>{5B4FACE3-DDB3-4EAA-985A-9DE4AAC34A91}</Project>
       <Name>PA.TileList</Name>
     </ProjectReference>
   </ItemGroup>
