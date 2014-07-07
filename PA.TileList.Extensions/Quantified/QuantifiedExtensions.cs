@@ -57,7 +57,7 @@ namespace PA.TileList.Quantified
              where T : ICoordinate
         {
             return list.GetArea().FirstOrDefault(c =>
-                list.Corners(c, 2, 1, (xc, yc) =>
+                list.Corners(c, 1, (xc, yc) =>
                     Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == p);
         }
 
@@ -69,8 +69,13 @@ namespace PA.TileList.Quantified
             double maxX =  Math.Max(x1,x2);
             double maxY =  Math.Max(y1,y2);
 
+            double resX = Math.Min((maxX - minX) / list.ElementSizeX, 1);
+            double resY = Math.Min((maxY - minY) / list.ElementSizeY, 1);
+
+            double res =  Math.Min(resX,resY);
+
             return list.GetArea().Where(c =>
-                list.Corners(c, 2, 1, (xc, yc) =>
+                list.Corners(c, res, (xc, yc) =>
                     xc >= minX && xc <= maxX && yc >= minY && yc <= maxY) >= (strict ? 4 : 1));
         }
 
@@ -83,7 +88,7 @@ namespace PA.TileList.Quantified
             double maxY = Math.Max(y1, y2);
 
             return list.Where(c =>
-                list.Corners(c, 2, 1, (xc, yc) => 
+                list.Corners(c, 1, (xc, yc) => 
                     xc >= minX && xc <= maxX && yc >= minY && yc <= maxY) >= (strict ? 4 : 1));
         }
 
@@ -91,15 +96,16 @@ namespace PA.TileList.Quantified
              where T : ICoordinate
         {
             return list.FirstOrDefault(e => 
-                list.Corners(e, 2, 1, (xc, yc) => 
+                list.Corners(e, 1, (xc, yc) => 
                     Math.Abs(xc - x) < list.ElementStepX && Math.Abs(yc - y) < list.ElementStepY) == 4);
 
         }
 
-        internal static int Corners<T>(this IQuantifiedTile<T> tile, ICoordinate c, int steps, float resolution, Func<double, double, bool> predicate)
+        internal static int Corners<T>(this IQuantifiedTile<T> tile, ICoordinate c, double resolution, Func<double, double, bool> predicate)
             where T : ICoordinate
         {
             int points = 0;
+            int steps = (int)Math.Round(1 / resolution + 1, 0);
 
             double[] testY = new double[steps];
             double[] testY2 = new double[steps];
