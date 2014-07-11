@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PA.TileList.Circular
+namespace PA.TileList.Geometrics.Circular
 {
     public class CircularProfile
     {

@@ -5,8 +5,9 @@ using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Drawing;
 using PA.File.Extensions;
+using UnitTests.TileList;
 using System.Drawing;
-using PA.TileList.Circular;
+using PA.TileList.Geometrics.Circular;
 using System.IO;
 
 namespace UnitTests.TileList.Extensions
@@ -49,6 +50,42 @@ namespace UnitTests.TileList.Extensions
  
             Assert.AreEqual(item.X, coord.X);
             Assert.AreEqual(item.Y, coord.Y);
+        }
+
+        [TestMethod]
+        public void CoordinatesIn()
+        {
+            Tile<TileTests.Item> t0 = new Tile<TileTests.Item>(new Area(0, 0, 100, 100), new TileTests.Item(0, 0, Color.Red));
+            t0.Fill(c => c.X > 25 && c.X < 75 && c.Y > 30 && c.Y < 60 ? new TileTests.Item(c.X, c.Y, c.X == c.Y ? Color.Yellow : Color.Green) : new TileTests.Item(c.X, c.Y, Color.Red));
+
+            IQuantifiedTile<TileTests.Item> q0 = t0.AsQuantified(10, 10);
+
+            string signature0 = q0.GetImage(1000, 1000, z =>
+                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+
+            foreach (ICoordinate c in q0.GetCoordinatesIn(250, 250, 600, 600))
+            {
+                t0.Find(c).Color = Color.Blue;
+            }
+
+            string signature1 = q0.GetImage(1000, 1000, z =>
+                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+
+            foreach (ICoordinate c in q0.GetCoordinatesIn(52, 52, 62, 62))
+            {
+                t0.Find(c).Color = Color.White;
+            }
+
+            string signature2 = q0.GetImage(1000, 1000, z =>
+                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+
+            foreach (ICoordinate c in q0.GetCoordinatesIn(12, 12, 13, 13))
+            {
+                t0.Find(c).Color = Color.Black;
+            }
+
+            string signature3 = q0.GetImage(1000, 1000, z =>
+                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
         }
 
         [TestMethod]
