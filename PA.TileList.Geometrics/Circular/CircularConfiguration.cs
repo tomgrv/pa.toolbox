@@ -21,7 +21,7 @@ namespace PA.TileList.Geometrics.Circular
         public float Resolution { get; private set; }
         
         /// <summary>
-        /// Percentage to be under
+        /// Percentage of surface considered (1f = 100% = all surface)
         /// </summary>
         public float Tolerance { get; private set; }
 

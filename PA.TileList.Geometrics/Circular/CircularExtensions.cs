@@ -41,7 +41,7 @@ namespace PA.TileList.Geometrics.Circular
                     {
                         return mix = false;
                     }
-                    else if (r2 < minRadius2)
+                    else if (r2 < minRadius2 * 0.8f)
                     {
                         return mix = true;
                     }
@@ -78,7 +78,7 @@ namespace PA.TileList.Geometrics.Circular
                         }
                         else
                         {
-                            double angle = Math.Atan2(-testY, testX);
+                            double angle = Math.Atan2(testY, testX);
                             CircularProfile.ProfileStep last = profile.Where(ps => ps.Angle < angle).LastOrDefault() ?? first;
                             return r2 < Math.Pow(last.Radius, 2);
                         }
