@@ -26,8 +26,8 @@ namespace PA.TileList.Geometrics.Circular
         public static IEnumerable<KeyValuePair<T, int>> Points<T>(this IQuantifiedTile<T> tile, CircularProfile p, CircularConfiguration config, Func<T, bool> predicate = null)
            where T : ICoordinate
         {
-            double minRadius2 = Math.Pow(p.GetMinRadius(), 2);
-            double maxRadius2 = Math.Pow(p.GetMaxRadius(), 2);
+            double minRadius2 = Math.Pow((double) p.GetMinRadius(), 2);
+            double maxRadius2 = Math.Pow((double) p.GetMaxRadius(), 2);
             CircularProfile.ProfileStep first = p.GetFirst();
             CircularProfile.ProfileStep[] profile = p.Profile.ToArray();
             bool mix = true;
@@ -78,9 +78,9 @@ namespace PA.TileList.Geometrics.Circular
                         }
                         else
                         {
-                            double angle = Math.Atan2(-testY, testX);
+                            double angle = Math.Atan2(testY, testX);
                             CircularProfile.ProfileStep last = profile.Where(ps => ps.Angle < angle).LastOrDefault() ?? first;
-                            return r2 < Math.Pow(last.Radius, 2);
+                            return r2 < Math.Pow((double) last.Radius, 2);
                         }
 
                     });

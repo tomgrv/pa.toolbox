@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTests</RootNamespace>
     <AssemblyName>UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -43,17 +43,10 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup>
-    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 2.0 ">net20</MinFramework>
-    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 3.5 ">net35</MinFramework>
-    <MinFramework Condition=" $(TargetFrameworkVersion.Replace('v', '')) &gt;= 4.0 ">net40</MinFramework>
-    <OutputPath>bin\$(Configuration)\$(TargetFrameworkVersion)</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.ComponentModel.Composition, Version=2010.2.11.1, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.Composition" />
   </ItemGroup>
   <Choose>
@@ -134,10 +127,6 @@
     <ProjectReference Include="..\..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
       <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
       <Name>PA.Plugin.Operations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin.Thread\PA.Plugin.Threads.csproj">
-      <Project>{96daeb75-b658-4d5e-83b5-55745dd983d2}</Project>
-      <Name>PA.Plugin.Threads</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>

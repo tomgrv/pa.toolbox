@@ -9,15 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PA.TileList</RootNamespace>
     <AssemblyName>PA.TileList.Extensions</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\WMT_Wafermap\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <ReleaseVersion>4.0</ReleaseVersion>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile92</TargetFrameworkProfile>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -54,9 +52,9 @@
     <Compile Include="..\common\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Contextual\Contextual.cs" />
-    <Compile Include="Contextual\IContextual.cs" />
-    <Compile Include="Contextual\ContextualExtensions.cs" />
+    <Compile Include="Extensions\Contextual\Contextual.cs" />
+    <Compile Include="Extensions\Contextual\IContextual.cs" />
+    <Compile Include="Extensions\Contextual\ContextualExtensions.cs" />
     <Compile Include="Extensions\CoordinateExtention.cs" />
     <Compile Include="Linear\LinearExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,11 +71,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.TileList\PA.TileList.csproj">
-      <Project>{5B4FACE3-DDB3-4EAA-985A-9DE4AAC34A91}</Project>
+      <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
       <Name>PA.TileList</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

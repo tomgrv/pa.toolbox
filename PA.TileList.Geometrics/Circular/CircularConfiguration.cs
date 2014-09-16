@@ -5,6 +5,9 @@ using System.Text;
 
 namespace PA.TileList.Geometrics.Circular
 {
+    /// <summary>
+    /// Parameters for circular operations
+    /// </summary>
     public class CircularConfiguration
     {
         [Flags]
@@ -21,12 +24,12 @@ namespace PA.TileList.Geometrics.Circular
         public float Resolution { get; private set; }
         
         /// <summary>
-        /// Percentage to be under
+        /// Percentage of surface considered (1f = 100% = all surface)
         /// </summary>
         public float Tolerance { get; private set; }
 
         /// <summary>
-        /// Calc stepping (based on resolution)
+        /// Nb of steps 
         /// </summary>
         public int Steps { get; private set; }
 
@@ -42,8 +45,36 @@ namespace PA.TileList.Geometrics.Circular
 
         public SelectionFlag SelectionType { get; private set; }
 
+        /// <summary>
+        /// Define CircularConfiguration with automatic resolution based on tolerance
+        /// </summary>
+        /// <param name="tolerance">Tolerance percentage for selectionType</param>
+        /// <param name="selectionType"></param>
+        public CircularConfiguration(float tolerance, SelectionFlag selectionType)
+        {
+            if (tolerance < 0 || tolerance > 1)
+                throw new ArgumentOutOfRangeException("Should be a percentage");
 
-        public CircularConfiguration(float tolerance, float resolution, SelectionFlag type)
+            this.Tolerance = tolerance;
+            this.Resolution = 1;
+            this.SelectionType = selectionType;
+
+            // Automatic resolution
+            double factor = tolerance;
+            while (Math.Floor(factor) != factor)
+            {
+                this.Resolution = this.Resolution / 10f;
+                factor = factor / 10f;
+            }
+
+            // Members
+            this.Steps = (int)Math.Round(1 / this.Resolution + 1, 0);
+            this.MaxSurface = this.Steps * this.Steps;
+            this.MinSurface = this.Tolerance * this.MaxSurface;
+        }
+
+        [Obsolete("Please use CircularConfiguration(float tolerance, SelectionFlag selectionType) as constructor")]
+        public CircularConfiguration(float tolerance, float resolution, SelectionFlag selectionType)
         {
             if (tolerance < 0 || tolerance > 1) 
                 throw new ArgumentOutOfRangeException("Should be a percentage");
@@ -53,7 +84,7 @@ namespace PA.TileList.Geometrics.Circular
 
             this.Tolerance = tolerance;
             this.Resolution = resolution;
-            this.SelectionType = type;
+            this.SelectionType = selectionType;
 
             this.Steps = (int)Math.Round(1 / this.Resolution + 1, 0);
             this.MaxSurface = this.Steps * this.Steps;
