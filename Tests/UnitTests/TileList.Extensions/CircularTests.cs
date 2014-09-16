@@ -128,7 +128,7 @@ namespace UnitTests.Drawing
             Assert.AreEqual("E63318A4278EED31907E0374B728F045285D43B6FBE0955A1622BFCFBB7AF5B8", signature, "Image hash");
         }
 
-        private CircularProfile GetTestProfile(float radius, double stepping = 1f, double resolution = 1f)
+        private CircularProfile GetTestProfile(decimal radius, double stepping = 1f, double resolution = 1f)
         {
             CircularProfile p = new CircularProfile(radius);
 

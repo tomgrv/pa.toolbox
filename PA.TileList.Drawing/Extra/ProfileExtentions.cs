@@ -79,10 +79,10 @@ namespace PA.TileList.Drawing
 
                     if (Math.Round(last.Radius ) != Math.Round(current.Radius))
                     {
-                        double x1 = offsetX + last.Radius * Math.Cos(current.Angle);
-                        double y1 = offsetY - last.Radius * Math.Sin(current.Angle);
-                        double x2 = offsetX + current.Radius * Math.Cos(current.Angle);
-                        double y2 = offsetY - current.Radius * Math.Sin(current.Angle);
+                        double x1 = offsetX + (double)last.Radius * Math.Cos(current.Angle);
+                        double y1 = offsetY - (double)last.Radius * Math.Sin(current.Angle);
+                        double x2 = offsetX + (double)current.Radius * Math.Cos(current.Angle);
+                        double y2 = offsetY - (double)current.Radius * Math.Sin(current.Angle);
                         g.DrawLine(Pens.Orange, (float)x1, (float)y1, (float)x2, (float)y2);
                     }
 
