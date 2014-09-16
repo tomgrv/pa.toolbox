@@ -203,7 +203,6 @@ Global
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|x64.ActiveCfg = Release|Any CPU
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
