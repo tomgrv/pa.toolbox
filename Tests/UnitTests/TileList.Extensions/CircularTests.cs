@@ -19,7 +19,7 @@ namespace UnitTests.Drawing
     [TestClass]
     public class CircularTests
     {
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void ProfileWith0()
         {
             CircularProfile search = new CircularProfile(1000);
@@ -35,8 +35,8 @@ namespace UnitTests.Drawing
             string signature = search.GetImage(1000, 1000).Item.GetSignature();
             Assert.AreEqual("98AE8580E2596469A774C97BEE234564E96281C519BFFED621FBB8CC2A63F6D8", signature, "Image hash");
         }
-          
-        [TestMethod]
+
+        [TestMethod, TestCategory("Image hash")]
         public void ProfileWithFlat()
         {
             CircularProfile search = new CircularProfile(1000);
@@ -51,7 +51,7 @@ namespace UnitTests.Drawing
             Assert.AreEqual("EED4365394FDB98CE5A4566244C50FA9925A28F54F8561533295FAC5E4B91FE4", signature, "Image hash");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void Profile()
         {
             CircularProfile p = new CircularProfile(1500);
@@ -73,7 +73,7 @@ namespace UnitTests.Drawing
             Assert.AreEqual("DAA3296DC2EE2A6682DFFBD8425ED029E34004676D6AB80E67DBB691E85CD2E0", signature, "Image hash");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void SelectionSmallTile()
         {
             float factor = 1f;
@@ -100,7 +100,7 @@ namespace UnitTests.Drawing
             Assert.AreEqual("ADE22DBF99F378AEE20F993BF51705756AFFF2539CA8D6CC5CCA7266C9F2B551", signature, "Image hash");
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void SelectionMediumTile()
         {
             float factor = 5f;

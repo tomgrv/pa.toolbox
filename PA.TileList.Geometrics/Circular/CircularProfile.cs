@@ -8,7 +8,7 @@ namespace PA.TileList.Geometrics.Circular
     // Describe a circular profile
     public class CircularProfile
     {
-        public decimal Radius { get; private set; }
+        public double Radius { get; private set; }
 
         /// <summary>
         /// Describe a circular profile step
@@ -23,7 +23,7 @@ namespace PA.TileList.Geometrics.Circular
             /// <summary>
             /// Distance from center 
             /// </summary>
-            public decimal Radius { get; internal set; }
+            public double Radius { get; internal set; }
 
             internal ProfileStep(ProfileStep s)
             {
@@ -31,7 +31,7 @@ namespace PA.TileList.Geometrics.Circular
                 this.Radius = s.Radius;
             }
 
-            public ProfileStep(double angle, decimal radius)
+            public ProfileStep(double angle, double radius)
             {
                 while (angle < -Math.PI)
                 {
@@ -49,7 +49,7 @@ namespace PA.TileList.Geometrics.Circular
 
             public override string ToString()
             {
-                return "[" + this.Angle + "° ;" + this.Radius + "]";
+                return  this.Angle + "°," + this.Radius ;
             }
         }
 
@@ -71,7 +71,7 @@ namespace PA.TileList.Geometrics.Circular
             }
         }
 
-        public CircularProfile(decimal radius)
+        public CircularProfile(double radius)
         {
             this.Radius = radius;
             this.ResetProfile();
@@ -89,17 +89,17 @@ namespace PA.TileList.Geometrics.Circular
             return last;
         }
 
-        public decimal GetMinRadius()
+        public double GetMinRadius()
         {
             return this.Profile.Min<ProfileStep>(p => p.Radius);
         }
 
-        public decimal GetMaxRadius()
+        public double GetMaxRadius()
         {
             return this.Profile.Max<ProfileStep>(p => p.Radius);
         }
 
-        public decimal GetRadius()
+        public double GetRadius()
         {
             return this.Profile.Sum<ProfileStep>(p => p.Radius) / this.Profile.Count();
         }
@@ -129,7 +129,7 @@ namespace PA.TileList.Geometrics.Circular
         /// </summary>
         /// <param name="angle">Angle from which radius change (in radian)</param>
         /// <param name="radius">Radius of selection from specified angle to next step (to end of circle if last step)</param>
-        public void AddProfileStep(double angle, decimal radius)
+        public void AddProfileStep(double angle, double radius)
         {
             this.profile.Add(new ProfileStep(angle, radius));
 
@@ -141,17 +141,17 @@ namespace PA.TileList.Geometrics.Circular
         /// <param name="angle">Zone center angle</param>
         /// <param name="thickness">Radius delta relative to profile base radius for all zone</param>
         /// <param name="length">Zone length, centered on specified angle</param>
-        public void AddProfileZone(double angle, decimal thickness, decimal length)
+        public void AddProfileZone(double angle, double thickness, double length)
         {
-            double delta = Math.Atan2((double)(length / 2m), (double)this.Radius);
+            double delta = Math.Atan2(length / 2d, this.Radius);
 
             double angle_0 = angle - delta;
-            decimal rayon_0 = this.Radius - thickness;
+            double rayon_0 = this.Radius - thickness;
 
             this.AddProfileStep(angle_0, rayon_0);
 
             double angle_1 = angle + delta;
-            decimal rayon_1 = this.Radius;
+            double rayon_1 = this.Radius;
 
             this.AddProfileStep(angle_1, rayon_1);
         }
@@ -164,16 +164,16 @@ namespace PA.TileList.Geometrics.Circular
         /// <param name="length">Flat lenght, centered on specified angle</param>
         /// <param name="step">Calculation step (Profile is curved between each step)</param> 
         /// <param name="resolution">Calculation step (Profile is curved between each step)</param>
-        public void AddProfileFlatByThickness(double angle, decimal thickness, double step = 1f, double resolution = 1f)
+        public void AddProfileFlatByThickness(double angle, double thickness, double step = 1f, double resolution = 1f)
         {
             // Rayon central
-            decimal r0 = this.Radius - thickness;
+            double r0 = this.Radius - thickness;
 
             // Arc de demi-flat
-            double delta_flat = Math.Acos((double)(r0 / this.Radius));
+            double delta_flat = Math.Acos(r0 / this.Radius);
 
             // flat
-            decimal length = 2 * this.Radius * (decimal) Math.Sin(delta_flat);
+            double length = 2 * this.Radius * Math.Sin(delta_flat);
 
             this.AddProfileFlat(angle, r0, length, step, resolution);
         }
@@ -186,13 +186,13 @@ namespace PA.TileList.Geometrics.Circular
         /// <param name="length">Flat lenght, centered on specified angle</param>
         /// <param name="step">Calculation step (Profile is curved between each step)</param>
         /// <param name="resolution">Calculation step (Profile is curved between each step)</param>
-        public void AddProfileFlatByLength(double angle, decimal length, double step = 1f, double resolution = 1f)
+        public void AddProfileFlatByLength(double angle, double length, double step = 1f, double resolution = 1f)
         {
             // Arc de demi-flat
-            double delta_flat = Math.Atan2((double)(length / 2m), (double) this.Radius);
+            double delta_flat = Math.Atan2(length / 2d,this.Radius);
 
             // Rayon central
-            decimal r0 = (decimal) Math.Cos(delta_flat) * this.Radius;
+            double r0 = Math.Cos(delta_flat) * this.Radius;
 
             this.AddProfileFlat(angle, r0, length, step, resolution);
         }
@@ -205,18 +205,18 @@ namespace PA.TileList.Geometrics.Circular
         /// <param name="length">Flat lenght, centered on specified angle</param>
         /// <param name="step">Calculation step (Profile is curved between each step)</param>
         /// <param name="resolution">Calculation step (Profile is curved between each step)</param>
-        public void AddProfileFlat(double angle, decimal radius, decimal length, double step = 1f, double resolution = 1f)
+        public void AddProfileFlat(double angle, double radius, double length, double step = 1f, double resolution = 1f)
         {
             // Arc de demi-flat
-            double delta_flat = Math.Atan2((double)(length / 2m), (double)this.Radius);
+            double delta_flat = Math.Atan2(length / 2d, this.Radius);
 
             // Rayon orthogonal au flat, corrigé selon la bordure
-            decimal r0 = radius;
+            double r0 = radius;
 
-            double delta = Math.Atan2(step, (double)this.Radius) * resolution;
+            double delta = Math.Atan2(step, this.Radius) * resolution;
 
             double angle_0;
-            decimal rayon_0;
+            double rayon_0;
 
             // Nb de points de calcul
             int steps = (int)Math.Round(delta_flat / delta);
@@ -225,7 +225,7 @@ namespace PA.TileList.Geometrics.Circular
             for (int s = -steps; s < 0; s++)
             {
                 angle_0 = angle + s * delta;
-                rayon_0 = r0 / (decimal) Math.Cos(angle_0 - angle);
+                rayon_0 = r0 /  Math.Cos(angle_0 - angle);
 
                 this.AddProfileStep(angle_0, rayon_0);
             }
@@ -235,7 +235,7 @@ namespace PA.TileList.Geometrics.Circular
             for (int s = 0; s < steps; s++)
             {
                 angle_0 = angle + s * delta;
-                rayon_0 = r0 / (decimal) Math.Cos(angle_0 - angle + delta);
+                rayon_0 = r0 / Math.Cos(angle_0 - angle + delta);
 
                 this.AddProfileStep(angle_0, rayon_0);
             }

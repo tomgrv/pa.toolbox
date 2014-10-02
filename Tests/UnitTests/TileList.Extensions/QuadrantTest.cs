@@ -18,7 +18,7 @@ namespace UnitTests
     [TestClass]
     public class QuadrantTest
     {
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void ChangeQuadrant()
         {
             float factor = 1;

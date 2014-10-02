@@ -124,7 +124,7 @@ namespace UnitTests.TileList
 
         #endregion
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void Crop()
         {
             Tile<Item> t0 = new Tile<Item>(new Area(0, 0, 100, 100), new Item(0, 0, Color.Red));

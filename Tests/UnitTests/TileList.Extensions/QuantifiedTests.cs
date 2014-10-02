@@ -15,7 +15,7 @@ namespace UnitTests.TileList.Extensions
     [TestClass]
     public class QuantifiedTests
     {
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void FirstOrDefault()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);
@@ -88,7 +88,7 @@ namespace UnitTests.TileList.Extensions
                 z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void Rulers()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);
