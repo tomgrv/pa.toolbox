@@ -87,10 +87,10 @@ namespace UnitTests.Drawing
 
             bool change = true;
 
-            IQuantifiedTile<IContextual<TileTests.Item>> q = tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside), ref change);
+            IQuantifiedTile<IContextual<TileTests.Item>> q = tile.Take(p, new CircularConfiguration(1f, 0.5f, CircularConfiguration.SelectionFlag.Inside), ref change);
 
             Assert.AreEqual(false, change, "Reference Changed");
-            Assert.AreEqual(1800, q.Count(), "Selected item count");
+            Assert.AreEqual(1799, q.Count(), "Selected item count");
 
             RectangleD<Bitmap> pi = p.GetImage(1000, 1000, tile.GetBounds());
 
@@ -128,7 +128,7 @@ namespace UnitTests.Drawing
             Assert.AreEqual("E63318A4278EED31907E0374B728F045285D43B6FBE0955A1622BFCFBB7AF5B8", signature, "Image hash");
         }
 
-        private CircularProfile GetTestProfile(decimal radius, double stepping = 1f, double resolution = 1f)
+        private CircularProfile GetTestProfile(double radius, double stepping = 1f, double resolution = 1f)
         {
             CircularProfile p = new CircularProfile(radius);
 
