@@ -107,10 +107,10 @@ namespace UnitTests.TileList
             Item t2 = new Item(1, 1, Color.Green);
 
             SubTile t1 = new SubTile(a1, t2);
-            t1.Fill<Item>(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
+            t1.Fill(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
 
             MainTile t0 = new MainTile(a0, t1);
-            t0.Fill<SubTile>(c => t1.Clone() as SubTile);
+            t0.Fill(c => t1.Clone() as SubTile);
 
             t0.ElementSizeX = 50f / factor * a1.SizeX;
             t0.ElementSizeY = 50f / factor * a1.SizeY;
