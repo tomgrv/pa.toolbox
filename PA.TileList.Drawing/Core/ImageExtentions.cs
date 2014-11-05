@@ -144,8 +144,8 @@ namespace PA.TileList.Drawing
 
             foreach (T e in c)
             {
-                RectangleF inner = new RectangleF(bounds.Left + p.Inner.Left + (e.X - c.Area.Min.X) * p.Outer.Width, bounds.Top + p.Inner.Top + (e.Y - c.Area.Min.Y) * p.Outer.Height, p.Inner.Width, p.Inner.Width);
-                RectangleF outer = new RectangleF(bounds.Left + p.Outer.Left + (e.X - c.Area.Min.X) * p.Outer.Width, bounds.Top + p.Outer.Top + (e.Y - c.Area.Min.Y) * p.Outer.Height, p.Outer.Width, p.Outer.Width);
+                RectangleF inner = new RectangleF(bounds.Left + p.Inner.Left + (e.X - c.Area.Min.X) * p.Outer.Width, bounds.Top + p.Inner.Top + (e.Y - c.Area.Min.Y) * p.Outer.Height, p.Inner.Width, p.Inner.Height);
+                RectangleF outer = new RectangleF(bounds.Left + p.Outer.Left + (e.X - c.Area.Min.X) * p.Outer.Width, bounds.Top + p.Outer.Top + (e.Y - c.Area.Min.Y) * p.Outer.Height, p.Outer.Width, p.Outer.Height);
 
                 if ((mode & ScaleMode.EXACTPIXEL) == ScaleMode.EXACTPIXEL)
                 {
