@@ -21,5 +21,10 @@ namespace PA.TileList.Contextual
         {
             return base.ToString() + " [" + this.Context.ToString() + "]";
         }
+
+        public static IContextual<T> FromContext(T e)
+        {
+            return new Contextual<T>(e.X, e.Y, e);
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace PA.TileList.Contextual
 {
     public static class ContextualExtensions
     {
+        #region Contextualize
+
         public static IContextual<T> Contextualize<T>(this ITile t, T item)
           where T : ICoordinate
         {
@@ -29,14 +31,9 @@ namespace PA.TileList.Contextual
             return new Contextual<T>(item.X + t.X * sizeX, item.Y + t.Y * sizeY, item);
         }
 
-        public static IEnumerable<T> ToContext<T>(this IEnumerable<IContextual<T>> t)
-           where T : ICoordinate
-        {
-            foreach (IContextual<T> c in t)
-            {
-                yield return c.Context;
-            }
-        }
+        #endregion
+
+        #region Flatten
 
         public static IQuantifiedTile<IContextual<T>> Flatten<U, T>(this IQuantifiedTile<U> t, Func<U, bool> predicate = null)
             where U : ITile<T>
@@ -86,5 +83,7 @@ namespace PA.TileList.Contextual
             tile.SetReference(tile.Find(reference.X, reference.Y));
             return tile;
         }
+
+        #endregion
     }
 }
