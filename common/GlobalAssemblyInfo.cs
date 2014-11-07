@@ -9,7 +9,7 @@
 
 [assembly: AssemblyCompany("PerspicApps")]
 [assembly: AssemblyProduct("PA.Toolbox")]
-[assembly: AssemblyCopyright("©PA 2013")]
+[assembly: AssemblyCopyright("©PA 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
