@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
 using PA.TileList.Drawing;
 using PA.TileList.Quantified;
+using PA.TileList.Extensions;
 using System.Drawing;
 using UnitTests.TileList;
 
@@ -23,11 +24,11 @@ namespace UnitTests.Drawing
                 t2
                 .AsQuantified((int)(50 / factor), (int)(50 / factor), (int)(55 / factor), (int)(55 / factor))
                 .GetImage(1000, 1000,
-                 p1 => AjouterDetourage(
-                     p1.Item
+                 (p1,s1) => AjouterDetourage(
+                     p1
                      .AsQuantified()
                      .GetImage(100, 100,
-                        p2 => p2.Item.ToBitmap(20, 20, p2.Item.X + "|" + p2.Item.Y)
+                        (p2, s2) => p2.ToBitmap(20, 20, p2.X + "|" + p2.Y)
                      ).Item
                     )
                 ).Item
