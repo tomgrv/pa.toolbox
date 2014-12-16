@@ -4,6 +4,8 @@ obj/
 *.pidb
 *.exe
 *.nupkg
+
+# Chutzpah Test files
 *.user
 *.suo
 *.dll
