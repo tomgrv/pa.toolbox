@@ -8,7 +8,7 @@
 
   <Target Name="SetAssemblyInfo" >
 
-    <Message Text="Updating AssemblyInfo to Version $(Version)$(VersionSuffix)" />
+    <Message Text="Updating AssemblyInfo to Version $(Version-File)$(VersionSuffix)" />
 
     <ItemGroup>
       <Compile Include="$(GeneratedAssemblyInfoFile)" />
@@ -17,11 +17,10 @@
     <AssemblyInfo
       CodeLanguage="CS"
       OutputFile="$(GeneratedAssemblyInfoFile)"
-      AssemblyVersion="$(Version)"
+      AssemblyVersion="$(Version-Main)"
       AssemblyFileVersion="$(Version-File)"
-      AssemblyInformationalVersion="$(Version-File)-$(Version-Suffix)-$(GitBranch)-$(CommitHash), built $(Version-BuildTime) UTC on $(BuildMachineName) $(DependentTargetsFound)" />
+      AssemblyInformationalVersion="$(Version-Major).$(Version-Minor).$(Version-Build)-$(Version-Suffix)" />
 
-  
   </Target>
 
   <Target Name="SetAssemblyInfoClean" Condition="Exists($(GeneratedAssemblyInfoFile))">

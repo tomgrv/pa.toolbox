@@ -8,10 +8,11 @@
 
   <Target Name="SetAssemblyNuspec"  Condition="Exists('$(NuSpecFile)')">
 
-    <Message Text="Updating $(NuSpecFile) to Version $(Version)-$(Version-Suffix)" />
+    <Message Text="Updating $(NuSpecFile) to Version $(Version-Major).$(Version-Minor).$(Version-Build)-$(Version-Suffix)" />
 
     <XmlUpdate XmlFileName="$(NuSpecFile)" XPath="/package/metadata/id" Value="$(MsBuildProjectName)" />
-    <XmlUpdate XmlFileName="$(NuSpecFile)" XPath="/package/metadata/version" Value="$(Version)-$(Version-Suffix)" />
+    <XmlUpdate Condition="$(GitBranch) != 'master'" XmlFileName="$(NuSpecFile)" XPath="/package/metadata/version" Value="$(Version-Major).$(Version-Minor).$(Version-Build)-$(Version-Suffix)" />
+    <XmlUpdate Condition="$(GitBranch) == 'master'" XmlFileName="$(NuSpecFile)" XPath="/package/metadata/version" Value="$(Version-Major).$(Version-Minor).$(Version-Build)" />
     
   </Target>
 
