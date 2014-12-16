@@ -2,7 +2,7 @@
 using PA.TileList.Contextual;
 using PA.TileList.Extensions;
 using PA.TileList.Quantified;
-using PA.TileList.Geometrics.Line;
+using PA.TileList.Geometrics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,28 +14,67 @@ namespace PA.TileList.Geometrics
     {
         public enum Orientation
         {
-            ClockWise = -1,
-            CounterClockWise = 1,
-            Collinear = 0
+            ClockWise = 1,
+            Collinear = 0,
+            CounterClockWise = -1
         }
+
+       
 
         public static double DistanceTo<T>(this T p, ICoordinate q)
             where T : ICoordinate
         {
-            return Math.Sqrt(Math.Pow(p.X - q.X, 2) + Math.Pow(p.Y - q.Y, 2));
+            return Math.Sqrt(Math.Pow(q.X - p.X, 2) + Math.Pow(q.Y - p.Y, 2));
         }
 
-        public static Orientation GetOrientation<T>(this T b, T a, T c)
+        /// <summary>
+        /// Dot Product OA.OB
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static int GetDotProduct<T>(this T o, ICoordinate a, ICoordinate b)
+        where T : ICoordinate
+        {
+            return (a.X - o.X) * (b.X - o.X) + (a.Y - o.Y) * (b.Y - o.Y);
+        }
+
+
+        /// <summary>
+        /// Cross Product Magnitude |OAxOB|
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static double GetArea<T>(this T o, ICoordinate a, ICoordinate b)
+         where T : ICoordinate
+        {
+            return (o.X - a.X) * (b.Y - o.Y)  - (o.Y - a.Y) * (b.X - o.X);
+        }
+
+        /// <summary>
+        /// Determine whether or not a triangle has its vertices ordered clockwise or counterclockwise
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Orientation GetOrientation<T>(this T o, ICoordinate a, ICoordinate b)
             where T : ICoordinate
         {
-            double area2 = (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
+            double area2 = o.GetArea(a, b);
 
-            if (area2 < 0)
+            if (area2 > 0)
             {
                 return Orientation.ClockWise;
             }
 
-            if (area2 > 0)
+            if (area2 < 0)
             {
                 return Orientation.CounterClockWise;
             }
@@ -43,60 +82,20 @@ namespace PA.TileList.Geometrics
             return Orientation.Collinear;
         }
 
-        public static bool IsCollinear<T>(this T p, T q, T r)
+        /// <summary>
+        /// Determine whether or not OA and OB are Collinear
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool AreCollinear<T>(this T o, ICoordinate a, ICoordinate b)
             where T : ICoordinate
         {
-            return p.GetOrientation<T>(q, r) == Orientation.Collinear;
+            return o.GetOrientation<T>(a, b) == Orientation.Collinear;
         }
 
-        public static bool OnSegment<T>(this T p, Line<T> l)
-            where T : ICoordinate
-        {
-            return p.X <= Math.Max(l.Coordinate1.X, l.Coordinate2.X)
-                && p.X >= Math.Min(l.Coordinate1.X, l.Coordinate2.X)
-                && p.Y <= Math.Max(l.Coordinate1.Y, l.Coordinate2.Y)
-                && p.Y >= Math.Min(l.Coordinate1.Y, l.Coordinate2.Y);
-        }
-
-        public static bool IsInside<T>(this T p, T[] polygon)
-             where T : ICoordinate
-        {
-            // There must be at least 3 vertices in polygon[]
-            if (polygon.Length < 3)
-            {
-                throw new InvalidOperationException("At least 3 Coordinates needed in polygon");
-            }
-
-            // Create a point for line segment from p to infinite
-            Coordinate extreme = new Coordinate(int.MaxValue, p.Y);
-            Line<T> ray = new Line<T>(p, extreme);
-
-            // Count intersections of the above line with sides of polygon
-            int count = 0, i = 0;
-            do
-            {
-                int next = (i + 1) % polygon.Length;
-
-                Line<T> segment = new Line<T>(polygon[i], polygon[next]);
-
-                // Check if the line segment from 'p' to 'extreme' intersects
-                // with the line segment from 'polygon[i]' to 'polygon[next]'
-                if (segment.Intersect(ray))
-                {
-                    count++;
-                }
-                else if (p.IsCollinear(polygon[i], polygon[next]))
-                {
-                    return p.OnSegment(segment);
-                }
-
-                i = next;
-
-            } while (i != 0);
-
-            // Return true if count is odd, false otherwise
-            return count % 2 == 1;
-        }
 
         #region Translate
 

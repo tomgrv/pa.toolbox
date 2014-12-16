@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+
+    <GeneratedAssemblyInfoFile Condition=" '$(GeneratedAssemblyInfoFile)' == '' ">$(MsBuildProjectDirectory)\Properties\GeneratedAssemblyInfo.cs</GeneratedAssemblyInfoFile>
+  </PropertyGroup>
+
+  <Target Name="SetAssemblyInfo" >
+
+    <Message Text="Updating AssemblyInfo to Version $(Version)$(VersionSuffix)" />
+
+    <ItemGroup>
+      <Compile Include="$(GeneratedAssemblyInfoFile)" />
+    </ItemGroup>
+
+    <AssemblyInfo
+      CodeLanguage="CS"
+      OutputFile="$(GeneratedAssemblyInfoFile)"
+      AssemblyVersion="$(Version)"
+      AssemblyFileVersion="$(Version-File)"
+      AssemblyInformationalVersion="$(Version-File)-$(Version-Suffix)-$(GitBranch)-$(CommitHash), built $(Version-BuildTime) UTC on $(BuildMachineName) $(DependentTargetsFound)" />
+
+  
+  </Target>
+
+  <Target Name="SetAssemblyInfoClean" Condition="Exists($(GeneratedAssemblyInfoFile))">
+    <Delete Files="$(GeneratedAssemblyInfoFile)" />
+  </Target>
+</Project>

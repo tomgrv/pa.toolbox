@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+
+    <MSBuildCommunityTasksPath Condition=" '$(MSBuildCommunityTasksPath)' == '' ">$(SolutionDir)\packages\MSBuildTasks.1.4.0.78\tools</MSBuildCommunityTasksPath>
+    <DependentTargetsPath>$(SolutionDir).build\</DependentTargetsPath>
+    <DependentTargetsMask>_*.targets</DependentTargetsMask>
+    <BuildDependsOn>
+      BuildExtra;
+      $(BuildDependsOn)
+    </BuildDependsOn>
+    <CleanDependsOn>
+      $(CleanDependsOn);
+      BuildExtraClean
+    </CleanDependsOn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TargetsFound Include="$(DependentTargetsPath)_*.targets" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+  <!-- Workaround for missing task declaration in MSbuildTasks project (pull request already sent) -->
+  <UsingTask Condition="Exists($(MSBuildCommunityTasksLib))" AssemblyFile="$(MSBuildCommunityTasksLib)" TaskName="MSBuild.Community.Tasks.Git.GitBranch" />
+
+  <Target Name="BuildExtra"  DependsOnTargets="InitExtra;ProcessTarget"/>
+
+  <Target Name="ProcessTarget" Outputs="%(TargetsFound.Identity)"> 
+    <PropertyGroup>
+      <TargetFileName>%(TargetsFound.Filename)</TargetFileName>
+      <TargetName>$(TargetFileName.Substring(1))</TargetName>
+    </PropertyGroup>
+    <CallTarget  Targets="$(TargetName)"/>
+  </Target>
+
+  <Target Name="InitExtra" >
+
+    <GitVersion LocalPath="$(SolutionDir)">
+      <Output TaskParameter="CommitHash" PropertyName="CommitHash" />
+    </GitVersion>
+
+    <GitBranch LocalPath="$(SolutionDir)">
+      <Output TaskParameter="Branch" PropertyName="GitBranch" />
+    </GitBranch>
+
+    <Computer>
+      <Output TaskParameter="Name" PropertyName="BuildMachineName" />
+      <Output TaskParameter="OSPlatform" PropertyName="BuildMachineOSPlatform" />
+      <Output TaskParameter="OSVersion" PropertyName="BuildMachineOSVersion" />
+    </Computer>
+
+    <PropertyGroup>
+
+      <Version-Suffix Condition=" $(Configuration) != 'Release'">$(Configuration.ToLower())</Version-Suffix>
+
+      <Version-Major>0</Version-Major>
+      <Version-Minor>0</Version-Minor>
+      <Version-Build Condition=" '$(build_number)' == '' ">0</Version-Build>
+      <Version-Build Condition=" '$(build_number)' != '' ">$(BuildNumber)</Version-Build>
+      <Version-Revision Condition=" '$(revision_number)' == '' ">0</Version-Revision>
+      <Version-Revision Condition=" '$(revision_number)' != '' ">$(RevisionNumber)</Version-Revision>
+
+      <Version>$(Version-Major).$(Version-Minor).0.0</Version>
+      <Version-File>$(Version-Major).$(Version-Minor).$(Version-Build).$(Version-Revision)</Version-File>
+
+      <Version-BuildTime>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))</Version-BuildTime>
+    </PropertyGroup>
+
+    <Message Text="Determine assembly version: $(Version)-$(Version-Suffix)" />
+  </Target>
+
+  <Target Name="BuildExtraClean" Condition="Exists($(GeneratedAssemblyInfoFile))">
+  </Target>
+
+  <Import Project="$(DependentTargetsPath)$(DependentTargetsMask)" />
+</Project>

@@ -20,9 +20,8 @@ namespace PA.TileList.Drawing
 
         public static RectangleD<Bitmap> GetImage(this CircularProfile p, int width, int height)
         {
-            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height) , PointF.Empty, p.GetSize()));
+            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height), PointF.Empty, p.GetSize()));
         }
-
 
         /// <summary>
         /// Get profile centered in specified rectangleF
@@ -32,34 +31,42 @@ namespace PA.TileList.Drawing
         /// <param name="height"></param>
         /// <param name="inner"></param>
         /// <returns></returns>
-        public static RectangleD<Bitmap> GetImage(this CircularProfile p, int width, int height, RectangleF inner)
+        public static RectangleD<Bitmap> GetImage(this CircularProfile p, int width, int height, RectangleF outer)
         {
-            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height), inner, inner));
+            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height), outer, outer));
+        }
+
+        public static RectangleD<Bitmap> GetImage(this CircularProfile p, int width, int height, RectangleF outer, RectangleF inner)
+        {
+            return p.GetImage(new RectangleD<Bitmap>(new Bitmap(width, height), outer, inner));
         }
 
         public static RectangleD<U> GetImage<U>(this CircularProfile p, RectangleD<U> image, bool extra = true)
-            where U:Image
+            where U : Image
         {
-            float maxsize = (float)p.GetMaxRadius() * 2f;
-            float minsize = (float)p.GetMinRadius() * 2f;
-            float midsize = (float)p.Radius * 2f;
-            float offsetX = image.Inner.Left + image.Inner.Width / 2f;
-            float offsetY = image.Inner.Top + image.Inner.Height / 2f;
+            float scale = Math.Min((float)image.Item.Width / image.Outer.Width, (float)image.Item.Height / image.Outer.Height);
 
-            float resolution = Math.Min((float)image.Item.Width / image.Outer.Width, (float)image.Item.Height / image.Outer.Height);
+            RectangleF outerZone = new RectangleF(image.Outer.X * scale, image.Outer.Y * scale, image.Outer.Width * scale, image.Outer.Height * scale);
+            RectangleF innerZone = new RectangleF(image.Inner.X * scale, image.Inner.Y * scale, image.Inner.Width * scale, image.Inner.Height * scale);
+
+            float maxsize = scale * (float)p.GetMaxRadius() * 2f;
+            float minsize = scale * (float)p.GetMinRadius() * 2f;
+            float midsize = scale * (float)p.Radius * 2f;
+            float offsetX = innerZone.Left + innerZone.Width / 2f;
+            float offsetY = innerZone.Top + innerZone.Height / 2f;
 
             using (Graphics g = Graphics.FromImage(image.Item))
             {
-                g.ScaleTransform((float)image.Item.Width / image.Outer.Width, (float)image.Item.Height / image.Outer.Height);
-                g.TranslateTransform(-image.Outer.Left, -image.Outer.Top);
+                //g.ScaleTransform((float)image.Item.Width / image.Outer.Width, (float)image.Item.Height / image.Outer.Height);
+                g.TranslateTransform(-outerZone.Left, -outerZone.Top);
 
                 if (extra)
                 {
-                    g.DrawRectangle(Pens.Black, (int)image.Inner.Location.X, (int)image.Inner.Location.Y, (int)image.Inner.Width - 1, (int)image.Inner.Height - 1);
-                    g.DrawLine(Pens.Black, image.Inner.Left, offsetY, image.Inner.Right, offsetY);
-                    g.DrawLine(Pens.Black, offsetX, image.Inner.Top, offsetX, image.Inner.Bottom);
-                    g.DrawLine(Pens.Black, image.Inner.Left, image.Inner.Top, image.Inner.Right, image.Inner.Bottom);
-                    g.DrawLine(Pens.Black, image.Inner.Right, image.Inner.Top, image.Inner.Left, image.Inner.Bottom);
+                    g.DrawRectangle(Pens.Black, (int)innerZone.X, (int)innerZone.Y, (int)innerZone.Width - 1, (int)innerZone.Height - 1);
+                    g.DrawLine(Pens.Black, innerZone.Left, offsetY, innerZone.Right, offsetY);
+                    g.DrawLine(Pens.Black, offsetX, innerZone.Top, offsetX, innerZone.Bottom);
+                    g.DrawLine(Pens.Black, innerZone.Left, innerZone.Top, innerZone.Right, innerZone.Bottom);
+                    g.DrawLine(Pens.Black, innerZone.Right, innerZone.Top, innerZone.Left, innerZone.Bottom);
                     g.DrawEllipse(Pens.Blue, offsetX - maxsize / 2f, offsetY - maxsize / 2f, maxsize, maxsize);
                     g.DrawEllipse(Pens.Black, offsetX - midsize / 2f, offsetY - midsize / 2f, midsize, midsize);
                     g.DrawEllipse(Pens.Blue, offsetX - minsize / 2f, offsetY - minsize / 2f, minsize, minsize);
@@ -69,21 +76,23 @@ namespace PA.TileList.Drawing
 
                 foreach (CircularProfile.ProfileStep current in p.Profile)
                 {
-                    double ad = 180f * -last.Angle /  Math.PI;
-                    double sw = 180f * -(current.Angle - last.Angle) /Math.PI;
+                    double ad = 180f * -last.Angle / Math.PI;
+                    double sw = 180f * -(current.Angle - last.Angle) / Math.PI;
 
-                    if (last.Radius > 0)
+                    float lastRadius = scale * (float)last.Radius;
+
+                    if (lastRadius > 0)
                     {
-                        g.DrawArc(Pens.Red, offsetX - (float)last.Radius, offsetY - (float)last.Radius, (float)last.Radius * 2f, (float)last.Radius * 2f, (float)ad, (float)sw);
+                        g.DrawArc(Pens.Red, offsetX - lastRadius, offsetY -  lastRadius, lastRadius * 2f, lastRadius * 2f, (float)ad, (float)sw);
                     }
 
-                    if (Math.Round(last.Radius ) != Math.Round(current.Radius))
+                    if (Math.Round(lastRadius) != Math.Round(current.Radius))
                     {
-                        double x1 = offsetX + (double)last.Radius * Math.Cos(current.Angle);
-                        double y1 = offsetY - (double)last.Radius * Math.Sin(current.Angle);
-                        double x2 = offsetX + (double)current.Radius * Math.Cos(current.Angle);
-                        double y2 = offsetY - (double)current.Radius * Math.Sin(current.Angle);
-                        g.DrawLine(Pens.Orange, (float)x1, (float)y1, (float)x2, (float)y2);
+                        double x1 = offsetX + (double)lastRadius * Math.Cos(current.Angle);
+                        double y1 = offsetY - (double)lastRadius * Math.Sin(current.Angle);
+                        double x2 = offsetX + (double)scale * current.Radius * Math.Cos(current.Angle);
+                        double y2 = offsetY - (double)scale * current.Radius * Math.Sin(current.Angle);
+                        g.DrawLine(Pens.Orange,  (float)x1, (float)y1, (float)x2, (float)y2);
                     }
 
                     last = current;

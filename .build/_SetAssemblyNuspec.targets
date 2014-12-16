@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup>
+
+    <NuspecFile Condition=" '$(NuspecFileFile)' == '' And Exists('$(MsBuildProjectDirectory)\$(MsBuildProjectName).nuspec') ">$(MsBuildProjectDirectory)\$(MsBuildProjectName).nuspec</NuspecFile>
+    <NuspecFile Condition=" '$(NuspecFileFile)' == '' And Exists('$(MsBuildProjectDirectory)\package.nuspec') ">$(MsBuildProjectDirectory)\package.nuspec</NuspecFile>
+  </PropertyGroup>
+
+  <Target Name="SetAssemblyNuspec"  Condition="Exists('$(NuSpecFile)')">
+
+    <Message Text="Updating $(NuSpecFile) to Version $(Version)-$(Version-Suffix)" />
+
+    <XmlUpdate XmlFileName="$(NuSpecFile)" XPath="/package/metadata/id" Value="$(MsBuildProjectName)" />
+    <XmlUpdate XmlFileName="$(NuSpecFile)" XPath="/package/metadata/version" Value="$(Version)-$(Version-Suffix)" />
+    
+  </Target>
+
+  <Target Name="SetAssemblyNuspecClean" Condition="Exists($(NuspecFile))">
+  </Target>
+</Project>
