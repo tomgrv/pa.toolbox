@@ -56,7 +56,7 @@ namespace PA.TileList.Rotation
 
         #region ITile
 
-        public static ITile<IContextual<T>> Rotate<T>(this ITile<T> tile, RotationTable.Angle angle)
+        public static Tile<IContextual<T>> Rotate<T>(this ITile<T> tile, RotationTable.Angle angle)
              where T : ICoordinate
         {
             ICoordinate c = tile.Area.Center();
@@ -70,7 +70,7 @@ namespace PA.TileList.Rotation
             return list;
         }
 
-        public static ITile<IContextual<T>> Rotate<T>(this ITile<IContextual<T>> tile, RotationTable.Angle angle)
+        public static Tile<IContextual<T>> Rotate<T>(this ITile<IContextual<T>> tile, RotationTable.Angle angle)
             where T : ICoordinate
         {
             ICoordinate c = tile.Area.Center();

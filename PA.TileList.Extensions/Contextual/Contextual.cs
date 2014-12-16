@@ -5,24 +5,26 @@ using System.Text;
 
 namespace PA.TileList.Contextual
 {
-    public class Contextual<T> : IContextual<T>
+    public class Contextual<T> : Coordinate, IContextual<T>
         where T : ICoordinate
     {
-        public int X { get;  set; }
-        public int Y { get;  set; }
 
         public T Context { get; private set; }
 
         public Contextual(int x, int y, T context)
+            : base(x, y)
         {
-            this.X = x;
-            this.Y = y;
             this.Context = context;
         }
 
-        public ICoordinate Clone()
+        public override string ToString()
         {
-            return this.MemberwiseClone() as ICoordinate;
+            return base.ToString() + " [" + this.Context.ToString() + "]";
+        }
+
+        public static IContextual<T> FromContext(T e)
+        {
+            return new Contextual<T>(e.X, e.Y, e);
         }
     }
 }

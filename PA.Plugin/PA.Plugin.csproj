@@ -22,8 +22,6 @@
     <SccProvider>
     </SccProvider>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <ReleaseVersion>4.0</ReleaseVersion>
   </PropertyGroup>
@@ -132,7 +130,6 @@
   <ItemGroup>
     <None Include="PA.Plugin.nuspec" />
     <None Include="PA.Toolbox.snk" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Configuration\PA.Configuration.csproj">
@@ -163,4 +160,5 @@
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(SolutionDir)\.build\Extra.targets" Condition="Exists('$(SolutionDir)\.build\Extra.targets')" />
 </Project>

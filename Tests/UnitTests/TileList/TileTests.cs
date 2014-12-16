@@ -16,7 +16,7 @@ namespace UnitTests.TileList
     {
         #region Definitions 
 
-        internal class MainTile : Tile<SubTile>, IQuadrant<SubTile>, IQuantifiedTile<SubTile>
+        internal class MainTile : Tile<SubTile>, IQuadrant<SubTile>, IQuantifiedTile<SubTile>, ITile<SubTile>
         {
             public MainTile(IArea a, SubTile t)
                 : base(a, t)
@@ -107,16 +107,16 @@ namespace UnitTests.TileList
             Item t2 = new Item(1, 1, Color.Green);
 
             SubTile t1 = new SubTile(a1, t2);
-            t1.Fill<Item>(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
+            t1.Fill(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
 
             MainTile t0 = new MainTile(a0, t1);
-            t0.Fill<SubTile>(c => t1.Clone() as SubTile);
+            t0.Fill(c => t1.Clone() as SubTile);
 
             t0.ElementSizeX = 50f / factor * a1.SizeX;
             t0.ElementSizeY = 50f / factor * a1.SizeY;
             t0.ElementStepX = 55f / factor * a1.SizeX;
             t0.ElementStepY = 55f / factor * a1.SizeY;
-            t0.RefOffsetX = 0;
+            t0.RefOffsetX = 50;
             t0.RefOffsetY = 0;
 
             return t0;
@@ -124,23 +124,23 @@ namespace UnitTests.TileList
 
         #endregion
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void Crop()
         {
             Tile<Item> t0 = new Tile<Item>(new Area(0, 0, 100, 100), new Item(0, 0, Color.Red));
 
             t0.Fill(c => c.X > 25 && c.X < 75 && c.Y > 30 && c.Y < 60  ? new Item(c.X, c.Y, c.X == c.Y  ? Color.Yellow: Color.Green) : new Item(c.X, c.Y, Color.Red));
 
-            string signature0 = t0.AsQuantified().GetImage(1000, 1000, z => 
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature0 = t0.AsQuantified().GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
             Assert.AreEqual("BFE39DA3858C0A979B54F99442B397DA", signature0, "Image hash");
             Assert.AreEqual("0,0;100,100", t0.GetArea().ToString(), "Area");
 
             IEnumerable<Item> crop1 = t0.Crop(new Area(25, 30, 75, 60));
             Tile<Item> t1 = new Tile<Item>(crop1);
 
-            string signature1 = t1.AsQuantified().GetImage(1000, 1000, z =>
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature1 = t1.AsQuantified().GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
             Assert.AreEqual("742D809F5440028ED7F86072C4FC2FA9", signature1, "Image hash");
             Assert.AreEqual("25,30;75,60", t1.GetArea().ToString(), "Area");
@@ -149,8 +149,8 @@ namespace UnitTests.TileList
             IEnumerable<Item> crop2 = t0.Crop(t => t.Color != Color.Yellow);
             Tile<Item> t2 = new Tile<Item>(crop2);
 
-            string signature2 = t2.AsQuantified().GetImage(1000, 1000, z =>
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature2 = t2.AsQuantified().GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
             Assert.AreEqual("6A226FC4E4EC36837BA5042FBFE8D923", signature2, "Image hash");
             Assert.AreEqual("31,31;59,59", t2.GetArea().ToString(), "Area");

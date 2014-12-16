@@ -26,62 +26,72 @@ namespace PA.TileList.Geometrics.Circular
         public static IEnumerable<KeyValuePair<T, int>> Points<T>(this IQuantifiedTile<T> tile, CircularProfile p, CircularConfiguration config, Func<T, bool> predicate = null)
            where T : ICoordinate
         {
-            double minRadius2 = Math.Pow((double) p.GetMinRadius(), 2);
-            double maxRadius2 = Math.Pow((double) p.GetMaxRadius(), 2);
+            double minRadius2 = Math.Pow((double)p.GetMinRadius(), 2);
+            double maxRadius2 = Math.Pow((double)p.GetMaxRadius(), 2);
             CircularProfile.ProfileStep first = p.GetFirst();
             CircularProfile.ProfileStep[] profile = p.Profile.ToArray();
-            bool mix = true;
 
             foreach (T c in tile.WhereOrDefault(predicate))
             {
+                CircularProfile.ProfileStep step = first;
+                bool quickMode = true;
+
                 // Quick check with 4 corners
-                int quick = tile.Points(c, 2, 1, (testX, testY, r2) =>
+                int quick = tile.Points(c, 2, 1, (angle, r2) =>
                 {
                     if (r2 > maxRadius2)
                     {
-                        return mix = false;
+                        return false;
                     }
-                    else if (r2 < minRadius2)
+
+                    if (r2 < minRadius2)
                     {
-                        return mix = true;
+                        return true;
                     }
-                    else
+
+                    CircularProfile.ProfileStep last = profile.Where(ps => ps.Angle < angle).LastOrDefault() ?? first;
+
+                    if (step != last)
                     {
-                        return mix ^= true;
+                        quickMode = step.Equals(first);
+                        step = last;
                     }
+
+                    return config.SelectionType.HasFlag(CircularConfiguration.SelectionFlag.Under);
                 });
 
-                // Certainly All Outside
-                if (quick == 0)
+                if (quickMode)
                 {
-                    yield return new KeyValuePair<T, int>(c, 0);
-                    continue;
-                }
+                    // Certainly All Outside
+                    if (quick == 0)
+                    {
+                        yield return new KeyValuePair<T, int>(c, 0);
+                        continue;
+                    }
 
-                // Certainly All Inside
-                if (quick == 4)
-                {
-                    yield return new KeyValuePair<T, int>(c, (int)config.MaxSurface);
-                    continue;
+                    // Certainly All Inside
+                    if (quick == 4)
+                    {
+                        yield return new KeyValuePair<T, int>(c, (int)config.MaxSurface);
+                        continue;
+                    }
                 }
 
                 // Full check on all surface
-                int full = tile.Points(c, config.Steps, config.Resolution, (testX, testY, r2) =>
+                int full = tile.Points(c, config.Steps, config.Resolution, (angle, r2) =>
                     {
                         if (r2 > maxRadius2)
                         {
                             return false;
                         }
-                        else if (r2 < minRadius2)
+
+                        if (r2 < minRadius2)
                         {
                             return true;
                         }
-                        else
-                        {
-                            double angle = Math.Atan2(testY, testX);
-                            CircularProfile.ProfileStep last = profile.Where(ps => ps.Angle < angle).LastOrDefault() ?? first;
-                            return r2 < Math.Pow((double) last.Radius, 2);
-                        }
+
+                        CircularProfile.ProfileStep last = profile.Where(ps => ps.Angle < angle).LastOrDefault() ?? first;
+                        return r2 < Math.Pow((double)last.Radius, 2);
 
                     });
 
@@ -89,7 +99,14 @@ namespace PA.TileList.Geometrics.Circular
             }
         }
 
+        // Calculate all points
+        internal static int Points<T>(this IQuantifiedTile<T> tile, T c, int steps, float resolution, Func<double, double, bool> predicate)
+         where T : ICoordinate
+        {
+            return tile.Points(c, steps, resolution, (testX, testY, r2) => predicate(Math.Atan2(testY, testX), r2));
+        }
 
+        // Calculate all points
         internal static int Points<T>(this IQuantifiedTile<T> tile, T c, int steps, float resolution, Func<double, double, double, bool> predicate)
          where T : ICoordinate
         {
@@ -107,7 +124,12 @@ namespace PA.TileList.Geometrics.Circular
                 {
                     for (int j = 0; j < steps; j++)
                     {
-                        testY[j] = ((c.Y - tile.Reference.Y) - 0.5f + j * resolution) * tile.ElementStepY + tile.RefOffsetY;
+                        // Work in topleft quadrant
+                        //testY[j] = ((c.Y - tile.Reference.Y) - 0.5f + j * resolution) * tile.ElementStepY + tile.RefOffsetY;
+
+                        // Work in topleft quadrant by default
+                        testY[j] = -(((c.Y - tile.Reference.Y) - 0.5f + j * resolution) * tile.ElementStepY + tile.RefOffsetY);
+
                         testY2[j] = Math.Pow(testY[j], 2);
                         double radius2 = temp + testY2[j];
                         points += predicate(testX, testY[j], radius2) ? 1 : 0;
@@ -138,23 +160,19 @@ namespace PA.TileList.Geometrics.Circular
         public static IEnumerable<T> Take<T>(this IQuantifiedTile<T> tile, CircularProfile p, CircularConfiguration config, Func<T, bool> predicate = null)
            where T : ICoordinate
         {
-            bool inside = (config.SelectionType & CircularConfiguration.SelectionFlag.Inside) > 0;
-            bool under = (config.SelectionType & CircularConfiguration.SelectionFlag.Under) > 0;
-            bool outside = (config.SelectionType & CircularConfiguration.SelectionFlag.Outside) > 0;
-
             foreach (KeyValuePair<T, int> c in tile.Points(p, config, predicate))
             {
-                if (inside && config.MinSurface <= c.Value)
+                if (config.SelectionType.HasFlag(CircularConfiguration.SelectionFlag.Inside) && config.MinSurface <= c.Value)
                 {
                     yield return c.Key;
                 }
 
-                if (under && 0 < c.Value && c.Value < config.MinSurface)
+                if (config.SelectionType.HasFlag(CircularConfiguration.SelectionFlag.Under) && 0 < c.Value && c.Value < config.MinSurface)
                 {
                     yield return c.Key;
                 }
 
-                if (outside && c.Value == 0)
+                if (config.SelectionType.HasFlag(CircularConfiguration.SelectionFlag.Outside) && c.Value == 0)
                 {
                     yield return c.Key;
                 }

@@ -4,6 +4,7 @@ using PA.TileList;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Drawing;
+using PA.TileList.Extensions;
 using PA.File.Extensions;
 using UnitTests.TileList;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace UnitTests.TileList.Extensions
     [TestClass]
     public class QuantifiedTests
     {
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void FirstOrDefault()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);
@@ -29,7 +30,7 @@ namespace UnitTests.TileList.Extensions
             IContextual<TileTests.Item> item2 = t1.FirstOrDefault(0, 0);
             item2.Context.Color = Color.Blue;
 
-           RectangleD<Bitmap> i1 = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y));
+            RectangleD<Bitmap> i1 = t1.GetImage(2000, 2000, (z, s) => z.Context.ToBitmap(100, 50, z.X + "\n" + z.Y));
 
            string signature = t1.GetRulers(i1, new float[] { 100f, 500f }).Item.GetSignature();
             Assert.AreEqual("A56EBC8E87772EA73D38342AF45FF00B5489A22DB73E7ED5996C6AF7EEE3DE0A", signature, "Image hash");
@@ -60,35 +61,35 @@ namespace UnitTests.TileList.Extensions
 
             IQuantifiedTile<TileTests.Item> q0 = t0.AsQuantified(10, 10);
 
-            string signature0 = q0.GetImage(1000, 1000, z =>
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature0 = q0.GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
             foreach (ICoordinate c in q0.GetCoordinatesIn(250, 250, 600, 600))
             {
                 t0.Find(c).Color = Color.Blue;
             }
 
-            string signature1 = q0.GetImage(1000, 1000, z =>
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature1 = q0.GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
             foreach (ICoordinate c in q0.GetCoordinatesIn(52, 52, 62, 62))
             {
                 t0.Find(c).Color = Color.White;
             }
 
-            string signature2 = q0.GetImage(1000, 1000, z =>
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature2 = q0.GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
             foreach (ICoordinate c in q0.GetCoordinatesIn(12, 12, 13, 13))
             {
                 t0.Find(c).Color = Color.Black;
             }
 
-            string signature3 = q0.GetImage(1000, 1000, z =>
-                z.Item.ToBitmap(100, 50, z.Item.X + "\n" + z.Item.Y)).Item.GetSignature();
+            string signature3 = q0.GetImage(1000, 1000, (z, s) =>
+                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Image hash")]
         public void Rulers()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);
@@ -101,7 +102,7 @@ namespace UnitTests.TileList.Extensions
             IContextual<TileTests.Item> item = t1.FirstOrDefault(500, 1000);
             item.Context.Color = Color.Red;
 
-            RectangleD<Bitmap> i1 = t1.GetImage(2000, 2000, z => z.Item.Context.ToBitmap(100, 100, z.Item.X + "\n" + z.Item.Y));
+            RectangleD<Bitmap> i1 = t1.GetImage(2000, 2000, (z, s) => z.Context.ToBitmap(100, 100, z.X + "\n" + z.Y));
 
             CircularProfile p = new CircularProfile(1000);
 

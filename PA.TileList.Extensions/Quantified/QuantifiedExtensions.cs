@@ -7,36 +7,12 @@ namespace PA.TileList.Quantified
 {
     public static class QuantifiedExtensions
     {
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l)
-             where T : ICoordinate
-        {
-            return l as IQuantifiedTile<T> ?? new QuantifiedTile<T>(l);
-        }
-
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l, double sizeX, double sizeY)
-            where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(l, sizeX, sizeY);
-        }
-
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l, double sizeX, double sizeY, double stepX, double stepY)
-           where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(l, sizeX, sizeY, stepX, stepY);
-        }
-
-        public static IQuantifiedTile<T> AsQuantified<T>(this ITile<T> l, double sizeX, double sizeY, double stepX, double stepY, double offsetX, double offsetY)
-           where T : ICoordinate
-        {
-            return new QuantifiedTile<T>(l, sizeX, sizeY, stepX, stepY, offsetX, offsetY);
-        }
-
         public static double GetScaleFactor(this IQuantifiedTile list, double sizeX, double sizeY)
         {
             double ratioX = sizeX / (list.Area.SizeX * list.ElementStepX);
             double ratioY = sizeY / (list.Area.SizeY * list.ElementStepY);
 
-            return Math.Min(ratioX, ratioY);
+            return  Math.Round(Math.Min(ratioX, ratioY), 4);
         }
 
         public static IQuantifiedTile<T> Scale<T>(this IQuantifiedTile<T> list, double scaleFactor)

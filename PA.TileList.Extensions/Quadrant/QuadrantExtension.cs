@@ -40,22 +40,49 @@ namespace PA.TileList.Quadrant
             }
         }
 
+        #region IEnumerable
+
         public static IEnumerable<IContextual<T>> ChangeQuadrant<T>(this IEnumerable<T> c, IArea a, Quadrant source, Quadrant target)
            where T : ICoordinate
         {
-            foreach (T e in c)
+            foreach (var e in c)
             {
                 yield return e.ChangeQuadrant(a, source, target);
             }
         }
 
+        public static IEnumerable<IContextual<T>> ChangeQuadrant<T>(this IEnumerable<IContextual<T>> c, IArea a, Quadrant source, Quadrant target)
+          where T : ICoordinate
+        {
+            foreach (var e in c)
+            {
+                yield return e.ChangeQuadrant(a, source, target);
+            }
+        }
+
+        #endregion
+
+        #region ITile
+
         public static ITile<IContextual<T>> ChangeQuadrant<T>(this ITile<T> c, Quadrant source, Quadrant target)
             where T : ICoordinate
         {
             return QuadrantExtension
-                .ChangeQuadrant(c as IEnumerable<T>, c.Area, source, target)
+                .ChangeQuadrant(c.AsEnumerable(), c.Area, source, target)
                 .AsTile(c.IndexOf(c.Reference));
         }
+
+        public static ITile<IContextual<T>> ChangeQuadrant<T>(this ITile<IContextual<T>> c, Quadrant source, Quadrant target)
+          where T : ICoordinate
+        {
+            return QuadrantExtension
+                .ChangeQuadrant(c.AsEnumerable(), c.Area, source, target)
+                .AsTile(c.IndexOf(c.Reference));
+        }
+
+        #endregion
+
+        #region IQuantifiedTile
 
         public static IQuantifiedTile<IContextual<T>> ChangeQuadrant<T>(this IQuantifiedTile<T> c, Quadrant source, Quadrant target)
             where T : ICoordinate
@@ -104,9 +131,65 @@ namespace PA.TileList.Quadrant
             }
 
             return QuadrantExtension
-                .ChangeQuadrant(c as ITile<T>, source, target)
+                .ChangeQuadrant(c.AsTile(), source, target)
                 .AsQuantified(c.ElementSizeX, c.ElementSizeY, c.ElementStepX, c.ElementStepY, offsetX, offsetY);
         }
+
+
+        public static IQuantifiedTile<IContextual<T>> ChangeQuadrant<T>(this IQuantifiedTile<IContextual<T>> c, Quadrant source, Quadrant target)
+            where T : ICoordinate
+        {
+            double offsetX = c.RefOffsetX;
+            double offsetY = c.RefOffsetY;
+
+            switch (source)
+            {
+                case Quadrant.TopRight:
+                    offsetX = -offsetX;
+                    //offsetY =offsetY;
+                    break;
+                case Quadrant.TopLeft:
+                    //offsetX = offsetX;
+                    //offsetY =offsetY;
+                    break;
+                case Quadrant.BottomLeft:
+                    //offsetX = offsetX;
+                    offsetY = -offsetY;
+                    break;
+                case Quadrant.BottomRight:
+                    offsetX = -offsetX;
+                    offsetY = -offsetY;
+                    break;
+            }
+
+            switch (target)
+            {
+                case Quadrant.TopRight:
+                    offsetX = -offsetX;
+                    //offsetY = offsetY ;
+                    break;
+                case Quadrant.TopLeft:
+                    //offsetX = offsetX ;
+                    //offsetY = offsetY ;
+                    break;
+                case Quadrant.BottomLeft:
+                    //offsetX = offsetX;
+                    offsetY = -offsetY;
+                    break;
+                case Quadrant.BottomRight:
+                    offsetX = -offsetX;
+                    offsetY = -offsetY;
+                    break;
+            }
+
+            return QuadrantExtension
+                .ChangeQuadrant(c.AsTile(), source, target)
+                .AsQuantified(c.ElementSizeX, c.ElementSizeY, c.ElementStepX, c.ElementStepY, offsetX, offsetY);
+        }
+
+        #endregion
+
+        #region Internal
 
         internal static IContextual<T> ChangeQuadrant<T>(this T e, IArea a, Quadrant source, Quadrant target)
               where T : ICoordinate
@@ -157,6 +240,58 @@ namespace PA.TileList.Quadrant
 
             return item;
         }
+
+        internal static IContextual<T> ChangeQuadrant<T>(this IContextual<T> e, IArea a, Quadrant source, Quadrant target)
+           where T : ICoordinate
+        {
+            IContextual<T> item = new Contextual<T>(e.X, e.Y, e.Context);
+
+            // Source ==> Array
+            switch (source)
+            {
+                case Quadrant.TopRight:
+                    item.X = -(item.X - a.Min.X - a.SizeX + 1);
+                    item.Y = (item.Y - a.Min.Y);
+                    break;
+                case Quadrant.TopLeft:
+                    item.X = (item.X - a.Min.X);
+                    item.Y = (item.Y - a.Min.Y);
+                    break;
+                case Quadrant.BottomLeft:
+                    item.X = (item.X - a.Min.X);
+                    item.Y = -(item.Y - a.Min.Y - a.SizeY + 1);
+                    break;
+                case Quadrant.BottomRight:
+                    item.X = -(item.X - a.Min.X - a.SizeX + 1);
+                    item.Y = -(item.Y - a.Min.Y - a.SizeY + 1);
+                    break;
+            }
+
+            // Array ==> Target
+            switch (target)
+            {
+                case Quadrant.TopRight:
+                    item.X = -item.X + a.Min.X + a.SizeX - 1;
+                    item.Y = item.Y + a.Min.Y;
+                    break;
+                case Quadrant.TopLeft:
+                    item.X = item.X + a.Min.X;
+                    item.Y = item.Y + a.Min.Y;
+                    break;
+                case Quadrant.BottomLeft:
+                    item.X = item.X + a.Min.X;
+                    item.Y = -item.Y + a.Min.Y + a.SizeY - 1;
+                    break;
+                case Quadrant.BottomRight:
+                    item.X = -item.X + a.Min.X + a.SizeX - 1;
+                    item.Y = -item.Y + a.Min.Y + a.SizeY - 1;
+                    break;
+            }
+
+            return item;
+        }
+
+        #endregion
 
         #endregion
 

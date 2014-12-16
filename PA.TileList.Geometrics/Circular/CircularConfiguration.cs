@@ -56,15 +56,15 @@ namespace PA.TileList.Geometrics.Circular
                 throw new ArgumentOutOfRangeException("Should be a percentage");
 
             this.Tolerance = tolerance;
-            this.Resolution = 1;
+            this.Resolution = 1f;
             this.SelectionType = selectionType;
 
             // Automatic resolution
-            double factor = tolerance;
+            float factor = tolerance;
             while (Math.Floor(factor) != factor)
             {
                 this.Resolution = this.Resolution / 10f;
-                factor = factor / 10f;
+                factor = factor * 10f;
             }
 
             // Members

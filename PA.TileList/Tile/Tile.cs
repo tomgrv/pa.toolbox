@@ -29,7 +29,7 @@ namespace PA.TileList
             this.X = 0;
             this.Y = 0;
             this.Reference = t.ElementAt(referenceIndex);
-            this.Area = t.GetArea();
+            this.UpdateArea();
         }
 
 
@@ -110,7 +110,7 @@ namespace PA.TileList
             this.Area = this.GetArea();
         }
 
-        public void Fill<U>(ushort SizeX, ushort SizeY, Func<ICoordinate, U> filler, decimal ShiftX = 0, decimal ShiftY = 0) where U : T
+        public void Fill(ushort SizeX, ushort SizeY, Func<ICoordinate, T> filler, decimal ShiftX = 0, decimal ShiftY = 0)
         {
             int StartX = Math.Min(this.Area.Max.X, Math.Max(this.Area.Min.X, Convert.ToInt32(ShiftX - SizeX / 2m)));
             int StartY = Math.Min(this.Area.Max.Y, Math.Max(this.Area.Min.Y, Convert.ToInt32(ShiftY - SizeY / 2m)));
@@ -120,21 +120,18 @@ namespace PA.TileList
             this.Fill(filler, a);
         }
 
-        public void Fill<U>(Func<ICoordinate, U> filler, IArea a = null) where U : T, ICoordinate
-        {
-            this.Clear();
 
+        public void Fill(Func<Coordinate, T> filler, IArea a = null) 
+        {
             IArea area = a ?? this.Area;
 
             for (int i = area.Min.X; i <= area.Max.X; i++)
             {
                 for (int j = area.Min.Y; j <= area.Max.Y; j++)
                 {
-                    U e = filler(new Coordinate(i,j));
-                    // reassign  to ensure coherence...
-                    e.X = i;
-                    e.Y = j;
-                    this.Add(e);
+                    T  item = filler(new Coordinate(i,j));
+                    this.Remove(item.X, item.Y);;
+                    this.Add(item);
                 }
             }
 
@@ -143,7 +140,16 @@ namespace PA.TileList
             this.UpdateArea();
         }
 
-       
+        public IEnumerable<T> Inside(IArea area)
+        {
+            for (int i = area.Min.X; i <= area.Max.X; i++)
+            {
+                for (int j = area.Min.Y; j <= area.Max.Y; j++)
+                {
+                    yield return this.Find(i, j);
+                }
+            }
+        }
 
         public void SetReference(T reference)
         {
@@ -166,7 +172,7 @@ namespace PA.TileList
             return this.X + "," + this.Y;
         }
 
-        public virtual  ICoordinate Clone()
+        public virtual ICoordinate Clone()
         {
             return this.MemberwiseClone() as ICoordinate;
         }
