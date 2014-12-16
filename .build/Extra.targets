@@ -65,7 +65,8 @@
       <Output TaskParameter="Branch" PropertyName="GitBranch" />
     </GitBranch>
 
-    <PropertyGroup Condition=" '$(GitBranch.SubString(0,7)' == 'release' ">
+    <PropertyGroup Condition=" '$(GitBranch.SubString(0,7))' == 'release' ">
+     
       <Version-Current>$(GitBranch.SubString(8))</Version-Current>
       <Version-Major Condition=" $(Version-Current.Length) &gt; '0' ">$(Version-Current.Split('.')[0])</Version-Major>
       <Version-Minor Condition=" $(Version-Current.Length) &gt; '0' ">$(Version-Current.Split('.')[1])</Version-Minor>
