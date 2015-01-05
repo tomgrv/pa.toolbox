@@ -83,7 +83,7 @@ namespace PA.TileList.Drawing
 
                     if (lastRadius > 0)
                     {
-                        g.DrawArc(Pens.Red, offsetX - lastRadius, offsetY -  lastRadius, lastRadius * 2f, lastRadius * 2f, (float)ad, (float)sw);
+                        g.DrawArc(Pens.Red, offsetX - lastRadius, offsetY - lastRadius, lastRadius * 2f, lastRadius * 2f, (float)ad, (float)sw);
                     }
 
                     if (Math.Round(lastRadius) != Math.Round(current.Radius))
@@ -92,7 +92,7 @@ namespace PA.TileList.Drawing
                         double y1 = offsetY - (double)lastRadius * Math.Sin(current.Angle);
                         double x2 = offsetX + (double)scale * current.Radius * Math.Cos(current.Angle);
                         double y2 = offsetY - (double)scale * current.Radius * Math.Sin(current.Angle);
-                        g.DrawLine(Pens.Orange,  (float)x1, (float)y1, (float)x2, (float)y2);
+                        g.DrawLine(Pens.Orange, (float)x1, (float)y1, (float)x2, (float)y2);
                     }
 
                     last = current;
@@ -103,4 +103,3 @@ namespace PA.TileList.Drawing
         }
     }
 }
-
