@@ -33,16 +33,6 @@ namespace PA.TileList.Geometrics.Circular
 
             public ProfileStep(double angle, double radius)
             {
-                while (angle < -Math.PI)
-                {
-                    angle = angle + 2 * Math.PI;
-                }
-
-                while (angle > Math.PI)
-                {
-                    angle = angle - 2 * Math.PI;
-                }
-
                 this.Angle = angle;
                 this.Radius = radius;
             }
