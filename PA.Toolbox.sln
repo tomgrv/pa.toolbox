@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FC1851C7-35B2-43E9-8E8B-71340B221469}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -46,6 +48,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8115E64F-B81B-4A43-A829-9D41EDBEF529}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Tests\UnitTests\UnitTests.csproj", "{AC973648-96E4-4C7F-9047-E84D71EBB750}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PA.InnoSetupProcessor", "PA.InnoSetupProcessor\PA.InnoSetupProcessor.csproj", "{EBC810F8-DF7E-4392-9E88-B57A7659CA15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,6 +209,14 @@ Global
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|x64.ActiveCfg = Release|Any CPU
 		{AC973648-96E4-4C7F-9047-E84D71EBB750}.Release|x86.ActiveCfg = Release|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Release|x64.ActiveCfg = Release|Any CPU
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -224,6 +236,7 @@ Global
 		{69C9EA62-E168-4241-89DB-A44E8387E846} = {5A292FF3-5C00-4D46-9477-F9CF4EE644BA}
 		{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE} = {5A292FF3-5C00-4D46-9477-F9CF4EE644BA}
 		{B64BCAC4-3BD8-414D-8F5C-F55728FA109E} = {5A292FF3-5C00-4D46-9477-F9CF4EE644BA}
+		{EBC810F8-DF7E-4392-9E88-B57A7659CA15} = {5A292FF3-5C00-4D46-9477-F9CF4EE644BA}
 		{AC973648-96E4-4C7F-9047-E84D71EBB750} = {8115E64F-B81B-4A43-A829-9D41EDBEF529}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
