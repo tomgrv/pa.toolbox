@@ -5,6 +5,7 @@ using PA.TileList.Geometrics.Circular;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Extensions;
+using PA.TileList.Quadrant;
 using PA.TileList.Drawing;
 using System.Drawing;
 using PA.TileList;
@@ -94,7 +95,7 @@ namespace UnitTests.Drawing
 
             RectangleD<Bitmap> pi = p.GetImage(1000, 1000, tile.GetBounds());
 
-            RectangleD<Bitmap> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
+            RectangleD<Bitmap> i = q.GetImage(pi, (z,s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
 
             string signature = i.Item.GetSignature();
             Assert.AreEqual("ADE22DBF99F378AEE20F993BF51705756AFFF2539CA8D6CC5CCA7266C9F2B551", signature, "Image hash");
@@ -106,26 +107,30 @@ namespace UnitTests.Drawing
             float factor = 5f;
 
             IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
-                .Flatten<TileTests.SubTile, TileTests.Item>();
+                .Flatten<TileTests.SubTile, TileTests.Item>();                
 
             Assert.AreEqual(65025, tile.Count(), "Initial item count");
 
-            CircularProfile p = GetTestProfile(1400);
+            CircularProfile p = GetTestProfile(1000);
 
-            IEnumerable<IContextual<TileTests.Item>> l = tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside));
+            foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside)).ToArray()).ToArray())
+            {
+                tt.Context.Color = Color.Beige;
+            }
 
-            Assert.AreEqual(47860, l.Count(), "Selected item count");
+            //Assert.AreEqual(47860, tile.Count(), "Selected item count");
 
-            IQuantifiedTile<IContextual<TileTests.Item>> q = l.AsTile(tile.Area).AsQuantified(50f / factor, 50f / factor, 55f / factor, 55f / factor);
+            //RectangleD<Bitmap> pi = p.GetImage(5000, 5000, tile.GetBounds());
+            //RectangleD<Bitmap> i = tile.GetImage(pi, (z, s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
+            //string signature_1 = i.Item.GetSignature();
+            //Assert.AreEqual("E63318A4278EED31907E0374B728F045285D43B6FBE0955A1622BFCFBB7AF5B8", signature_1, "Image hash");
 
-            RectangleD<Bitmap> pi = p.GetImage(5000, 5000, tile.GetBounds());
+            RectangleD<Bitmap> j = tile.GetImage(5000, 5000, (z, s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
+            RectangleD<Bitmap> pj = p.GetImage(j);
+            string signature_2 = pj.Item.GetSignature();
 
-            RectangleD<Bitmap> i = q.GetImage(pi, z => z.Item.Context.ToBitmap(50, 50, z.Item.X + "\n" + z.Item.Y));
-
-            string file = "SelectionMediumTile_" + DateTime.Now.Ticks + ".png";
-
-            string signature = i.Item.GetSignature();
-            Assert.AreEqual("E63318A4278EED31907E0374B728F045285D43B6FBE0955A1622BFCFBB7AF5B8", signature, "Image hash");
+         
+            Assert.AreEqual("E63318A4278EED31907E0374B728F045285D43B6FBE0955A1622BFCFBB7AF5B8", signature_2, "Image hash");
         }
 
         private CircularProfile GetTestProfile(double radius, double stepping = 1f, double resolution = 1f)

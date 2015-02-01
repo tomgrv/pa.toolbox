@@ -29,7 +29,7 @@ namespace PA.TileList
             this.X = 0;
             this.Y = 0;
             this.Reference = t.ElementAt(referenceIndex);
-            this.Area = t.GetArea();
+            this.UpdateArea();
         }
 
 
@@ -110,7 +110,6 @@ namespace PA.TileList
             this.Area = this.GetArea();
         }
 
-
         public void Fill(ushort SizeX, ushort SizeY, Func<ICoordinate, T> filler, decimal ShiftX = 0, decimal ShiftY = 0)
         {
             int StartX = Math.Min(this.Area.Max.X, Math.Max(this.Area.Min.X, Convert.ToInt32(ShiftX - SizeX / 2m)));
@@ -122,30 +121,34 @@ namespace PA.TileList
         }
 
 
-        public void Fill(Func<ICoordinate, T> filler, IArea a = null) 
+        public void Fill(Func<Coordinate, T> filler, IArea a = null) 
         {
-            this.Clear();
-
             IArea area = a ?? this.Area;
 
             for (int i = area.Min.X; i <= area.Max.X; i++)
             {
                 for (int j = area.Min.Y; j <= area.Max.Y; j++)
                 {
-                    T e = filler(this.Find(i, j) as ICoordinate ?? new Coordinate(i, j));
-
-                    // reassign  to ensure coherence...
-                    e.X = i;
-                    e.Y = j;
-
-                    this.Add(e);
-
+                    T  item = filler(new Coordinate(i,j));
+                    this.Remove(item.X, item.Y);;
+                    this.Add(item);
                 }
             }
 
             this.Reference = this.Find(this.Reference.X, this.Reference.Y);
             this.TrimExcess();
             this.UpdateArea();
+        }
+
+        public IEnumerable<T> Inside(IArea area)
+        {
+            for (int i = area.Min.X; i <= area.Max.X; i++)
+            {
+                for (int j = area.Min.Y; j <= area.Max.Y; j++)
+                {
+                    yield return this.Find(i, j);
+                }
+            }
         }
 
         public void SetReference(T reference)

@@ -1,12 +1,18 @@
 .svn/
 bin/
 obj/
-packages/
-publish/
 *.pidb
 *.exe
 *.nupkg
+
+# Chutzpah Test files
 *.user
+*.suo
+*.dll
+*bak
+/packages/
+/publish/
 /TestResults/
-/*.suo
-/*.nupkg*
+/.metadata/
+Generated*
+MSBuild*
