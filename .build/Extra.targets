@@ -65,14 +65,14 @@
       <Output TaskParameter="Branch" PropertyName="GitBranch" />
     </GitBranch>
 
-    <PropertyGroup Condition=" '$(GitBranch.SubString(0,8))' == 'release/'  ">
+    <PropertyGroup Condition=" $(GitBranch.StartsWith('release/'))  ">
      
       <Version-Current>$(GitBranch.SubString(8))</Version-Current>
       <Version-Major Condition=" $(Version-Current.Length) &gt; '0' ">$(Version-Current.Split('.')[0])</Version-Major>
       <Version-Minor Condition=" $(Version-Current.Length) &gt; '0' ">$(Version-Current.Split('.')[1])</Version-Minor>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(GitBranch.SubString(0,7))' == 'hotfix/' ">
+    <PropertyGroup Condition=" $(GitBranch.StartsWith('hotfix/')) ">
 
       <Version-Current>$(GitBranch.SubString(7))</Version-Current>
       <Version-Major Condition=" $(Version-Current.Length) &gt; '0' ">$(Version-Current.Split('.')[0])</Version-Major>
