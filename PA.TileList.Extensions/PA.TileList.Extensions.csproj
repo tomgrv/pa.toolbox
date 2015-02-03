@@ -14,6 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\WMT_Wafermap\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <ReleaseVersion>4.4</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,7 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.TileList\PA.TileList.csproj">
-      <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
+      <Project>{5B4FACE3-DDB3-4EAA-985A-9DE4AAC34A91}</Project>
       <Name>PA.TileList</Name>
     </ProjectReference>
   </ItemGroup>

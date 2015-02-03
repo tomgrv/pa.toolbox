@@ -1,0 +1,17 @@
+﻿<Properties StartupItem="PA.Plugin\PA.Plugin.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ActiveRuntime="MS.NET" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="PA.TileList.Geometrics\Circular\CircularExtensions.cs">
+    <Files>
+      <File FileName=".build\_SetAssemblyNuspec.targets" Line="18" Column="18" />
+      <File FileName=".build\_SetAssemblyInfo.targets" Line="1" Column="1" />
+      <File FileName=".build\Extra.targets" Line="1" Column="1" />
+      <File FileName="PA.TileList.Geometrics\Circular\CircularProfile.cs" Line="17" Column="17" />
+      <File FileName="PA.TileList.Geometrics\Circular\CircularConfiguration.cs" Line="6" Column="6" />
+      <File FileName="PA.TileList.Geometrics\Circular\CircularExtensions.cs" Line="30" Column="30" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

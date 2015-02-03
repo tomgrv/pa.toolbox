@@ -15,7 +15,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <RestorePackages>true</RestorePackages>
-    <ReleaseVersion>4.0</ReleaseVersion>
+    <ReleaseVersion>4.4</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,7 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PA.Plugin\PA.Plugin.csproj">
-      <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
+      <Project>{557ACE88-A58E-48AB-B7CF-07925CA98530}</Project>
       <Name>PA.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
