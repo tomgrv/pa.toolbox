@@ -51,13 +51,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8115E64F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Tests\UnitTests\UnitTests.csproj", "{AC973648-96E4-4C7F-9047-E84D71EBB750}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{6A933FDE-E26D-4C26-BE8F-A1B20732BB34}"
-	ProjectSection(SolutionItems) = preProject
-		.build\_SetAssemblyInfo.targets = .build\_SetAssemblyInfo.targets
-		.build\_SetAssemblyNuspec.targets = .build\_SetAssemblyNuspec.targets
-		.build\Extra.targets = .build\Extra.targets
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -248,7 +241,7 @@ Global
 		$0.VersionControlPolicy = $1
 		$1.inheritsSet = Mono
 		$0.DotNetNamingPolicy = $2
-		$2.DirectoryNamespaceAssociation = PrefixedFlat
+		$2.DirectoryNamespaceAssociation = Hierarchical
 		$2.ResourceNamePolicy = MSBuild
 		$0.StandardHeader = $3
 		$3.Text = 
@@ -409,7 +402,7 @@ Global
 		$28.inheritsSet = Mono
 		$28.inheritsScope = text/x-csharp
 		$28.scope = text/x-csharp
-		version = 4.4
+		version = 4.4.1
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
