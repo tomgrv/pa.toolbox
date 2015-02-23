@@ -6,6 +6,8 @@ using System.Reflection;
 using System.IO;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
+using IniParser;
+using IniParser.Model;
 
 namespace PA.Configuration
 {
@@ -14,29 +16,37 @@ namespace PA.Configuration
     /// </summary>
     public class Settings : IDisposable
     {
+
+        #if OLD
+
         #region Import Ini
 
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern long WritePrivateProfileString(string section,
-            string key, string val, string filePath);
+                                                             string key, string val, string filePath);
+
+        [DllImport("kernel32", CharSet = CharSet.Auto)]
+        private static extern long WriteProfileString(string section,
+                                                             string key,  string filePath);
 
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern int GetPrivateProfileString(string section,
-            string key, string def, StringBuilder retVal, int size, string filePath);
+                                                          string key, string def, StringBuilder retVal, int size, string filePath);
 
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern int GetPrivateProfileSectionNames(byte[] lpszReturnBuffer,
-           int nSize, string filePath);
+                                                                int nSize, string filePath);
 
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         // Note that because the key/value pars are returned as null-terminated
         // strings with the last string followed by 2 null-characters, we cannot
         // use StringBuilder.
         private static extern int GetPrivateProfileSection(string section,
-              IntPtr lpszReturnBuffer, int nSize, string filePath);
-
+                                                           IntPtr lpszReturnBuffer, int nSize, string filePath);
 
         #endregion
+
+        #endif
 
         public enum Status
         {
@@ -67,6 +77,7 @@ namespace PA.Configuration
             CustomFormat15 = 31,
             CustomFormat16 = 32,
         }
+
         public enum Scope
         {
             UserScope = 0,
@@ -155,14 +166,18 @@ namespace PA.Configuration
             this.path = new Stack<string>();
             this.CurrentFormat = DefaultFormat;
             this.CurrentScope = Scope.UserScope;
-            this.OrganizationName = GetAttribute<AssemblyCompanyAttribute>(); ;
+            this.OrganizationName = GetAttribute<AssemblyCompanyAttribute>();
+            ;
             this.ApplicationName = GetAttribute<AssemblyProductAttribute>();
             this.SetFileName();
             this.Sync();
         }
 
 
-        public Settings.Status status() { throw new NotImplementedException(); }
+        public Settings.Status status()
+        {
+            throw new NotImplementedException();
+        }
 
         #region Group
 
@@ -239,7 +254,7 @@ namespace PA.Configuration
 
         public string[] AllKeys()
         {
-            string root = this.Group + (this.array is string && this.array.Length > 0 ? "/"+this.array + "/" + this.index : string.Empty);
+            string root = this.Group + (!string.IsNullOrEmpty(this.array) ? "/" + this.array + "/" + this.index : string.Empty);
 
             switch (this.CurrentFormat)
             {
@@ -249,7 +264,7 @@ namespace PA.Configuration
                         .Where(k => k.StartsWith(root) && k.Length >= root.Length)
                         .Select(k => k.Substring(root.Length > 0 ? root.Length : 0))
                         .Select(k => k.StartsWith("/") ? k.Substring(1) : k)
-                        //.Select(k => k.EndsWith("/") ? k.Substring(0, k.Length - 1) : k)
+                    //.Select(k => k.EndsWith("/") ? k.Substring(0, k.Length - 1) : k)
                         .ToArray();
 
                 default:
@@ -308,7 +323,10 @@ namespace PA.Configuration
 
         #endregion
 
-        public bool IsWritable() { throw new NotImplementedException(); }
+        public bool IsWritable()
+        {
+            throw new NotImplementedException();
+        }
 
         #region Values
 
@@ -325,18 +343,43 @@ namespace PA.Configuration
             {
                 foreach (KeyValuePair<string, string> item in this.values)
                 {
-                    if (item.Value is string)
+                    if (!string.IsNullOrEmpty(item.Value))
                     {
                         string[] hash = this.GetHashArray(item.Key);
 
                         switch (this.CurrentFormat)
                         {
                             case Format.IniFormat:
+
+                                #if OLD
+
+
+                                if (item.Value != ";")
+                                {
                                 WritePrivateProfileString(hash[0], hash[1], item.Value.ToString(), this.FileName);
+                                }
+                                else
+                                {
+                                WriteProfileString(hash[0], hash[1], this.FileName);
+                                }
+
+                                #else
+
+                                var parser = new FileIniDataParser();
+
+                                IniData content = parser.ReadFile(this.FileName);
+
+                                content[hash[0]][hash[1]] = item.Value.ToString();
+
+                                parser.WriteFile(this.FileName,content);
+
+                                #endif
+
                                 break;
 
                             case Format.NativeFormat:
-                                Microsoft.Win32.Registry.SetValue(this.FileName + (hash[0] is string && hash[0].Length > 0 ? "\\" + hash[0] : ""), hash[1], item.Value);
+
+                                Microsoft.Win32.Registry.SetValue(this.FileName + (!string.IsNullOrEmpty(hash[0]) ? "\\" + hash[0] : ""), hash[1], item.Value);
                                 break;
                         }
                     }
@@ -348,15 +391,17 @@ namespace PA.Configuration
                 {
                     case Format.IniFormat:
 
+                        #if OLD
+
                         byte[] data = new byte[1024];
                         GetPrivateProfileSectionNames(data, data.Length, this.FileName);
 
                         foreach (string section in System.Text.Encoding.Unicode.GetString(data).Split('\0').Where(s => s.Length > 0))
                         {
                             List<string> temp = new List<string>();
-                            IntPtr pBuffer = Marshal.AllocHGlobal(32767);
+                            IntPtr pBuffer = Marshal.AllocHGlobal(65635);
 
-                            int size = GetPrivateProfileSection(section, pBuffer, 32767, this.FileName);
+                            int size = GetPrivateProfileSection(section, pBuffer, 65635, this.FileName);
 
                             // iStartAddress will point to the first character of the buffer,
                             int iStartAddress = pBuffer.ToInt32();
@@ -385,6 +430,22 @@ namespace PA.Configuration
                             pBuffer = IntPtr.Zero;
                         }
 
+                        #else
+
+                        var parser = new FileIniDataParser();
+
+                        IniData content = parser.ReadFile(this.FileName);
+
+                        foreach(var section in content.Sections)
+                        {
+                            foreach(var key in section.Keys)
+                            {
+                                this.SetValue(section + "/" + key.KeyName, key.Value);
+                            }
+                        }
+
+                        #endif
+
                         break;
 
                     default:
@@ -398,6 +459,11 @@ namespace PA.Configuration
             return this.Value(key, "");
         }
 
+        /// <summary>
+        /// Get value at key
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <param name="d">Default value</param>
         public string Value(string key, object d)
         {
             string field;
@@ -409,6 +475,9 @@ namespace PA.Configuration
 
                     if (File.Exists(this.FileName))
                     {
+
+                        #if OLD 
+
                         StringBuilder temp = new StringBuilder(255);
 
                         try
@@ -424,6 +493,16 @@ namespace PA.Configuration
                         {
                             this.SetValue(key, temp.ToString());
                         }
+
+                        #else
+
+                        var parser = new FileIniDataParser();
+
+                        IniData content = parser.ReadFile(this.FileName);
+
+                        this.SetValue(key, content[this.Group.Length > 0 ? this.Group : this.ApplicationName][field]);
+
+                        #endif
                     }
                     else
                     {
@@ -434,7 +513,7 @@ namespace PA.Configuration
 
                 case Format.NativeFormat:
 
-                    object data = Registry.GetValue(this.FileName + (this.Group is string && this.Group.Length > 0 ? "\\" + this.Group : ""), key, d);
+                    object data = Registry.GetValue(this.FileName + (!string.IsNullOrEmpty(this.Group) ? "\\" + this.Group : ""), key, d);
                     if (data is object)
                     {
                         this.values[hashk] = data.ToString();
@@ -463,22 +542,40 @@ namespace PA.Configuration
 
         #endregion
 
-        public void Remove(string key) { throw new NotImplementedException(); }
+        public void Remove(string key)
+        { 
+            string fields;
+
+            foreach (string k in this.values.Keys.Where(s=>s.StartsWith(string.IsNullOrEmpty(key) ? this.Group: this.GetHashKey(key, out fields))).ToArray())
+            {
+                this.values.Remove(k);
+            }
+        }
 
         public bool Contains(string key)
         {
             return this.Value(key) is object;
         }
 
-        public void SetFallbacksEnabled(bool b) { throw new NotImplementedException(); }
-        public bool FallbacksEnabled() { throw new NotImplementedException(); }
+        public void SetFallbacksEnabled(bool b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FallbacksEnabled()
+        {
+            throw new NotImplementedException();
+        }
 
 
         public string FileName { get; private set; }
 
         public Settings.Format CurrentFormat { get; private set; }
+
         public Settings.Scope CurrentScope { get; private set; }
+
         public string OrganizationName { get; private set; }
+
         public string ApplicationName { get; private set; }
 
 
@@ -495,6 +592,7 @@ namespace PA.Configuration
 
         //public static void SetDefaultFormat(Settings.Format format);
         public static Settings.Format DefaultFormat { get; set; }
+
         private static Dictionary<KeyValuePair<Format, Scope>, string> DefaultPath;
 
         public static void SetPath(Settings.Format format, Settings.Scope scope, string path)
@@ -516,8 +614,8 @@ namespace PA.Configuration
 
         private string GetHashKey(string k, out string field)
         {
-            string g = this.Group is string && this.Group.Length > 0 ? this.Group + "/" : "";
-            string a = this.array is string && this.array.Length > 0 ? this.array + "/" : "";
+            string g = !string.IsNullOrEmpty(this.Group) ? this.Group + "/" : "";
+            string a = !string.IsNullOrEmpty(this.array) ? this.array + "/" : "";
             string i = this.index < 0 ? "" : this.index.ToString();
             string s = i.Length > 0 && k.Length > 0 ? "/" + k : k;
 
