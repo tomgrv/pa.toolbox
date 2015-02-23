@@ -1,17 +1,24 @@
-﻿<Properties StartupItem="PA.Plugin\PA.Plugin.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ActiveRuntime="MS.NET" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="PA.TileList.Geometrics\Circular\CircularExtensions.cs">
+﻿<Properties StartupItem="PA.InnoSetupProcessor\PA.InnoSetupProcessor.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="PA.InnoSetupProcessor\ProjectProcessor.cs">
     <Files>
-      <File FileName=".build\_SetAssemblyNuspec.targets" Line="18" Column="18" />
-      <File FileName=".build\_SetAssemblyInfo.targets" Line="1" Column="1" />
-      <File FileName=".build\Extra.targets" Line="1" Column="1" />
-      <File FileName="PA.TileList.Geometrics\Circular\CircularProfile.cs" Line="17" Column="17" />
-      <File FileName="PA.TileList.Geometrics\Circular\CircularConfiguration.cs" Line="6" Column="6" />
-      <File FileName="PA.TileList.Geometrics\Circular\CircularExtensions.cs" Line="30" Column="30" />
+      <File FileName="PA.Configuration\Utilities\Settings.cs" Line="1" Column="1" />
+      <File FileName="PA.InnoSetupProcessor\ProjectProcessor.cs" Line="1" Column="1" />
+      <File FileName="PA.InnoSetupProcessor\InnoSetupScript.cs" Line="1" Column="1" />
+      <File FileName="PA.InnoSetupProcessor\Program.cs" Line="1" Column="1" />
+      <File FileName="PA.InnoSetupProcessor\InnoSetupScriptParser.cs" Line="1" Column="1" />
+      <File FileName="PA.File\PA.File.csproj" Line="1" Column="1" />
+      <File FileName="c:\Users\thomas gervais\Documents\Projects\PA.Toolbox\PA.InnoSetupProcessor\SolutionProcessor.cs" Line="1" Column="1" />
+      <File FileName="c:\Users\thomas gervais\Documents\Projects\PA.Toolbox\PA.InnoSetupProcessor\InnoSetupFileItem.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\thomas gervais\Documents\Projects\PA.Toolbox\PA.InnoSetupProcessor\ProjectProcessor.cs" line="174" column="1" />
+      <Breakpoint file="C:\Users\thomas gervais\Documents\Projects\PA.Toolbox\PA.InnoSetupProcessor\ProjectProcessor.cs" line="140" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="PA.InnoSetupProcessor\ProjectProcessor.cs" line="166" offsetX="704" offsetY="2640" expression="ppi" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>
