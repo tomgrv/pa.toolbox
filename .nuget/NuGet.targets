@@ -103,14 +103,14 @@
   <Target Name="BuildPackage" DependsOnTargets="CheckPrerequisites">
 
     <!-- Add Nuget SemVer Support -->
-    <GetVersion SolutionDirectory="$(SolutionDir)">
-       <Output TaskParameter="NuGetVersion" PropertyName="GfvNuGetVersion" />
+    <GetVersion SolutionDirectory="$(SolutionDir)"  Condition=" '$(GitVersion_NuGetVersionV2)' == '' " >
+       <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersionV2" />
     </GetVersion>    
 
-    <Exec Command="$(BuildCommand) -Version $(GfvNuGetVersion)"
+    <Exec Command="$(BuildCommand) -Version $(GitVersion_NuGetVersionV2)"
           Condition=" '$(OS)' != 'Windows_NT' " />
 
-    <Exec Command="$(BuildCommand) -Version $(GfvNuGetVersion)"
+    <Exec Command="$(BuildCommand) -Version $(GitVersion_NuGetVersionV2)"
           LogStandardErrorAsError="true"
           Condition=" '$(OS)' == 'Windows_NT' " />
   
