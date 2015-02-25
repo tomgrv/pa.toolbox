@@ -402,7 +402,7 @@ Global
 		$28.inheritsSet = Mono
 		$28.inheritsScope = text/x-csharp
 		$28.scope = text/x-csharp
-		version = 4.4.1
+		version = 4.5.0
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

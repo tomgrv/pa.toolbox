@@ -30,7 +30,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-    <ReleaseVersion>4.4.1</ReleaseVersion>
+    <ReleaseVersion>4.5.0</ReleaseVersion>
     <NuGetPackageImportStamp>116e4a35</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
