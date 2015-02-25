@@ -31,6 +31,7 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <ReleaseVersion>4.4.1</ReleaseVersion>
+    <NuGetPackageImportStamp>116e4a35</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>PA.Toolbox.snk</AssemblyOriginatorKeyFile>

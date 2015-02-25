@@ -103,17 +103,17 @@
   <Target Name="BuildPackage" DependsOnTargets="CheckPrerequisites">
 
     <!-- Add Nuget SemVer Support -->
-    <GetVersion SolutionDirectory="$(SolutionDir)"  Condition=" '$(GitVersion_NuGetVersionV2)' == '' " >
-       <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersionV2" />
-    </GetVersion>    
+    <GetVersion SolutionDirectory="$(SolutionDir)" Condition=" '$(GitVersion_NuGetVersion)' == '' " >
+      <Output TaskParameter="NuGetVersion" PropertyName="GitVersion_NuGetVersion" />
+    </GetVersion>
 
-    <Exec Command="$(BuildCommand) -Version $(GitVersion_NuGetVersionV2)"
+    <Exec Command="$(BuildCommand) -Version $(GitVersion_NuGetVersion)"
           Condition=" '$(OS)' != 'Windows_NT' " />
 
-    <Exec Command="$(BuildCommand) -Version $(GitVersion_NuGetVersionV2)"
+    <Exec Command="$(BuildCommand) -Version $(GitVersion_NuGetVersion)"
           LogStandardErrorAsError="true"
           Condition=" '$(OS)' == 'Windows_NT' " />
-  
+
   </Target>
 
   <UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">

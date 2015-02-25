@@ -15,6 +15,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <ReleaseVersion>4.4.1</ReleaseVersion>
+    <NuGetPackageImportStamp>e7def96d</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
