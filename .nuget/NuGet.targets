@@ -101,13 +101,13 @@
   </Target>
   
   <Target Name="BuildPackage" DependsOnTargets="CheckPrerequisites">
-    
+
     <Exec Command="$(BuildCommand) -Version $(GfvNuGetVersion)"
-          Condition=" '$(OS)' != 'Windows_NT' " />
+          Condition=" '$(OS)' != 'Windows_NT' And '$(GfvNuGetVersion)' != '' " />
     
     <Exec Command="$(BuildCommand) -Version $(GfvNuGetVersion)"
           LogStandardErrorAsError="true"
-          Condition=" '$(OS)' == 'Windows_NT' " />
+          Condition=" '$(OS)' == 'Windows_NT' And '$(GfvNuGetVersion)' != '' " />
     
   </Target>
 
