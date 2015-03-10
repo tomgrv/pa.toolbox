@@ -23,17 +23,19 @@ namespace PA.Data
             StackTrace stackTrace = new StackTrace();           // get call stack
             StackFrame[] stackFrames = stackTrace.GetFrames();  // get method calls (frames)
             this.name = stackFrames[1].GetMethod().DeclaringType.ToString() + "." + stackFrames[1].GetMethod().Name;
+#else
+            this.name = "class #" + this.GetHashCode();
 #endif
 
-            Debug.WriteLine("Context waiting in <" + (this.name ?? "") + ">");
+            Debug.WriteLine("Context waiting in <" + this.name + ">");
             sem.WaitOne();
-            Debug.WriteLine("Context in use in <" + (this.name ?? "") + ">");
+            Debug.WriteLine("Context in use in <" + this.name + ">");
 
             if (context is ObjectContext)
             {
                 throw new AccessViolationException("Will be started twice");
             }
-           
+
             context = Activator.CreateInstance<T>();
         }
 

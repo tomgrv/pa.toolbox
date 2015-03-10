@@ -16,7 +16,7 @@ namespace PA.Plugin
             this.PluginItem = pi;
         }
 
-        public static readonly PluginItemEventArgs Empty;
+        public new static readonly PluginItemEventArgs Empty;
 
     }
 }

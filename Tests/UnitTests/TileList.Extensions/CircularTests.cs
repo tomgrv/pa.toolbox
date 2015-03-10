@@ -88,7 +88,7 @@ namespace UnitTests.Drawing
 
             bool change = true;
 
-            IQuantifiedTile<IContextual<TileTests.Item>> q = tile.Take(p, new CircularConfiguration(1f, 0.5f, CircularConfiguration.SelectionFlag.Inside), ref change);
+            IQuantifiedTile<IContextual<TileTests.Item>> q = tile.Take(p, new CircularConfiguration(1f, CircularConfiguration.SelectionFlag.Inside), ref change);
 
             Assert.AreEqual(false, change, "Reference Changed");
             Assert.AreEqual(1799, q.Count(), "Selected item count");
@@ -113,7 +113,7 @@ namespace UnitTests.Drawing
 
             CircularProfile p = GetTestProfile(1000);
 
-            foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f, 1f, CircularConfiguration.SelectionFlag.Inside)).ToArray()).ToArray())
+            foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f,  CircularConfiguration.SelectionFlag.Inside)).ToArray()).ToArray())
             {
                 tt.Context.Color = Color.Beige;
             }
