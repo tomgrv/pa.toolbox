@@ -17,7 +17,7 @@ namespace PA.Configuration
     public class Settings : IDisposable
     {
 
-        #if OLD
+#if OLD
 
         #region Import Ini
 
@@ -46,7 +46,7 @@ namespace PA.Configuration
 
         #endregion
 
-        #endif
+#endif
 
         public enum Status
         {
@@ -264,7 +264,7 @@ namespace PA.Configuration
                         .Where(k => k.StartsWith(root) && k.Length >= root.Length)
                         .Select(k => k.Substring(root.Length > 0 ? root.Length : 0))
                         .Select(k => k.StartsWith("/") ? k.Substring(1) : k)
-                    //.Select(k => k.EndsWith("/") ? k.Substring(0, k.Length - 1) : k)
+                        //.Select(k => k.EndsWith("/") ? k.Substring(0, k.Length - 1) : k)
                         .ToArray();
 
                 default:
@@ -351,7 +351,7 @@ namespace PA.Configuration
                         {
                             case Format.IniFormat:
 
-                                #if OLD
+#if OLD
 
 
                                 if (item.Value != ";")
@@ -363,7 +363,7 @@ namespace PA.Configuration
                                 WriteProfileString(hash[0], hash[1], this.FileName);
                                 }
 
-                                #else
+#else
 
                                 var parser = new FileIniDataParser();
 
@@ -376,9 +376,9 @@ namespace PA.Configuration
 
                                 content[hash[0]][hash[1]] = item.Value.ToString();
 
-                                parser.WriteFile(this.FileName,content);
+                                parser.WriteFile(this.FileName, content);
 
-                                #endif
+#endif
 
                                 break;
 
@@ -396,7 +396,7 @@ namespace PA.Configuration
                 {
                     case Format.IniFormat:
 
-                        #if OLD
+#if OLD
 
                         byte[] data = new byte[1024];
                         GetPrivateProfileSectionNames(data, data.Length, this.FileName);
@@ -435,21 +435,21 @@ namespace PA.Configuration
                             pBuffer = IntPtr.Zero;
                         }
 
-                        #else
+#else
 
                         var parser = new FileIniDataParser();
 
                         IniData content = parser.ReadFile(this.FileName);
 
-                        foreach(var section in content.Sections)
+                        foreach (var section in content.Sections)
                         {
-                            foreach(var key in section.Keys)
+                            foreach (var key in section.Keys)
                             {
                                 this.SetValue(section.SectionName + "/" + key.KeyName, key.Value);
                             }
                         }
 
-                        #endif
+#endif
 
                         break;
 
@@ -480,8 +480,7 @@ namespace PA.Configuration
 
                     if (File.Exists(this.FileName))
                     {
-
-                        #if OLD 
+#if OLD 
 
                         StringBuilder temp = new StringBuilder(255);
 
@@ -499,15 +498,17 @@ namespace PA.Configuration
                             this.SetValue(key, temp.ToString());
                         }
 
-                        #else
-
+#else
                         var parser = new FileIniDataParser();
+                        var hash = this.Group.Length > 0 ? this.Group : this.ApplicationName;
 
                         IniData content = parser.ReadFile(this.FileName);
 
-                        this.SetValue(key, content[this.Group.Length > 0 ? this.Group : this.ApplicationName][field]);
-
-                        #endif
+                        if (content[hash] != null && content[hash][field] != null)
+                        {
+                            this.SetValue(key, content[hash][field]);
+                        }
+#endif
                     }
                     else
                     {
@@ -548,10 +549,10 @@ namespace PA.Configuration
         #endregion
 
         public void Remove(string key)
-        { 
+        {
             string fields;
 
-            foreach (string k in this.values.Keys.Where(s=>s.StartsWith(string.IsNullOrEmpty(key) ? this.Group: this.GetHashKey(key, out fields))).ToArray())
+            foreach (string k in this.values.Keys.Where(s => s.StartsWith(string.IsNullOrEmpty(key) ? this.Group : this.GetHashKey(key, out fields))).ToArray())
             {
                 this.values.Remove(k);
             }
