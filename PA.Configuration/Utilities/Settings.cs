@@ -369,6 +369,11 @@ namespace PA.Configuration
 
                                 IniData content = parser.ReadFile(this.FileName);
 
+                                if (content.Sections[hash[0]] == null)
+                                {
+                                    content.Sections.AddSection(hash[0]);
+                                }
+
                                 content[hash[0]][hash[1]] = item.Value.ToString();
 
                                 parser.WriteFile(this.FileName,content);
@@ -440,7 +445,7 @@ namespace PA.Configuration
                         {
                             foreach(var key in section.Keys)
                             {
-                                this.SetValue(section + "/" + key.KeyName, key.Value);
+                                this.SetValue(section.SectionName + "/" + key.KeyName, key.Value);
                             }
                         }
 
