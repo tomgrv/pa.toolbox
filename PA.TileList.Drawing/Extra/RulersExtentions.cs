@@ -16,7 +16,7 @@ namespace PA.TileList.Drawing
         public static RectangleD<Bitmap> GetRulers<T>(this IQuantifiedTile<T> c, int width, int height, float[] steps)
            where T : ICoordinate
         {
-            RectangleF b = c.GetBounds();
+            RectangleF b = c.GetBounds(1f,1f);
             return c.GetRulers(new RectangleD<Bitmap>(new Bitmap(width, height), b, b), steps);
         }
 

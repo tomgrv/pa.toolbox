@@ -611,18 +611,14 @@ namespace PA.TileList.Quadrant
             {
                 for (int j = StartY; j < (StartY + SizeY); j++)
                 {
-                    T clone = (T)motif.Clone();
-
+                   
                     T item = zl.FirstOrDefault<IQuadrant<T>, T>(i, j);
                     if (item is T)
                     {
                         zl.Remove(item);
                     }
 
-                    clone.X = i;
-                    clone.Y = j;
-
-                    zl.Add(clone);
+                    zl.Add(motif.Clone(i, j));
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,6 +13,9 @@ namespace PA.Converters.Extensions
 {
     public static class ObjectExtensions
     {
+       
+
+
         public static T ParseTo<T, U>(this U value, Type type = null)
         {
             Type t = type ?? typeof(T);
@@ -127,9 +131,9 @@ namespace PA.Converters.Extensions
 #if ! XAMARIN
                 type.IsAssignableFrom(s.GetType())
 #else
-                type.GetTypeInfo().IsAssignableFrom(s.GetType().GetTypeInfo())
+ type.GetTypeInfo().IsAssignableFrom(s.GetType().GetTypeInfo())
 #endif
-            ).ToArray();
+).ToArray();
 
             Array destination = Array.CreateInstance(type, source.Length);
             Array.Copy(source, destination, source.Length);

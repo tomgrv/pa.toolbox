@@ -20,7 +20,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <ReleaseVersion>4.5.0</ReleaseVersion>
-    <NuGetPackageImportStamp>fc7e5221</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>a0c3088e</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +66,7 @@
     <Compile Include="..\..\common\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="Configuration\IniConfigurationTest.cs" />
     <Compile Include="Configuration\SettingsTest.cs" />
     <Compile Include="Converters\Extensions.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="TileList\TileTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="vstest.executionengine.x86.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -121,15 +123,15 @@
       <Project>{3b0b93a1-4a55-412b-8f9d-7e94a60867ea}</Project>
       <Name>PA.Picture</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin.Components\PA.Plugin.Components.csproj">
+    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.Components\PA.Plugin.Components.csproj">
       <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
       <Name>PA.Plugin.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
       <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
       <Name>PA.Plugin.Operations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.csproj">
+    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
       <Name>PA.Plugin</Name>
     </ProjectReference>
@@ -171,6 +173,13 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets" Condition="Exists('..\..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

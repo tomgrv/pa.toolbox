@@ -1,19 +1,12 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PA.TileList.Geometrics.Circular;
-using PA.TileList.Quantified;
-using PA.TileList.Contextual;
-using PA.TileList.Extensions;
-using PA.TileList.Quadrant;
-using PA.TileList.Drawing;
-using System.Drawing;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
-using PA.File.Extensions;
-using System.Collections.Generic;
+using PA.TileList.Contextual;
+using PA.TileList.Drawing;
+using PA.TileList.Geometrics.Circular;
+using System;
+using System.Drawing;
+using System.Linq;
 using UnitTests.TileList;
-using System.IO;
-using System.Security.Cryptography;
 
 namespace UnitTests.Drawing
 {
@@ -43,10 +36,10 @@ namespace UnitTests.Drawing
             CircularProfile search = new CircularProfile(1000);
 
             search.AddProfileFlatByLength(0, 1500);
-            search.AddProfileFlatByLength(Math.PI, 500, 0.0001,500);
-            search.AddProfileFlat(Math.PI/2f, 200,1000);
-            search.AddProfileStep(-Math.PI/4, 1000);
-            search.AddProfileStep(-3*Math.PI/4, 800);
+            search.AddProfileFlatByLength(Math.PI, 500, 0.0001, 500);
+            search.AddProfileFlat(Math.PI / 2f, 200, 1000);
+            search.AddProfileStep(-Math.PI / 4, 1000);
+            search.AddProfileStep(-3 * Math.PI / 4, 800);
 
             string signature = search.GetImage(1000, 1000).Item.GetSignature();
             Assert.AreEqual("EED4365394FDB98CE5A4566244C50FA9925A28F54F8561533295FAC5E4B91FE4", signature, "Image hash");
@@ -95,7 +88,10 @@ namespace UnitTests.Drawing
 
             RectangleD<Bitmap> pi = p.GetImage(1000, 1000, tile.GetBounds());
 
-            RectangleD<Bitmap> i = q.GetImage(pi, (z,s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
+            RectangleD<Bitmap> i = q.GetImage(pi, (z, s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
+
+            string signature1 = q.GetSignature(it => it.Context.Color.GetHashCode().ToString());
+            Assert.AreEqual("ADE22DBF99F378AEE20F993BF51705756AFFF2539CA8D6CC5CCA7266C9F2B551", signature1, "Signature");
 
             string signature = i.Item.GetSignature();
             Assert.AreEqual("ADE22DBF99F378AEE20F993BF51705756AFFF2539CA8D6CC5CCA7266C9F2B551", signature, "Image hash");
@@ -107,13 +103,13 @@ namespace UnitTests.Drawing
             float factor = 5f;
 
             IQuantifiedTile<IContextual<TileTests.Item>> tile = TileTests.GetTile(factor)
-                .Flatten<TileTests.SubTile, TileTests.Item>();                
+                .Flatten<TileTests.SubTile, TileTests.Item>();
 
             Assert.AreEqual(65025, tile.Count(), "Initial item count");
 
             CircularProfile p = GetTestProfile(1000);
 
-            foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f,  CircularConfiguration.SelectionFlag.Inside)).ToArray()).ToArray())
+            foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f, CircularConfiguration.SelectionFlag.Inside)).ToArray()).ToArray())
             {
                 tt.Context.Color = Color.Beige;
             }
@@ -129,7 +125,7 @@ namespace UnitTests.Drawing
             RectangleD<Bitmap> pj = p.GetImage(j);
             string signature_2 = pj.Item.GetSignature();
 
-         
+
             Assert.AreEqual("E63318A4278EED31907E0374B728F045285D43B6FBE0955A1622BFCFBB7AF5B8", signature_2, "Image hash");
         }
 
@@ -137,7 +133,7 @@ namespace UnitTests.Drawing
         {
             CircularProfile p = new CircularProfile(radius);
 
-            p.AddProfileFlat(-Math.PI / 2, radius-100, 100, stepping);
+            p.AddProfileFlat(-Math.PI / 2, radius - 100, 100, stepping);
             p.AddProfileFlat(7 * Math.PI / 4, radius - 200, 100, stepping);
             p.AddProfileFlat(0, radius - 300, 100, stepping, resolution);
             p.AddProfileFlat(Math.PI / 3f, radius - 400, 200, stepping, resolution);
