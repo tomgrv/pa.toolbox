@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
+
 namespace PA.Configuration
+
 {
-    public interface IConfigurationSource
+    public interface IConfigurationSource: ISupportInitialize
     {
         bool ContainsSetting(string key);
         string GetSetting(string key);

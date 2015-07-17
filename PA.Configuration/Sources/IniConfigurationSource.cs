@@ -11,11 +11,31 @@ namespace PA.Configuration
     public partial class IniConfigurationSource : Component, IConfigurationSource
     {
         private Settings settings;
+        private String iniName;
+
+        public String FileName { get { return this.settings != null ? this.settings.FileName : string.Empty; } }
 
         public IniConfigurationSource()
         {
-            this.settings = new Settings(Process.GetCurrentProcess().ProcessName + ".ini", Settings.Format.IniFormat);
-            Trace.TraceInformation("Loading configuration from " + this.settings.FileName);
+            this.iniName = Process.GetCurrentProcess().ProcessName + ".ini";
+        }
+
+        public void BeginInit()
+        {
+            if (this.settings != null)
+            {
+                throw new InvalidOperationException("Cannot init twice");
+            }
+        }
+
+        public void EndInit()
+        {
+            if (!base.DesignMode && this.settings == null)
+            {
+                Trace.TraceInformation("Loading configuration from " + this.settings.FileName);
+                this.settings = new Settings(this.iniName, Settings.Format.IniFormat);
+                Trace.TraceInformation("File loaded " + this.settings.FileName);
+            }
         }
 
         public bool ContainsSetting(string key)
@@ -86,11 +106,11 @@ namespace PA.Configuration
                         {
                             this.settings.SetArrayIndex(i);
 
-                            stg.AddRange(this.settings.ChildKeys().Select(k =>  group + "/" + i + (k.Length > 0 ? "/" + k : "")));
+                            stg.AddRange(this.settings.ChildKeys().Select(k => group + "/" + i + (k.Length > 0 ? "/" + k : "")));
 
                             foreach (string subgroup in this.settings.ChildGroups())
                             {
-                                stg.AddRange(this.GetSettings(subgroup + "/" + i).Select(k =>  group + "/" + i + (k.Length > 0 ? "/" + k : "")));
+                                stg.AddRange(this.GetSettings(subgroup + "/" + i).Select(k => group + "/" + i + (k.Length > 0 ? "/" + k : "")));
                             }
                         }
 
@@ -98,7 +118,7 @@ namespace PA.Configuration
                     }
                     else
                     {
-                        stg.AddRange(this.GetSettings(group).Select(k =>  group + (k.Length > 0 ? "/" + k : "")));
+                        stg.AddRange(this.GetSettings(group).Select(k => group + (k.Length > 0 ? "/" + k : "")));
                     }
                 }
 

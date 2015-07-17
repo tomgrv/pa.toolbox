@@ -7,6 +7,16 @@ namespace PA.Configuration
 {
     public partial class FileConfigurationSource : Component, IConfigurationSource
     {
+        public void BeginInit()
+        {
+            
+        }
+
+        public void EndInit()
+        {
+           
+        }
+
         public bool ContainsSetting( string key)
         {
             return ConfigurationManager.AppSettings.AllKeys.Contains(key);
