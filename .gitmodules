@@ -28,3 +28,6 @@
 [submodule "PA.TileList"]
 	path = PA.TileList
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.git
+[submodule "PA.TileList.Drawing"]
+	path = PA.TileList.Drawing
+	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.Drawing.git
