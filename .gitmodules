@@ -7,3 +7,6 @@
 [submodule "PA.Data"]
 	path = PA.Data
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Data.git
+[submodule "PA.File"]
+	path = PA.File
+	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.File.git
