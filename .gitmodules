@@ -1,3 +1,6 @@
 [submodule "PA.Configuration"]
 	path = PA.Configuration
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Configuration.git
+[submodule "PA.Converters"]
+	path = PA.Converters
+	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Converters.git
