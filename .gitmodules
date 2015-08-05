@@ -13,3 +13,6 @@
 [submodule "PA.InnoSetupProcessor"]
 	path = PA.InnoSetupProcessor
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.InnoSetupProcessor.git
+[submodule "PA.LibraryTools"]
+	path = PA.LibraryTools
+	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.LibraryTools.git
