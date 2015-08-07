@@ -34,3 +34,6 @@
 [submodule "PA.TileList.Geometrics"]
 	path = PA.TileList.Geometrics
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.Geometrics.git
+[submodule "PA.Plugin"]
+	path = PA.Plugin
+	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.git
