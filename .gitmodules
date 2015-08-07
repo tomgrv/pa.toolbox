@@ -19,9 +19,6 @@
 [submodule "PA.Picture"]
 	path = PA.Picture
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Picture.git
-[submodule "PA.Plugin"]
-	path = PA.Plugin
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Plugin.git
 [submodule "PA.SimiliBrowser"]
 	path = PA.SimiliBrowser
 	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.SimiliBrowser.git
