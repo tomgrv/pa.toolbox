@@ -40,3 +40,6 @@
 [submodule "PA.Plugin.Components"]
 	path = PA.Plugin.Components
 	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.Components.git
+[submodule "PA.Plugin.File"]
+	path = PA.Plugin.File
+	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.File.git
