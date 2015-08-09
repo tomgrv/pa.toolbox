@@ -1,48 +1,48 @@
 [submodule "PA.Configuration"]
 	path = PA.Configuration
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Configuration.git
+	url = https://github.com/tomgrv/PA.Configuration.git
 [submodule "PA.Converters"]
 	path = PA.Converters
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Converters.git
+	url = https://github.com/tomgrv/PA.Converters.git
 [submodule "PA.Data"]
 	path = PA.Data
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Data.git
+	url = https://github.com/tomgrv/PA.Data.git
 [submodule "PA.File"]
 	path = PA.File
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.File.git
+	url = https://github.com/tomgrv/PA.File.git
 [submodule "PA.InnoSetupProcessor"]
 	path = PA.InnoSetupProcessor
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.InnoSetupProcessor.git
+	url = https://github.com/tomgrv/PA.InnoSetupProcessor.git
 [submodule "PA.Picture"]
 	path = PA.Picture
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.Picture.git
+	url = https://github.com/tomgrv/PA.Picture.git
 [submodule "PA.SimiliBrowser"]
 	path = PA.SimiliBrowser
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.SimiliBrowser.git
+	url = https://github.com/tomgrv/PA.SimiliBrowser.git
 [submodule "PA.TileList"]
 	path = PA.TileList
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.git
+	url = https://github.com/tomgrv/PA.TileList.git
 [submodule "PA.TileList.Drawing"]
 	path = PA.TileList.Drawing
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.Drawing.git
+	url = https://github.com/tomgrv/PA.TileList.Drawing.git
 [submodule "PA.TileList.Extensions"]
 	path = PA.TileList.Extensions
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.Extensions.git
+	url = https://github.com/tomgrv/PA.TileList.Extensions.git
 [submodule "PA.TileList.Geometrics"]
 	path = PA.TileList.Geometrics
-	url = https://7840f421ab2acf1fb80675180d26d133f3829f57:x-oauth-basic@github.com/tomgrv/PA.TileList.Geometrics.git
+	url = https://github.com/tomgrv/PA.TileList.Geometrics.git
 [submodule "PA.Plugin"]
 	path = PA.Plugin
-	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.git
+	url = https://github.com/tomgrv/PA.Plugin.git
 [submodule "PA.Plugin.Components"]
 	path = PA.Plugin.Components
-	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.Components.git
+	url = https://github.com/tomgrv/PA.Plugin.Components.git
 [submodule "PA.Plugin.File"]
 	path = PA.Plugin.File
-	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.File.git
+	url = https://github.com/tomgrv/PA.Plugin.File.git
 [submodule "PA.Plugin.Operations"]
 	path = PA.Plugin.Operations
-	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.Operations.git
+	url = https://github.com/tomgrv/PA.Plugin.Operations.git
 [submodule "PA.Plugin.Thread"]
 	path = PA.Plugin.Thread
-	url = https://34d101d122a760661ca96f70769755f8aba0ac98:x-oauth-basic@github.com/tomgrv/PA.Plugin.Thread.git
+	url = https://github.com/tomgrv/PA.Plugin.Thread.git
