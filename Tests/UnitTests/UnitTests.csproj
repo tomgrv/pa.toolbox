@@ -123,15 +123,15 @@
       <Project>{3b0b93a1-4a55-412b-8f9d-7e94a60867ea}</Project>
       <Name>PA.Picture</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.Components\PA.Plugin.Components.csproj">
+    <ProjectReference Include="..\..\PA.Plugin.Components\PA.Plugin.Components.csproj">
       <Project>{7dce837c-ccac-47d3-bd8f-cfafea09ceae}</Project>
       <Name>PA.Plugin.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+    <ProjectReference Include="..\..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
       <Project>{ac454838-bc18-4852-9eaa-1d2e4e72f711}</Project>
       <Name>PA.Plugin.Operations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin\PA.Plugin.csproj">
+    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.csproj">
       <Project>{557ace88-a58e-48ab-b7cf-07925ca98530}</Project>
       <Name>PA.Plugin</Name>
     </ProjectReference>
