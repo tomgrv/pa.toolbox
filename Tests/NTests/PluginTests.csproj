@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{36A8F97A-5E59-480F-AE97-45C43508A0B4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NTests</RootNamespace>
+    <AssemblyName>NTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Plugin\IPluginUri.cs" />
+    <Compile Include="Plugin\Plugin2ForUriHttp.cs" />
+    <Compile Include="Plugin\PluginForGenericArrayTest.cs" />
+    <Compile Include="Plugin\PluginForGenericImportTest.cs" />
+    <Compile Include="Plugin\PluginForSpecificArrayTest.cs" />
+    <Compile Include="Plugin\PluginForSpecificImportTest.cs" />
+    <Compile Include="Plugin\PluginForUriFile.cs" />
+    <Compile Include="Plugin\PluginForUriHttp.cs" />
+    <Compile Include="Plugin\TestLoader.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PA.Configuration\PA.Configuration.csproj">
+      <Project>{40FA1F2A-3B4E-470B-87CA-D8B3792F3E8A}</Project>
+      <Name>PA.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Converters\PA.Converters.csproj">
+      <Project>{B09F91A1-DF25-4DAE-8E45-40DF0FA9334F}</Project>
+      <Name>PA.Converters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Data\PA.Data.csproj">
+      <Project>{DDE40A86-A8A4-4A0E-A964-A4E0C233611F}</Project>
+      <Name>PA.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.File\PA.File.csproj">
+      <Project>{69C9EA62-E168-4241-89DB-A44E8387E846}</Project>
+      <Name>PA.File</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Picture\PA.Picture.csproj">
+      <Project>{3B0B93A1-4A55-412B-8F9D-7E94A60867EA}</Project>
+      <Name>PA.Picture</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.InnoSetupProcessor\PA.InnoSetupProcessor.csproj">
+      <Project>{EBC810F8-DF7E-4392-9E88-B57A7659CA15}</Project>
+      <Name>PA.InnoSetupProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Operations\PA.Plugin.Operations.csproj">
+      <Project>{AC454838-BC18-4852-9EAA-1D2E4E72F711}</Project>
+      <Name>PA.Plugin.Operations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.File\PA.Plugin.File.csproj">
+      <Project>{12CB506D-BCF9-4EC0-BA3F-3050CBF4BFA2}</Project>
+      <Name>PA.Plugin.File</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Components\PA.Plugin.Components.csproj">
+      <Project>{7DCE837C-CCAC-47D3-BD8F-CFAFEA09CEAE}</Project>
+      <Name>PA.Plugin.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin\PA.Plugin.csproj">
+      <Project>{557ACE88-A58E-48AB-B7CF-07925CA98530}</Project>
+      <Name>PA.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.Plugin.Thread\PA.Plugin.Threads.csproj">
+      <Project>{96DAEB75-B658-4D5E-83B5-55745DD983D2}</Project>
+      <Name>PA.Plugin.Threads</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.SimiliBrowser\PA.SimiliBrowser.csproj">
+      <Project>{A717A9F8-AEA4-4B9A-A0BA-8E6D0C856AEE}</Project>
+      <Name>PA.SimiliBrowser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.TileList\PA.TileList.csproj">
+      <Project>{5B4FACE3-DDB3-4EAA-985A-9DE4AAC34A91}</Project>
+      <Name>PA.TileList</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.TileList.Geometrics\PA.TileList.Geometrics.csproj">
+      <Project>{B64BCAC4-3BD8-414D-8F5C-F55728FA109E}</Project>
+      <Name>PA.TileList.Geometrics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.TileList.Extensions\PA.TileList.Extensions.csproj">
+      <Project>{A16E749B-7556-41BD-A9B9-253B3253578C}</Project>
+      <Name>PA.TileList.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PA.TileList.Drawing\PA.TileList.Drawing.csproj">
+      <Project>{2D187F72-216C-40D5-B9DD-FFB52F7B3AAF}</Project>
+      <Name>PA.TileList.Drawing</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
