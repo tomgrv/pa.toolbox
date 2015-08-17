@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.Composition;
 using PA.Plugin;
 using PA.Plugin.Extensions;
@@ -9,10 +8,12 @@ using PA.Configuration;
 using System.ComponentModel;
 using System.Collections.Generic;
 using PA.Plugin.Configuration;
+using NUnit.Framework;
+using PA.Plugin.Tests.Objects;
 
-namespace UnitTests.Plugin
+namespace PA.Plugin.Tests
 {
-    [TestClass]
+    [TestFixtureAttribute]
     public class TestLoader : Component
     {
         [Import("TestSection/TestString", AllowRecomposition=true)]
@@ -26,7 +27,6 @@ namespace UnitTests.Plugin
 
         [Import("TestSection/Date", AllowRecomposition = true)]
         private ConfigurationItem<DateTime> Date2 { get; set; }
-
 
         [Import("TestSection/TestUrl", AllowRecomposition = true)]
         private ConfigurationItem<string> UrlItemToTest { get; set; }
@@ -42,6 +42,10 @@ namespace UnitTests.Plugin
 
         [ImportMany("TestSection/Many", AllowRecomposition = true)]
         public IEnumerable<Lazy<IPlugin, IPluginIndex>> ManyPluginToLoad1 { get; set; }
+
+        [ImportMany("TestSection/Many", AllowRecomposition = true)]
+        public IEnumerable<Lazy<IPlugin>> ManyPluginToLoad1bis { get; set; }
+
 
         [ImportMany("TestLoader/ManyPluginToLoad", AllowRecomposition = true)]
         public IEnumerable<Lazy<IPlugin, IPluginIndex>> ManyPluginToLoad2 { get; set; }
@@ -73,18 +77,26 @@ namespace UnitTests.Plugin
         [ImportMany("TestLoader/AnotherArray")]
         public IEnumerable<IPlugin> AnotherPluginToLoad1 { get; set; }
 
+        [ImportMany("TestLoader/AnotherArray")]
+        public IEnumerable<Lazy<IPlugin>> AnotherPluginToLoad2 { get; set; }
+
+
         //[ImportMany("TestLoader/AnotherArray")]
         //public IEnumerable<IPlugin> AnotherPluginToLoad1 { get; set; }
 
-        [TestMethod]
+        [Test]
         public void Attributes()
         {
             Assert.AreEqual("DESC", PluginManager.GetAttribute<PluginDescriptionAttribute>(typeof(PluginForSpecificImportTest)).Description);
 
             using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
+                var ics = new IniConfigurationSource();
+                ics.BeginInit();
+                ics.EndInit();
+
                 loader.BeginInit();
-                loader.Configuration = new IniConfigurationSource();
+                loader.Configuration = ics;
                 loader.Parent = this;
                 loader.EndInit();
 
@@ -98,18 +110,22 @@ namespace UnitTests.Plugin
         {
             using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
+                var ics = new IniConfigurationSource();
+                ics.BeginInit();
+                ics.EndInit();
+
                 loader.BeginInit();
-                loader.Configuration = new IniConfigurationSource();
+                loader.Configuration = ics;
                 loader.Parent = this;
                 loader.EndInit();
 
                 Assert.AreEqual(1, this.ManyPluginToLoad2.Count(), "TestLoader/ManyPluginToLoad Plugin Loading");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad2.ElementAt(0).Value, typeof(IPlugin));
+                Assert.IsInstanceOf<IPlugin>(this.ManyPluginToLoad2.ElementAt(0).Value);
 
                 loader.BeginEdit();
 
                 Assert.AreEqual(1, this.ManyPluginToLoad2.Count(), "TestLoader/ManyPluginToLoad Plugin Loading");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad2.ElementAt(0).Value, typeof(IPlugin));
+                Assert.IsInstanceOf<IPlugin>(this.ManyPluginToLoad2.ElementAt(0).Value);
 
                 loader.Location = @"c:\";
 
@@ -129,13 +145,17 @@ namespace UnitTests.Plugin
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ConfigurationLoading()
         {
             using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
+                var ics = new IniConfigurationSource();
+                ics.BeginInit();
+                ics.EndInit();
+
                 loader.BeginInit();
-                loader.Configuration = new IniConfigurationSource();
+                loader.Configuration = ics;
                 loader.Parent = this;
                 loader.EndInit();
 
@@ -147,30 +167,30 @@ namespace UnitTests.Plugin
 
 
                 Assert.AreEqual(1, this.ManyPluginToLoad1.Count(), "TestSection/Many Plugin Loading");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad1.ElementAt(0).Value, typeof(PluginForSpecificArrayTest));
+                Assert.IsInstanceOf<PluginForSpecificArrayTest>(this.ManyPluginToLoad1.ElementAt(0).Value);
                 Assert.AreEqual("OKMANY1", (this.ManyPluginToLoad1.ElementAt(0).Value as PluginForSpecificArrayTest).Parameter);
 
                 Assert.AreEqual(1, this.ManyPluginToLoad2.Count(), "TestLoader/ManyPluginToLoad Plugin Loading");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad2.ElementAt(0).Value, typeof(IPlugin));
+                Assert.IsInstanceOf<IPlugin>(this.ManyPluginToLoad2.ElementAt(0).Value);
 
                 Assert.AreEqual(0, this.ManyPluginToLoad3.Count(), "TestSection/Many {PluginForGenericArrayTest} Plugin Loading");
 
                 Assert.AreEqual(1, this.ManyPluginToLoad4.Count(), "TestSection/Many {PluginForSpecificArrayTest} Plugin Loading");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad4.ElementAt(0).Value, typeof(PluginForSpecificArrayTest));
+                Assert.IsInstanceOf<PluginForSpecificArrayTest>(this.ManyPluginToLoad4.ElementAt(0).Value);
                 Assert.AreEqual("OKMANY1", (this.ManyPluginToLoad4.ElementAt(0).Value as PluginForSpecificArrayTest).Parameter);
 
                 Assert.AreEqual(2, this.ManyPluginToLoad5.Count(), "Default Plugin Loading with Interface");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad5.ElementAt(0), typeof(IPlugin));
+                Assert.IsInstanceOf<IPlugin>(this.ManyPluginToLoad5.ElementAt(0));
 
                 Assert.AreEqual(1, this.ManyPluginToLoad6.Count(), "Default Plugin Loading with Class");
-                Assert.IsInstanceOfType(this.ManyPluginToLoad6.ElementAt(0), typeof(PluginForSpecificImportTest));
+                Assert.IsInstanceOf<PluginForSpecificImportTest>(this.ManyPluginToLoad6.ElementAt(0));
                 Assert.AreEqual(3, this.ManyPluginToLoad6.ElementAt(0).Parameter.Length);
 
-                Assert.IsInstanceOfType(this.GenericPluginToTest, typeof(PluginForSpecificImportTest));
-                Assert.IsInstanceOfType(this.SpecificPluginToTest, typeof(PluginForSpecificImportTest));
-                Assert.IsInstanceOfType(this.GenericArrayToTest, typeof(IPlugin));
+                Assert.IsInstanceOf<PluginForSpecificImportTest>(this.GenericPluginToTest);
+                Assert.IsInstanceOf<PluginForSpecificImportTest>(this.SpecificPluginToTest);
+                Assert.IsInstanceOf<IPlugin>(this.GenericArrayToTest);
 
-                Assert.IsInstanceOfType(this.SpecificArrayToTest, typeof(PluginForSpecificArrayTest));
+                Assert.IsInstanceOf<PluginForSpecificArrayTest>(this.SpecificArrayToTest);
                 Assert.AreEqual("OKSINGLE", this.SpecificArrayToTest.Parameter);
             }
         }
