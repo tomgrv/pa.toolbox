@@ -1,0 +1,39 @@
+version: '{build}'
+skip_tags: true
+os: Windows Server 2012 R2
+configuration: Release
+platform: Any CPU
+init: []
+environment:
+  DownloadNuGetExe: True
+  RestorePackages: True
+  BuildPackage: True
+  COVERALLS_REPO_TOKEN:
+    secure: Nit14+e3YopZsd6IQ8/UnTu+yVmayj5knutSXlP+nmt4zSrtxV2Vx+0dnJwlIrhs
+install:
+- git submodule update --init --recursive
+- nuget restore PA.Toolbox.sln
+nuget:
+  account_feed: true
+  project_feed: true
+build:
+  project: PA.Toolbox.sln
+  verbosity: detailed
+test:
+  categories:
+    only:
+    - validtest
+artifacts:
+- path: '**\PA.*.nupkg'
+deploy:
+- provider: NuGet
+  api_key:
+    secure: 3BZTVqpPLuHt14tJZiB+lzG1oXtxJMirDdPgl2d7f6TdojLX9igg+qT0cVmaH4yD
+  on:
+    branch: master
+- provider: GitHub
+  auth_token:
+    secure: FKTbsPl3jCAyP0GIRfHar5L+OFDgreUFeivdrdAARugrcisbTwku76JRSoSjDkkM
+  artifact: 
+  draft: true
+  prerelease: false

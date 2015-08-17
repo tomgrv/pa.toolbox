@@ -1,0 +1,48 @@
+[submodule "PA.Configuration"]
+	path = PA.Configuration
+	url = https://github.com/tomgrv/PA.Configuration.git
+[submodule "PA.Converters"]
+	path = PA.Converters
+	url = https://github.com/tomgrv/PA.Converters.git
+[submodule "PA.Data"]
+	path = PA.Data
+	url = https://github.com/tomgrv/PA.Data.git
+[submodule "PA.File"]
+	path = PA.File
+	url = https://github.com/tomgrv/PA.File.git
+[submodule "PA.InnoSetupProcessor"]
+	path = PA.InnoSetupProcessor
+	url = https://github.com/tomgrv/PA.InnoSetupProcessor.git
+[submodule "PA.Picture"]
+	path = PA.Picture
+	url = https://github.com/tomgrv/PA.Picture.git
+[submodule "PA.SimiliBrowser"]
+	path = PA.SimiliBrowser
+	url = https://github.com/tomgrv/PA.SimiliBrowser.git
+[submodule "PA.TileList"]
+	path = PA.TileList
+	url = https://github.com/tomgrv/PA.TileList.git
+[submodule "PA.TileList.Drawing"]
+	path = PA.TileList.Drawing
+	url = https://github.com/tomgrv/PA.TileList.Drawing.git
+[submodule "PA.TileList.Extensions"]
+	path = PA.TileList.Extensions
+	url = https://github.com/tomgrv/PA.TileList.Extensions.git
+[submodule "PA.TileList.Geometrics"]
+	path = PA.TileList.Geometrics
+	url = https://github.com/tomgrv/PA.TileList.Geometrics.git
+[submodule "PA.Plugin"]
+	path = PA.Plugin
+	url = https://github.com/tomgrv/PA.Plugin.git
+[submodule "PA.Plugin.Components"]
+	path = PA.Plugin.Components
+	url = https://github.com/tomgrv/PA.Plugin.Components.git
+[submodule "PA.Plugin.File"]
+	path = PA.Plugin.File
+	url = https://github.com/tomgrv/PA.Plugin.File.git
+[submodule "PA.Plugin.Operations"]
+	path = PA.Plugin.Operations
+	url = https://github.com/tomgrv/PA.Plugin.Operations.git
+[submodule "PA.Plugin.Thread"]
+	path = PA.Plugin.Thread
+	url = https://github.com/tomgrv/PA.Plugin.Thread.git

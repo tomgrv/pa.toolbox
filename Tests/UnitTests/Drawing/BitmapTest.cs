@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PA.TileList;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList.Drawing;
 using PA.TileList.Quantified;
-using PA.TileList.Extensions;
+using PA.TileList.Geometrics;
+using System;
 using System.Drawing;
 using UnitTests.TileList;
 
@@ -20,34 +18,44 @@ namespace UnitTests.Drawing
 
             TileTests.MainTile t2 = TileTests.GetTile(factor);
 
-            string signature = AjouterDetourage(
+            //var z = t2.Reference
+            //    .AsQuantified()
+            //    .GetImage(100, 100,
+            //            (p2, s2) => p2.ToBitmap(20, 20, p2.X + "|" + p2.Y)
+            //            );
+
+            //z.Item.GetSignature();
+
+            string signature =
                 t2
-                .AsQuantified((int)(50 / factor), (int)(50 / factor), (int)(55 / factor), (int)(55 / factor))
                 .GetImage(1000, 1000,
-                 (p1,s1) => AjouterDetourage(
+                 (p1, s1) => AjouterDetourage(
                      p1
                      .AsQuantified()
                      .GetImage(100, 100,
                         (p2, s2) => p2.ToBitmap(20, 20, p2.X + "|" + p2.Y)
-                     ).Item
-                    )
-                ).Item
-                ).GetSignature();
+                     ), p1.X, p1.Y).Item
+                ).Item.GetSignature();
 
             Assert.AreEqual("0428457778FC3ACBAABEBB93953AB330", signature, "Image hash");
         }
 
-        public static U AjouterDetourage<U>(U i)
-            where U:Image
+        public static RectangleD<U> AjouterDetourage<U>(RectangleD<U> image, int x, int y, ImageExtentions.ScaleMode mode = ImageExtentions.ScaleMode.ALL)
+            where U : Image
         {
-            using (Graphics g = Graphics.FromImage(i))
+            using (GraphicsD g = image.GetGraphicsD(mode))
             {
-                g.DrawRectangle(Pens.Black, 0, 0, i.Width - 1, i.Height - 1);
-                g.DrawLine(Pens.Black, 0, 0, i.Width - 1, i.Height - 1);
-                g.DrawLine(Pens.Black, i.Width - 1, 0, 0, i.Height - 1);
+
+                g.Graphics.DrawRectangle(Pens.Black, (int)g.Portion.Inner.X, (int)g.Portion.Inner.Y, (int)g.Portion.Inner.Width - 1, (int)g.Portion.Inner.Height - 1);
+                g.Graphics.DrawLine(Pens.Black, g.Portion.Inner.Left, g.OffsetY, g.Portion.Inner.Right, g.OffsetY);
+                g.Graphics.DrawLine(Pens.Black, g.OffsetX, g.Portion.Inner.Top, g.OffsetX, g.Portion.Inner.Bottom);
+                g.Graphics.DrawLine(Pens.Black, g.Portion.Inner.Left, g.Portion.Inner.Top, g.Portion.Inner.Right, g.Portion.Inner.Bottom);
+                g.Graphics.DrawLine(Pens.Black, g.Portion.Inner.Right, g.Portion.Inner.Top, g.Portion.Inner.Left, g.Portion.Inner.Bottom);
+
+                g.Graphics.DrawString(x.ToString() + "|" + y.ToString(), SystemFonts.DefaultFont, Brushes.Black, PointF.Empty);
             }
 
-            return i;
+            return image;
         }
     }
 }

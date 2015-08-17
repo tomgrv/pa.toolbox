@@ -63,10 +63,6 @@ namespace UnitTests.TileList
                 throw new NotImplementedException();
             }
 
-            public override ICoordinate Clone()
-            {
-                return new SubTile(this.ConvertAll(i => i.Clone() as Item), this.IndexOf(this.Reference));
-            }
         }
 
         internal class Item : Coordinate
@@ -93,29 +89,23 @@ namespace UnitTests.TileList
                 return b;
             }
 
-            public override ICoordinate Clone()
-            {
-                return new Item(base.X, base.Y, this.Color);
-            }
         }
 
         internal static MainTile GetTile(float factor)
         {
-            IArea a1 = new Area(1, 1, 5, 5);
-            IArea a0 = new Area((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
+            IArea first = new Area((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
+            IArea second = new Area(1, 1, 5, 5);
+            
+            SubTile t1 = new SubTile(second, new Item(3, 3, Color.Green));
+            t1.Fill(c => new Item(c.X, c.Y,  c.X + c.Y == 6 ? Color.Green : Color.Yellow));
 
-            Item t2 = new Item(1, 1, Color.Green);
+            MainTile t0 = new MainTile(first, t1);
+            t0.Fill(c => t1.Clone(c.X,c.Y) as SubTile);
 
-            SubTile t1 = new SubTile(a1, t2);
-            t1.Fill(c => c.X + c.Y == 6 ? t2.Clone() as Item : new Item(c.X, c.Y, Color.Yellow));
-
-            MainTile t0 = new MainTile(a0, t1);
-            t0.Fill(c => t1.Clone() as SubTile);
-
-            t0.ElementSizeX = 50f / factor * a1.SizeX;
-            t0.ElementSizeY = 50f / factor * a1.SizeY;
-            t0.ElementStepX = 55f / factor * a1.SizeX;
-            t0.ElementStepY = 55f / factor * a1.SizeY;
+            t0.ElementSizeX = 50f / factor * second.SizeX;
+            t0.ElementSizeY = 50f / factor * second.SizeY;
+            t0.ElementStepX = 55f / factor * second.SizeX;
+            t0.ElementStepY = 60f / factor * second.SizeY;
             t0.RefOffsetX = 50;
             t0.RefOffsetY = 0;
 
@@ -131,8 +121,9 @@ namespace UnitTests.TileList
 
             t0.Fill(c => c.X > 25 && c.X < 75 && c.Y > 30 && c.Y < 60  ? new Item(c.X, c.Y, c.X == c.Y  ? Color.Yellow: Color.Green) : new Item(c.X, c.Y, Color.Red));
 
-            string signature0 = t0.AsQuantified().GetImage(1000, 1000, (z, s) =>
-                z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
+            string signature0 = t0.AsQuantified().GetImage(1000, 1000,
+                (z, s) => z.ToBitmap(100, 50, z.X + "\n" + z.Y)
+                ).Item.GetSignature();
             Assert.AreEqual("BFE39DA3858C0A979B54F99442B397DA", signature0, "Image hash");
             Assert.AreEqual("0,0;100,100", t0.GetArea().ToString(), "Area");
 
