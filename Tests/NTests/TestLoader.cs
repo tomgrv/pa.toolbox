@@ -91,12 +91,8 @@ namespace PA.Plugin.Tests
 
             using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
-                var ics = new IniConfigurationSource();
-                ics.BeginInit();
-                ics.EndInit();
-
                 loader.BeginInit();
-                loader.Configuration = ics;
+                loader.Configuration = new IniConfigurationSource();
                 loader.Parent = this;
                 loader.EndInit();
 
@@ -110,12 +106,9 @@ namespace PA.Plugin.Tests
         {
             using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
-                var ics = new IniConfigurationSource();
-                ics.BeginInit();
-                ics.EndInit();
-
+     
                 loader.BeginInit();
-                loader.Configuration = ics;
+                loader.Configuration =  new IniConfigurationSource();
                 loader.Parent = this;
                 loader.EndInit();
 
@@ -150,12 +143,10 @@ namespace PA.Plugin.Tests
         {
             using (PA.Plugin.Components.Controls.PluginLoader loader = new PA.Plugin.Components.Controls.PluginLoader())
             {
-                var ics = new IniConfigurationSource();
-                ics.BeginInit();
-                ics.EndInit();
+
 
                 loader.BeginInit();
-                loader.Configuration = ics;
+                loader.Configuration = new IniConfigurationSource();
                 loader.Parent = this;
                 loader.EndInit();
 
