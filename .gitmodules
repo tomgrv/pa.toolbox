@@ -46,3 +46,6 @@
 [submodule "PA.Plugin.Thread"]
 	path = PA.Plugin.Thread
 	url = https://github.com/tomgrv/PA.Plugin.Thread.git
+[submodule "PA.Utilities"]
+	path = PA.Utilities
+	url = ../PA.Utilities.git
