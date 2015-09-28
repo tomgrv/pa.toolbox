@@ -5,9 +5,9 @@ using System.Linq;
 using System.Security.Cryptography;
 
 
-namespace UnitTests
+namespace PA.TileList
 {
-    public static class Extensions
+    public static class TestsExtensions
     {
         public static string GetMD5Hash<U>(this U value, Func<U, string> signature = null)
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
 using PA.TileList.Extensions;
 using PA.TileList.Drawing;
@@ -8,10 +7,11 @@ using System.Drawing;
 using PA.TileList.Quantified;
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 
-namespace UnitTests.TileList
+namespace PA.TileList
 {
-    [TestClass]
+    [TestFixtureAttribute]
     public class TileTests
     {
         #region Definitions 
@@ -22,9 +22,9 @@ namespace UnitTests.TileList
                 : base(a, t)
             { }
 
-            public Quadrant Quadrant { get; private set; }
+            public Quadrant.Quadrant Quadrant { get; private set; }
 
-            public void SetQuadrant(Quadrant q)
+            public void SetQuadrant(Quadrant.Quadrant q)
             {
                 throw new NotImplementedException();
             }
@@ -40,10 +40,13 @@ namespace UnitTests.TileList
             public double RefOffsetX { get; internal set; }
 
             public double RefOffsetY { get; internal set; }
+
+          
         }
 
         internal class SubTile : Tile<Item>, IQuadrant<Item>
         {
+           
             public SubTile(IArea a, Item t)
                 : base(a, t)
             { }
@@ -56,9 +59,9 @@ namespace UnitTests.TileList
                 : base(t, referenceIndex)
             { }
 
-            public Quadrant Quadrant { get; private set; }
+            public Quadrant.Quadrant Quadrant { get; private set; }
 
-            public void SetQuadrant(Quadrant q)
+            public void SetQuadrant(Quadrant.Quadrant q)
             {
                 throw new NotImplementedException();
             }
@@ -114,7 +117,7 @@ namespace UnitTests.TileList
 
         #endregion
 
-        [TestMethod, TestCategory("Image hash")]
+        [Test, Category("Image hash")]
         public void Crop()
         {
             Tile<Item> t0 = new Tile<Item>(new Area(0, 0, 100, 100), new Item(0, 0, Color.Red));

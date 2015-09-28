@@ -1,22 +1,21 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
 using PA.TileList.Quantified;
 using PA.TileList.Contextual;
 using PA.TileList.Drawing;
 using PA.TileList.Extensions;
 using PA.File.Extensions;
-using UnitTests.TileList;
 using System.Drawing;
 using PA.TileList.Geometrics.Circular;
 using System.IO;
+using NUnit.Framework;
 
-namespace UnitTests.TileList.Extensions
+namespace PA.TileList
 {
-    [TestClass]
+    [TestFixture]
     public class QuantifiedTests
     {
-        [TestMethod, TestCategory("Image hash")]
+        [Test, Category("Image hash")]
         public void FirstOrDefault()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);
@@ -36,7 +35,7 @@ namespace UnitTests.TileList.Extensions
             Assert.AreEqual("A56EBC8E87772EA73D38342AF45FF00B5489A22DB73E7ED5996C6AF7EEE3DE0A", signature, "Image hash");
         }
 
-        [TestMethod]
+        [Test]
         public void Coordinates()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);
@@ -53,7 +52,7 @@ namespace UnitTests.TileList.Extensions
             Assert.AreEqual(item.Y, coord.Y);
         }
 
-        [TestMethod]
+        [Test]
         public void CoordinatesIn()
         {
             Tile<TileTests.Item> t0 = new Tile<TileTests.Item>(new Area(0, 0, 100, 100), new TileTests.Item(0, 0, Color.Red));
@@ -89,7 +88,7 @@ namespace UnitTests.TileList.Extensions
                 z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
         }
 
-        [TestMethod, TestCategory("Image hash")]
+        [Test, Category("Image hash")]
         public void Rulers()
         {
             TileTests.MainTile tile = TileTests.GetTile(1);

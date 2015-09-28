@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PA.TileList.Contextual;
+﻿using PA.TileList.Contextual;
 using PA.TileList.Quantified;
 using PA.TileList.Extensions;
 using PA.TileList.Drawing;
@@ -9,16 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnitTests.TileList;
 using System.IO;
 using PA.TileList;
+using NUnit.Framework;
 
-namespace UnitTests
+namespace PA.TileList
 {
-    [TestClass]
+    [TestFixture]
     public class QuadrantTest
     {
-        [TestMethod, TestCategory("Image hash")]
+        [Test, Category("Image hash")]
         public void ChangeQuadrant()
         {
             float factor = 1;
@@ -33,14 +32,14 @@ namespace UnitTests
 
             IQuantifiedTile<IContextual<TileTests.Item>> t2 = tile
                  .Flatten<TileTests.SubTile, TileTests.Item>()
-                 .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomLeft);
+                .ChangeQuadrant(Quadrant.Quadrant.TopLeft, Quadrant.Quadrant.BottomLeft);
 
             string signature2 = t2.GetImage(5000, 5000, (z, s) => z.Context.ToBitmap(100, 100, z.Context.X + "\n" + z.Context.Y)).Item.GetSignature("BottomLeft");
             Assert.AreEqual("4B02E3B3619367AB0CCE9AB8648B508FE5611B1D1B46BD225AB62A90F014BA0D", signature2, "BottomLeft");
 
             IQuantifiedTile <IContextual < TileTests.Item>> t3 = tile
                .Flatten<TileTests.SubTile, TileTests.Item>()
-               .ChangeQuadrant(Quadrant.TopLeft, Quadrant.BottomRight);
+                .ChangeQuadrant(Quadrant.Quadrant.TopLeft, Quadrant.Quadrant.BottomRight);
 
             string signature3 = t3.GetImage(5000, 5000, (z, s) => z.Context.ToBitmap(100, 100, z.Context.X + "\n" + z.Context.Y)).Item.GetSignature("BottomRight");
 
@@ -48,7 +47,7 @@ namespace UnitTests
 
             IQuantifiedTile<IContextual<TileTests.Item>> t4 = tile
              .Flatten<TileTests.SubTile, TileTests.Item>()
-             .ChangeQuadrant(Quadrant.TopLeft, Quadrant.TopRight);
+                .ChangeQuadrant(Quadrant.Quadrant.TopLeft, Quadrant.Quadrant.TopRight);
 
             string signature4 = t4.GetImage(5000, 5000, (z, s) => z.Context.ToBitmap(100, 100, z.Context.X + "\n" + z.Context.Y)).Item.GetSignature("TopRight");
 
