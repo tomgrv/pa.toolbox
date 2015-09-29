@@ -69,7 +69,6 @@
     <Compile Include="Configuration\IniConfigurationTest.cs" />
     <Compile Include="Configuration\SettingsTest.cs" />
     <Compile Include="Converters\Extensions.cs" />
-    <Compile Include="Drawing\BitmapTest.cs" />
     <Compile Include="Plugin.Components\ParameterForm.cs" />
     <Compile Include="Plugin\IPluginUri.cs" />
     <Compile Include="Plugin\Plugin2ForUriHttp.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="Plugin\TestLoader.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TileList.Geometrics\GeometricTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +140,10 @@
       <Project>{5b4face3-ddb3-4eaa-985a-9de4aac34a91}</Project>
       <Name>PA.TileList</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Drawing\" />
+    <Folder Include="TileList.Geometrics\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
