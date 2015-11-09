@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PA.TileList;
 using PA.TileList.Linear;
 using System.Collections.Generic;
+using NUnit.Framework;
 
-namespace UnitTests
+namespace PA.TileList
 {
-    [TestClass]
+    [TestFixture]
     public class LinearTests
     {
-        [TestMethod]
+        [Test]
         public void GetLine()
         {
             List<Coordinate> list = new List<Coordinate>()
