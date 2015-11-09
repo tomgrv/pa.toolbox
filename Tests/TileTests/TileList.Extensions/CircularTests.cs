@@ -1,12 +1,14 @@
 ﻿
 using PA.TileList;
 using PA.TileList.Contextual;
-using PA.TileList.Drawing;
+
 using PA.TileList.Geometrics.Circular;
 using System;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using PA.TileList.Drawing.Core;
+using PA.TileList.Drawing.Extra;
 
 namespace PA.TileList
 {
@@ -26,7 +28,7 @@ namespace PA.TileList
 				search.AddProfileStep(a1, 1000);
 			}
 
-			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ImageExtentions.ScaleMode.ALL, false).Item.GetSignature();
+			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ScaleMode.ALL, false).Item.GetSignature();
 			Assert.AreEqual("98AE8580E2596469A774C97BEE234564E96281C519BFFED621FBB8CC2A63F6D8", signature, "Image hash");
 		}
 
@@ -41,7 +43,7 @@ namespace PA.TileList
 			search.AddProfileStep(-Math.PI / 4, 1000);
 			search.AddProfileStep(-3 * Math.PI / 4, 800);
 
-			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ImageExtentions.ScaleMode.ALL, false).Item.GetSignature();
+			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ScaleMode.ALL, false).Item.GetSignature();
 			Assert.AreEqual("EED4365394FDB98CE5A4566244C50FA9925A28F54F8561533295FAC5E4B91FE4", signature, "Image hash");
 		}
 
@@ -86,10 +88,10 @@ namespace PA.TileList
 			Assert.AreEqual(false, change, "Reference Changed");
 
 
-			RectangleD<Bitmap> pi = p.GetImage(1000, 1000, q.GetBounds());
-			RectangleD<Bitmap> i = q.GetImage(pi, (z, s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
-
-			string signature = i.Item.GetSignature();
+			RectangleD<Bitmap> i = q.GetImage(5000, 5000, (z, s) => z.Context.ToBitmap(50, 50, z.X + "\n" + z.Y));
+			RectangleD<Bitmap> pi = p.GetImage(i);
+            
+			string signature = pi.Item.GetSignature();
 
 			Assert.AreEqual(1799, q.Count(), "Selected item count");
 			Assert.AreEqual("ADE22DBF99F378AEE20F993BF51705756AFFF2539CA8D6CC5CCA7266C9F2B551", signature, "Image hash");
@@ -107,7 +109,7 @@ namespace PA.TileList
 
 			CircularProfile p = GetTestProfile(1000);
 
-			foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f, CircularConfiguration.SelectionFlag.Inside)).ToArray()).ToArray())
+			foreach (IContextual<TileTests.Item> tt in tile.Except(tile.Take(p, new CircularConfiguration(1f, CircularConfiguration.SelectionFlag.Inside))))
 			{
 				tt.Context.Color = Color.Beige;
 			}

@@ -1,7 +1,8 @@
 ﻿using System;
 using PA.TileList;
 using PA.TileList.Extensions;
-using PA.TileList.Drawing;
+using PA.TileList.Drawing.Core;
+using PA.TileList.Drawing.Extra;
 using PA.TileList.Quadrant;
 using System.Drawing;
 using PA.TileList.Quantified;
@@ -20,7 +21,8 @@ namespace PA.TileList
 		{
 			public MainTile(IArea a, SubTile t)
 				: base(a, t)
-            { }
+			{
+			}
 
 			public Quadrant.Quadrant Quadrant { get; private set; }
 
@@ -49,15 +51,18 @@ namespace PA.TileList
            
 			public SubTile(IArea a, Item t)
 				: base(a, t)
-            { }
+			{
+			}
 
 			public SubTile(SubTile t)
 				: base(t)
-            { }
+			{
+			}
 
 			public SubTile(IEnumerable<Item> t, int referenceIndex = 0)
 				: base(t, referenceIndex)
-            { }
+			{
+			}
 
 			public Quadrant.Quadrant Quadrant { get; private set; }
 
@@ -103,7 +108,7 @@ namespace PA.TileList
 			t1.Fill(c => new Item(c.X, c.Y, c.X + c.Y == 6 ? Color.Green : Color.Yellow));
 
 			MainTile t0 = new MainTile(first, t1);
-            t0.Fill(c => t1.Clone(c.X,c.Y) as SubTile);
+			t0.Fill(c => t1.Clone(c.X, c.Y) as SubTile);
 
 			t0.ElementSizeX = 50f / factor * second.SizeX;
 			t0.ElementSizeY = 50f / factor * second.SizeY;
