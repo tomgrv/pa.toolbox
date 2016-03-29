@@ -141,10 +141,6 @@
       <Name>PA.TileList</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Drawing\" />
-    <Folder Include="TileList.Geometrics\" />
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
