@@ -49,3 +49,6 @@
 [submodule "PA.Utilities"]
 	path = PA.Utilities
 	url = ../PA.Utilities.git
+[submodule "PA.DesktopWebApp"]
+	path = PA.DesktopWebApp
+	url = ../PA.DesktopWebApp.git
