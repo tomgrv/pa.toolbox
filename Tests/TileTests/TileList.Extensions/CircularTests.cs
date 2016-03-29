@@ -28,7 +28,7 @@ namespace PA.TileList
 				search.AddProfileStep(a1, 1000);
 			}
 
-			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ScaleMode.ALL, null).Item.GetSignature();
+			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ScaleMode.ALL).Item.GetSignature();
 			Assert.AreEqual("98AE8580E2596469A774C97BEE234564E96281C519BFFED621FBB8CC2A63F6D8", signature, "Image hash");
 		}
 
@@ -43,7 +43,7 @@ namespace PA.TileList
 			search.AddProfileStep(-Math.PI / 4, 1000);
 			search.AddProfileStep(-3 * Math.PI / 4, 800);
 
-			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ScaleMode.ALL, null).Item.GetSignature();
+			string signature = search.GetImage(1000, 1000, new RectangleF(-1000, -1000, 2000, 2000), ScaleMode.ALL).Item.GetSignature();
 			Assert.AreEqual("EED4365394FDB98CE5A4566244C50FA9925A28F54F8561533295FAC5E4B91FE4", signature, "Image hash");
 		}
 
