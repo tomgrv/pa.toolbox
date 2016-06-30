@@ -19,7 +19,7 @@ namespace PA.TileList
 
 		internal class MainTile : Tile<SubTile>, IQuadrant<SubTile>, IQuantifiedTile<SubTile>, ITile<SubTile>
 		{
-			public MainTile(IArea a, SubTile t)
+			public MainTile(IZone a, SubTile t)
 				: base(a, t)
 			{
 			}
@@ -49,7 +49,7 @@ namespace PA.TileList
 		internal class SubTile : Tile<Item>, IQuadrant<Item>
 		{
            
-			public SubTile(IArea a, Item t)
+			public SubTile(IZone a, Item t)
 				: base(a, t)
 			{
 			}
@@ -101,8 +101,8 @@ namespace PA.TileList
 
 		internal static MainTile GetTile(float factor)
 		{
-			IArea first = new Area((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
-			IArea second = new Area(1, 1, 5, 5);
+			IZone first = new Zone((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
+			IZone second = new Zone(1, 1, 5, 5);
             
 			SubTile t1 = new SubTile(second, new Item(3, 3, Color.Green));
 			t1.Fill(c => new Item(c.X, c.Y, c.X + c.Y == 6 ? Color.Green : Color.Yellow));
@@ -122,8 +122,8 @@ namespace PA.TileList
 
 		internal static MainTile GetTileFullSpace(float factor)
 		{
-			IArea first = new Area((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
-			IArea second = new Area(1, 1, 5, 5);
+			IZone first = new Zone((int)(-5 * factor), (int)(-5 * factor), (int)(5 * factor), (int)(5 * factor));
+			IZone second = new Zone(1, 1, 5, 5);
             
 			SubTile t1 = new SubTile(second, new Item(3, 3, Color.Green));
 			t1.Fill(c => new Item(c.X, c.Y, c.X + c.Y == 6 ? Color.Green : Color.Yellow));
@@ -146,7 +146,7 @@ namespace PA.TileList
 		[Test, Category("Image hash")]
 		public void Crop()
 		{
-			Tile<Item> t0 = new Tile<Item>(new Area(0, 0, 100, 100), new Item(0, 0, Color.Red));
+			Tile<Item> t0 = new Tile<Item>(new Zone(0, 0, 100, 100), new Item(0, 0, Color.Red));
 
 			t0.Fill(c => c.X > 25 && c.X < 75 && c.Y > 30 && c.Y < 60 ? new Item(c.X, c.Y, c.X == c.Y ? Color.Yellow : Color.Green) : new Item(c.X, c.Y, Color.Red));
 
@@ -159,16 +159,16 @@ namespace PA.TileList
 
 
 			Assert.AreEqual("BFE39DA3858C0A979B54F99442B397DA", s0, "Image hash");
-			Assert.AreEqual("0,0;100,100", t0.GetArea().ToString(), "Area");
+			Assert.AreEqual("0,0;100,100", t0.GetZone().ToString(), "Area");
 
-			IEnumerable<Item> crop1 = t0.Crop(new Area(25, 30, 75, 60));
+			IEnumerable<Item> crop1 = t0.Crop(new Zone(25, 30, 75, 60));
 			Tile<Item> t1 = new Tile<Item>(crop1);
 
 			string signature1 = t1.AsQuantified().GetImage(1000, 1000, (z, s) =>
                 z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
 			Assert.AreEqual("742D809F5440028ED7F86072C4FC2FA9", signature1, "Image hash");
-			Assert.AreEqual("25,30;75,60", t1.GetArea().ToString(), "Area");
+			Assert.AreEqual("25,30;75,60", t1.GetZone().ToString(), "Area");
 
 
 			IEnumerable<Item> crop2 = t0.Crop(t => t.Color != Color.Yellow);
@@ -178,7 +178,7 @@ namespace PA.TileList
                 z.ToBitmap(100, 50, z.X + "\n" + z.Y)).Item.GetSignature();
 
 			Assert.AreEqual("6A226FC4E4EC36837BA5042FBFE8D923", signature2, "Image hash");
-			Assert.AreEqual("31,31;59,59", t2.GetArea().ToString(), "Area");
+			Assert.AreEqual("31,31;59,59", t2.GetZone().ToString(), "Area");
 
 		}
 	}

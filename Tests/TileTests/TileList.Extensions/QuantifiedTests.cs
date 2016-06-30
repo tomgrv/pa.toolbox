@@ -57,7 +57,7 @@ namespace PA.TileList
 		[Test]
 		public void CoordinatesIn()
 		{
-			Tile<TileTests.Item> t0 = new Tile<TileTests.Item>(new Area(0, 0, 100, 100), new TileTests.Item(0, 0, Color.Red));
+			Tile<TileTests.Item> t0 = new Tile<TileTests.Item>(new Zone(0, 0, 100, 100), new TileTests.Item(0, 0, Color.Red));
 			t0.Fill(c => c.X > 25 && c.X < 75 && c.Y > 30 && c.Y < 60 ? new TileTests.Item(c.X, c.Y, c.X == c.Y ? Color.Yellow : Color.Green) : new TileTests.Item(c.X, c.Y, Color.Red));
 
 			IQuantifiedTile<TileTests.Item> q0 = t0.AsQuantified(10, 10);

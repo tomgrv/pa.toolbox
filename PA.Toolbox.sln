@@ -294,12 +294,19 @@ Global
 		$0.NameConventionPolicy = $4
 		$4.Rules = $5
 		$5.NamingRule = $6
-		$6.Name = Namespaces
-		$6.AffectedEntity = Namespace
+		$6.Name = Type Parameters
+		$6.AffectedEntity = TypeParameter
 		$6.VisibilityMask = VisibilityMask
 		$6.NamingStyle = PascalCase
 		$6.IncludeInstanceMembers = True
 		$6.IncludeStaticEntities = True
+		$6.RequiredPrefixes = $34
+		$34.String = T
+		$6.RequiredSuffixes = $35
+		$35.String = Exception
+		$6.AllowedPrefixes = $36
+		$36.String = m_
+		$36.String = m_
 		$5.NamingRule = $7
 		$7.Name = Types
 		$7.AffectedEntity = Class, Struct, Enum, Delegate
@@ -474,19 +481,36 @@ Global
 		$33.inheritsSet = Mono
 		$33.inheritsScope = text/x-csharp
 		$33.scope = text/x-csharp
+		$33.IndentSwitchSection = True
+		$33.NewLinesForBracesInProperties = True
+		$33.NewLinesForBracesInAccessors = True
+		$33.NewLinesForBracesInAnonymousMethods = True
+		$33.NewLinesForBracesInControlBlocks = True
+		$33.NewLinesForBracesInAnonymousTypes = True
+		$33.NewLinesForBracesInObjectCollectionArrayInitializers = True
+		$33.NewLinesForBracesInLambdaExpressionBody = True
+		$33.NewLineForElse = True
+		$33.NewLineForCatch = True
+		$33.NewLineForFinally = True
+		$33.NewLineForMembersInObjectInit = True
+		$33.NewLineForMembersInAnonymousTypes = True
+		$33.NewLineForClausesInQuery = True
+		$33.SpacingAfterMethodDeclarationName = False
+		$33.SpaceAfterMethodCallName = False
+		$33.SpaceBeforeOpenSquareBracket = False
 		version = 4.5.0
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		AssemblyInfoVersionSettings = 
-		AssemblyFileVersionSettings = 
+		AssemblyInfoVersionSettings =
+		AssemblyFileVersionSettings =
 		AssemblyVersionSettings = IncrementOnDemandWithReset.IncrementOnDemandWithReset.DeltaDayStamp.TimeStamp
 		UpdateAssemblyInfoVersion = False
 		UpdateAssemblyFileVersion = False
 		UpdateAssemblyVersion = True
-		AssemblyInfoFilePath = 
-		ConfigurationFilter = 
+		AssemblyInfoFilePath =
+		ConfigurationFilter =
 	EndGlobalSection
 EndGlobal
